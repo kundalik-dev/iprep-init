@@ -1,0 +1,40 @@
+{
+  "name": "iprep-init",
+  "version": "0.1.0",
+  "description": "iPrep init scafolding iPrep strucutre ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky",
+    "setup": "pnpm install && pnpm db:generate",
+    "dev": "turbo run dev",
+    "dev:server": "turbo run dev --filter=@myrepo/server",
+    "dev:frontend": "turbo run dev --filter=@myrepo/frontend",
+    "dev:cli": "turbo run dev --filter=@myrepo/cli",
+    "build": "turbo run build",
+    "build:packages": "turbo run build --filter=./packages/*",
+    "db:generate": "pnpm --filter=@myrepo/db db:generate",
+    "db:migrate": "pnpm --filter=@myrepo/db db:migrate",
+    "db:studio": "pnpm --filter=@myrepo/db db:studio",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch"
+  },
+  "author": "kundalik.dev",
+  "license": "ISC",
+  "packageManager": "pnpm@10.33.3",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.59.2",
+    "@typescript-eslint/parser": "^8.59.2",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.3",
+    "prettier": "^3.8.3",
+    "turbo": "^2.9.12",
+    "typescript": "^6.0.3"
+  }
+}

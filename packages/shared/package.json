@@ -1,0 +1,19 @@
+{
+  "name": "@iprep/shared",
+  "version": "0.1.0",
+  "description": "@iprep/shared package",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "kundalik.dev",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "typescript": "^6.0.3"
+  }
+}
