@@ -1,4 +1,4 @@
-# my-monorepo
+# iPrep - an Interview Preparation App
 
 A full-stack monorepo with CLI, frontend, and server apps sharing common packages.
 
