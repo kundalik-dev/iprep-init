@@ -38,6 +38,8 @@ yarn-error.log*
 *.db-journal
 *.db-wal
 *.db-shm
+packages/db/prisma/dev.db
+packages/db/src/generated/
 
 # =============================================================================
 # Generated files (Prisma client, codegen output, etc.)
