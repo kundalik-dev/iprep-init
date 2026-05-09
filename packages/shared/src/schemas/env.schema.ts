@@ -5,6 +5,7 @@ export const EnvSchema = z.object({
   DATABASE_URL: z.string().min(1),
   CORS_ORIGIN: z.string().min(1),
   NODE_ENV: z.enum(['development', 'production', 'test']),
+  API_BASE_URL: z.string().min(1),
 });
 
 export type EnvVars = z.infer<typeof EnvSchema>;
