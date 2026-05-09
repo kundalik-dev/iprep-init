@@ -14,7 +14,7 @@ A full-stack monorepo with CLI, frontend, and server apps sharing common package
 
 ## Structure
 
-\```
+```
 my-monorepo/
 ├── apps/
 │ ├── cli/ # CLI tool
@@ -24,7 +24,7 @@ my-monorepo/
 ├── shared/ # Shared types, utils, constants
 ├── db/ # Prisma client, schema, migrations
 └── llm-adapters/ # LLM provider wrappers (OpenAI, Anthropic, Ollama)
-\```
+```
 
 ## Prerequisites
 
@@ -34,7 +34,7 @@ my-monorepo/
 
 ## Getting Started
 
-\```bash
+```bash
 
 # 1. Clone
 
@@ -62,11 +62,11 @@ pnpm db:migrate
 # 6. Start everything in dev mode
 
 pnpm dev
-\```
+```
 
 ## Common Commands
 
-\```bash
+```bash
 
 # Dev
 
@@ -96,11 +96,11 @@ pnpm format:check # check formatting without writing
 # Test
 
 pnpm test # run all tests
-\```
+```
 
 ## Adding a New Package
 
-\```bash
+```bash
 
 # 1. Create folder
 
@@ -117,7 +117,7 @@ mkdir packages/my-package
 # 4. Run install to link
 
 pnpm install
-\```
+```
 
 ## Environment Variables
 
