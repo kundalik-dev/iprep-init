@@ -38,6 +38,12 @@ importers:
 
   apps/server:
     dependencies:
+      '@iprep/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@iprep/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       cors:
         specifier: ^2.8.6
         version: 2.8.6

@@ -1,13 +1,5 @@
-import { ENV_VARS, EnvSchema } from '@iprep/shared';
+import { ENV_VARS } from '@iprep/shared';
 
-const parsed = EnvSchema.safeParse(process.env);
+export const env = Object.freeze(ENV_VARS);
 
-console.log(`Server is running on port ${ENV_VARS.PORT} in ${ENV_VARS.NODE_ENV} mode.`);
-
-if (!parsed.success) {
-  console.error('Invalid environment variables:', parsed.error.format());
-  process.exit(1);
-}
-
-export const env = Object.freeze(parsed.data);
 export type Env = typeof env;

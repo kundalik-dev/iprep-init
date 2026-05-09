@@ -12,9 +12,10 @@
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
-
+import fs from 'node:fs';
 export const IPREP_HOME = path.join(os.homedir(), '.iprep');
 const dirName = path.dirname(fileURLToPath(import.meta.url));
+const envExists = fs.existsSync(path.resolve(dirName, '../../../../.env'));
 
 export const IprepPaths = {
   // The directory where iprep stores all user data, including configs, logs, and cache.
@@ -22,11 +23,14 @@ export const IprepPaths = {
   /** Root: ~/.iprep/ */
   root: IPREP_HOME,
 
-  // CWD directory
+  // checks CWD directory
   cwd: dirName,
 
+  //checks if .env file exists
+  isEnvExists: envExists,
+
   // .env file path
-  envFile: path.resolve(dirName, '../../../../.env'),
+  envFilePath: path.resolve(dirName, '../../../../.env'),
 
   /** SQLite database folder: ~/.iprep/database/ */
   database: path.join(IPREP_HOME, 'database'),
