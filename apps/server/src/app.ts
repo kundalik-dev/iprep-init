@@ -1,9 +1,8 @@
 import express, { Express } from 'express';
+import { apiRoutes } from './routes/index.js';
 
 const app: Express = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+app.use('/api/v1', apiRoutes);
 
 export default app;
