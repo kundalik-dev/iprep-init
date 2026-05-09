@@ -1,0 +1,29 @@
+{
+  "name": "@iprep/cli",
+  "version": "0.1.0",
+  "description": "@iPrep/cli command line for iPrep",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "kundalik.dev",
+  "license": "ISC",
+  "dependencies": {
+    "@iprep/db": "workspace:*",
+    "@iprep/shared": "workspace:*",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "dotenv": "^17.4.2",
+    "inquirer": "^13.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}
