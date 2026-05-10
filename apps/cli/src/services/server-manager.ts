@@ -11,7 +11,7 @@ export async function startServer(_port: number): Promise<void> {
 
 export async function checkHealth(): Promise<boolean> {
   try {
-    const res = await fetch(`${env.API_BASE_URL}/health`);
+    const res = await fetch(`${env.API_BASE_URL}/health`, { signal: AbortSignal.timeout(3000) });
     return res.ok;
   } catch {
     return false;

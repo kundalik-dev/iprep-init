@@ -5,13 +5,13 @@ import gradient from 'gradient-string';
 const iprepGradient = gradient(['#6366f1', '#8b5cf6', '#a855f7', '#d946ef']);
 
 export const log = {
-  success: (msg: string) => console.log(chalk.green(`✓  ${msg}`)),
-  error: (msg: string) => console.error(chalk.red(`✗  ${msg}`)),
-  info: (msg: string) => console.log(chalk.cyan(`ℹ  ${msg}`)),
-  warn: (msg: string) => console.warn(chalk.yellow(`⚠  ${msg}`)),
-  title: (msg: string) => console.log(chalk.bold.white(`\n${msg}\n`)),
-  dim: (msg: string) => console.log(chalk.dim(msg)),
-  bold: (msg: string) => console.log(chalk.bold.white(msg)),
+  success:   (msg: string) => chalk.green(`✓  ${msg}`),
+  error:     (msg: string) => chalk.red(`✗  ${msg}`),
+  info:      (msg: string) => chalk.cyan(`ℹ  ${msg}`),
+  warn:      (msg: string) => chalk.yellow(`⚠  ${msg}`),
+  title:     (msg: string) => chalk.bold.white(`\n${msg}\n`),
+  dim:       (msg: string) => chalk.dim(msg),
+  bold:      (msg: string) => chalk.bold.white(msg),
   highlight: (msg: string) => iprepGradient(msg),
 };
 
