@@ -4,13 +4,13 @@ import { EnvSchema, type EnvVars } from '../schemas/env.schema.js';
 
 export const APP_NAME = 'iPrep';
 export const APP_VERSION = '0.1.0';
-export const API_BASE_URL = 'https://api.myapp.com';
 
 const DEFAULTS: EnvVars = {
-  PORT: 3000,
+  PORT: 5545,
   NODE_ENV: 'development',
   DATABASE_URL: IprepPaths.dbFile,
   CORS_ORIGIN: 'http://localhost:5173',
+  API_BASE_URL: 'http://localhost:5545/api/v1',
 };
 
 function loadEnv(): EnvVars {

@@ -13,7 +13,9 @@ import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
+
 export const IPREP_HOME = path.join(os.homedir(), '.iprep');
+
 const dirName = path.dirname(fileURLToPath(import.meta.url));
 const envExists = fs.existsSync(path.resolve(dirName, '../../../../.env'));
 
