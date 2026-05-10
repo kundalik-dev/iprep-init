@@ -1,5 +1,8 @@
 import net from 'node:net';
+import path from 'node:path';
+import { spawn, type ChildProcess } from 'node:child_process';
 import { checkDbHealth } from '@iprep/db';
+import { IprepPaths } from '@iprep/shared';
 import { env } from '../config/env.js';
 
 // Probes a port by attempting to bind a TCP server on it.
@@ -23,8 +26,15 @@ function isPortInUse(port: number): Promise<boolean> {
   });
 }
 
-async function startServer(_port: number): Promise<void> {
-  // TODO: spawn the server process and wait for it to be ready
+// Start server
+function startServer(port: number): ChildProcess {
+  const monorepoRoot = path.dirname(IprepPaths.envFilePath);
+  const serverEntry = path.join(monorepoRoot, 'apps', 'server', 'dist', 'index.js');
+  return spawn('node', [serverEntry], {
+    cwd: monorepoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, PORT: String(port) },
+  });
 }
 
 // Checks server is running and healthy
