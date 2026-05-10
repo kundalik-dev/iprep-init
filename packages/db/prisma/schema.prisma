@@ -22,3 +22,11 @@ model User {
 
   @@map("users")
 }
+
+model Health {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("ok")
+  checkedAt DateTime @default(now())
+
+  @@map("health")
+}

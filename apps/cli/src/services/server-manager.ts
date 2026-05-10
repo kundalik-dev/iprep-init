@@ -1,3 +1,4 @@
+import { checkDbHealth } from '@iprep/db';
 import { env } from '../config/env.js';
 
 export async function isPortInUse(_port: number): Promise<boolean> {
@@ -17,3 +18,5 @@ export async function checkHealth(): Promise<boolean> {
     return false;
   }
 }
+
+export { checkDbHealth };
