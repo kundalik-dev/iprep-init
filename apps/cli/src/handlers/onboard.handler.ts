@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { IprepPaths } from '@iprep/shared';
 import { checkDbHealth } from '@iprep/db';
-import { printBanner, log } from '../utils/chalk-helper.js';
+import { printBanner, printSeparator, printCommandBadge, printMeta, printStep, log } from '../utils/chalk-helper.js';
 import { dirExists } from '../utils/fs.utils.js';
 import { isPortInUse } from '../services/server-manager.js';
 
@@ -56,13 +56,11 @@ async function collectUserInput(yes: boolean): Promise<OnboardConfig> {
 
   const config: OnboardConfig = { port: parseInt(rawPort as string, 10) };
 
-  // Show summary before confirming
+  // Summary in Paperclip style
   console.log();
-  console.log(chalk.dim('  ── Summary ──────────────────────────────'));
-  console.log(`  ${chalk.dim('Port'.padEnd(12))}  ${config.port}`);
-  console.log(`  ${chalk.dim('Database'.padEnd(12))}  ${IprepPaths.dbFile}`);
-  console.log(`  ${chalk.dim('Config dir'.padEnd(12))}  ${IprepPaths.root}`);
-  console.log(chalk.dim('  ─────────────────────────────────────────'));
+  printStep('Server port', String(config.port));
+  printStep('Database',    IprepPaths.dbFile);
+  printStep('Config dir',  IprepPaths.root);
   console.log();
 
   const { confirmed } = await inquirer.prompt([{
@@ -109,7 +107,6 @@ function createDirectoryStructure(): void {
 // ─── Step 4 ────────────────────────────────────────────────────────────────
 
 async function writeEnvFile(config: OnboardConfig, yes: boolean): Promise<void> {
-  // Always write forward slashes in the URL — backslashes are invalid in file URIs
   const dbUrl = `file:${IprepPaths.dbFile.replace(/\\/g, '/')}`;
 
   const content = [
@@ -140,7 +137,6 @@ async function writeEnvFile(config: OnboardConfig, yes: boolean): Promise<void> 
 // ─── Step 5 ────────────────────────────────────────────────────────────────
 
 function runDbMigration(): void {
-  // Derive monorepo root from the known .env file path
   const monorepoRoot = path.dirname(IprepPaths.envFilePath);
 
   try {
@@ -169,28 +165,34 @@ function runDbMigration(): void {
 // ─── Step 6 ────────────────────────────────────────────────────────────────
 
 async function verifySetup(): Promise<void> {
+  const dbHealthy = await checkDbHealth();
   const checks = [
-    { label: 'Config dir exists',  ok: dirExists(IprepPaths.root) },
-    { label: 'Database dir exists', ok: dirExists(IprepPaths.database) },
+    { label: 'Config dir exists',    ok: dirExists(IprepPaths.root) },
+    { label: 'Database dir exists',  ok: dirExists(IprepPaths.database) },
     { label: 'Database file exists', ok: fs.existsSync(IprepPaths.dbFile) },
-    { label: 'Database reachable', ok: await checkDbHealth() },
+    { label: 'Database reachable',   ok: dbHealthy },
   ];
 
   for (const check of checks) {
     console.log(`  ${check.ok ? log.success(check.label) : log.error(check.label)}`);
+  }
+
+  if (!dbHealthy) {
+    console.log(chalk.dim('\n  → Native bindings missing. Fix with:'));
+    console.log(chalk.dim('    pnpm rebuild better-sqlite3'));
+    console.log(chalk.dim('    then re-run: iprep onboard\n'));
   }
 }
 
 // ─── Step 7 ────────────────────────────────────────────────────────────────
 
 function showCompletionSummary(config: OnboardConfig): void {
-  const col = (s: string) => chalk.dim(s.padEnd(12));
   console.log();
   console.log(chalk.bold.green('  ✓  iPrep setup complete!\n'));
-  console.log(`  ${col('Config dir')}  ${chalk.dim(IprepPaths.root)}`);
-  console.log(`  ${col('Database')}  ${chalk.dim(IprepPaths.dbFile)}`);
-  console.log(`  ${col('Port')}  ${config.port}`);
-  console.log(`  ${col('API')}  http://localhost:${config.port}/api/v1`);
+  printStep('Config dir', IprepPaths.root);
+  printStep('Database',   IprepPaths.dbFile);
+  printStep('Port',       String(config.port));
+  printStep('API',        `http://localhost:${config.port}/api/v1`);
   console.log();
   console.log(`  ${chalk.cyan('Next:')}  run ${chalk.bold.white('iprep start')} to start the server`);
   console.log();
@@ -202,6 +204,12 @@ export async function runOnBoard(opts: { yes?: boolean }): Promise<void> {
   const yes = opts.yes ?? false;
 
   printBanner();
+  printSeparator();
+  printCommandBadge('iprep onboard');
+  printMeta([
+    `home: ${IprepPaths.root}`,
+    `config: ${IprepPaths.envFilePath}`,
+  ]);
 
   const proceed = await checkAlreadyOnboarded(yes);
   if (!proceed) {
