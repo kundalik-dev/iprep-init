@@ -6,6 +6,8 @@ import { env } from '../config/env.js';
 export const healthCheck = async (req: Request, res: Response) => {
   const dbUp = await checkDbHealth();
 
+  console.log(`DB up is ${dbUp}`);
+
   res.status(200).json({
     status: 'running',
     uptime: uptime(),

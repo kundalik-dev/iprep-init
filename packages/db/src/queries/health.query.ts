@@ -4,7 +4,8 @@ export async function checkDbHealth(): Promise<boolean> {
   try {
     await prisma.health.count();
     return true;
-  } catch {
+  } catch (err) {
+    console.error('[checkDbHealth] failed:', err);
     return false;
   }
 }
