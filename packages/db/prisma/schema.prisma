@@ -249,6 +249,14 @@ model FillerWord {
   @@index([analysisId])
 }
 
+model userInfo {
+  id        String   @id @default(cuid())
+  username  String
+  email     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // =============================================
 // ENUMS
 // =============================================

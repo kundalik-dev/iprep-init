@@ -85,6 +85,7 @@ temp/
 .temp/
 .tmp/
 .cache/
+.pnpm-store/
 .vite/
 *.tgz
 pids/

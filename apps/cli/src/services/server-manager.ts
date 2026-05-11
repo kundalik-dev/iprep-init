@@ -40,11 +40,12 @@ function startServer(port: number): ChildProcess {
   return spawn('node', [serverEntry], {
     stdio: ['ignore', 'pipe', 'pipe'],
     env: {
-      NODE_ENV: process.env.NODE_ENV ?? 'production',
+      ...process.env,
+      NODE_ENV: env.NODE_ENV,
       PORT: String(port),
-      DATABASE_URL: process.env.DATABASE_URL ?? '',
-      CORS_ORIGIN: process.env.CORS_ORIGIN ?? '',
-      API_BASE_URL: process.env.API_BASE_URL ?? '',
+      DATABASE_URL: env.DATABASE_URL,
+      CORS_ORIGIN: env.CORS_ORIGIN,
+      API_BASE_URL: env.API_BASE_URL,
     },
   });
 }
