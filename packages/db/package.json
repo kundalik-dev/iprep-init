@@ -1,7 +1,7 @@
 {
   "name": "@iprep/db",
-  "version": "0.1.0",
-  "description": "@iprep/db a sqlite db for iPrep",
+  "version": "1.2.0",
+  "description": "@iprep/db — Prisma 7 + SQLite data layer for iPrep",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",

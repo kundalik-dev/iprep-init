@@ -1,5 +1,7 @@
 import net from 'node:net';
 import path from 'node:path';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { checkDbHealth } from '@iprep/db';
 import { IprepPaths } from '@iprep/shared';
@@ -28,10 +30,15 @@ function isPortInUse(port: number): Promise<boolean> {
 
 // Start server
 function startServer(port: number): ChildProcess {
+  // Production (bundled): server.js lives next to index.js in dist/
+  // Dev (tsx): fall back to the monorepo server build
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const bundledPath = path.join(__dirname, 'server.js');
   const monorepoRoot = path.dirname(IprepPaths.envFilePath);
-  const serverEntry = path.join(monorepoRoot, 'apps', 'server', 'dist', 'index.js');
+  const devPath = path.join(monorepoRoot, 'apps', 'server', 'dist', 'server.js');
+  const serverEntry = existsSync(bundledPath) ? bundledPath : devPath;
+
   return spawn('node', [serverEntry], {
-    cwd: monorepoRoot,
     stdio: ['ignore', 'pipe', 'pipe'],
     env: { ...process.env, PORT: String(port) },
   });

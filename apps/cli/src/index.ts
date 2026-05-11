@@ -4,7 +4,7 @@ import { registerCommands } from './commands/index.js';
 
 const program = new Command();
 
-program.name('iprep').description('iPrep CLI').version('0.1.0');
+program.name('iprep').description('iPrep CLI').version('1.2.0');
 
 registerCommands(program);
 

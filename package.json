@@ -1,7 +1,7 @@
 {
   "name": "iprep-init",
-  "version": "0.1.0",
-  "description": "iPrep init scafolding iPrep strucutre ",
+  "version": "1.2.0",
+  "description": "iPrep monorepo — interview preparation platform (CLI + server + frontend)",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "dev": "turbo run dev",
     "dev:server": "turbo run dev --filter=@iprep/server",
     "dev:frontend": "turbo run dev --filter=@iprep/frontend",
-    "dev:cli": "turbo run dev --filter=@iprep/cli",
+    "dev:cli": "turbo run dev --filter=iprep",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/*",
     "db:generate": "pnpm --filter=@iprep/db db:generate",
