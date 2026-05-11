@@ -32,20 +32,20 @@ pnpm build
 
 All routes are mounted under `/api/v1`.
 
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v1/health` | Server health check |
+| Method | Path             | Description         |
+| ------ | ---------------- | ------------------- |
+| `GET`  | `/api/v1/health` | Server health check |
 
 ## Environment Variables
 
 The server reads its config from `.env` at the monorepo root (or `~/.iprep/.env` when installed via CLI). Variables are loaded and validated by `@iprep/shared`.
 
-| Variable | Default | Description |
-|---|---|---|
-| `PORT` | `5545` | Port the server listens on |
-| `NODE_ENV` | `development` | Node environment |
-| `DATABASE_URL` | `~/.iprep/database/iprep.db` | SQLite database path |
-| `CORS_ORIGIN` | `http://localhost:5173` | Allowed CORS origin (frontend) |
+| Variable       | Default                        | Description                            |
+| -------------- | ------------------------------ | -------------------------------------- |
+| `PORT`         | `5545`                         | Port the server listens on             |
+| `NODE_ENV`     | `development`                  | Node environment                       |
+| `DATABASE_URL` | `~/.iprep/database/iprep.db`   | SQLite database path                   |
+| `CORS_ORIGIN`  | `http://localhost:5173`        | Allowed CORS origin (frontend)         |
 | `API_BASE_URL` | `http://localhost:5545/api/v1` | Base URL used by the CLI health checks |
 
 ## Stack

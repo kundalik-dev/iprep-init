@@ -16,14 +16,20 @@ export function register(program: Command): void {
       const label = (s: string) => chalk.dim(s.padEnd(10));
       const indent = ' '.repeat(14);
 
-      console.log(`  ${label('Server')}  ${serverUp ? log.success('Running') : log.error('Not running — run: iprep start')}`);
+      console.log(
+        `  ${label('Server')}  ${serverUp ? log.success('Running') : log.error('Not running — run: iprep start')}`,
+      );
       console.log(`  ${label('API Base')}  ${chalk.cyan(env.API_BASE_URL)}`);
 
       console.log();
 
-      console.log(`  ${label('Mode')}  ${env.NODE_ENV === 'production' ? chalk.yellow(env.NODE_ENV) : chalk.green(env.NODE_ENV)}`);
+      console.log(
+        `  ${label('Mode')}  ${env.NODE_ENV === 'production' ? chalk.yellow(env.NODE_ENV) : chalk.green(env.NODE_ENV)}`,
+      );
       console.log(`  ${label('Port')}  ${chalk.white(String(env.PORT))}`);
-      console.log(`  ${label('Database')}  ${dbUp ? log.success('Running') : log.error('Not running — run: iprep onboard')}`);
+      console.log(
+        `  ${label('Database')}  ${dbUp ? log.success('Running') : log.error('Not running — run: iprep onboard')}`,
+      );
       console.log(`${indent}${chalk.dim(env.DATABASE_URL.replace('file:', ''))}`);
       console.log(`  ${label('Frontend')}  ${chalk.cyan(env.CORS_ORIGIN)}`);
 

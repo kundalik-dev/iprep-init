@@ -1,6 +1,6 @@
 {
   "name": "@iprep/server",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "@iprep/server — local Express 5 API server for iPrep, bundled inside the iprep CLI package",
   "main": "./dist/server.js",
   "types": "./dist/server.d.ts",
