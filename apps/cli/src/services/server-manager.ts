@@ -31,16 +31,21 @@ function isPortInUse(port: number): Promise<boolean> {
 // Start server
 function startServer(port: number): ChildProcess {
   // Production (bundled): server.js lives next to index.js in dist/
-  // Dev (tsx): fall back to the monorepo server build
+  // Dev (tsx): fall back to the built server in the monorepo (process.cwd() = monorepo root)
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const bundledPath = path.join(__dirname, 'server.js');
-  const monorepoRoot = path.dirname(IprepPaths.envFilePath);
-  const devPath = path.join(monorepoRoot, 'apps', 'server', 'dist', 'server.js');
+  const devPath = path.join(process.cwd(), 'apps', 'server', 'dist', 'server.js');
   const serverEntry = existsSync(bundledPath) ? bundledPath : devPath;
 
   return spawn('node', [serverEntry], {
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, PORT: String(port) },
+    env: {
+      NODE_ENV: process.env.NODE_ENV ?? 'production',
+      PORT: String(port),
+      DATABASE_URL: process.env.DATABASE_URL ?? '',
+      CORS_ORIGIN: process.env.CORS_ORIGIN ?? '',
+      API_BASE_URL: process.env.API_BASE_URL ?? '',
+    },
   });
 }
 

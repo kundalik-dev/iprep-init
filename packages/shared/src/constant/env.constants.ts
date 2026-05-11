@@ -1,3 +1,5 @@
+import path from 'node:path';
+import fs from 'node:fs';
 import dotenv from 'dotenv';
 import { IprepPaths } from '../utils/iprep-path.js';
 import { EnvSchema, type EnvVars } from '../schemas/env.schema.js';
@@ -13,12 +15,22 @@ const DEFAULTS: EnvVars = {
   API_BASE_URL: 'http://localhost:5545/api/v1',
 };
 
-function loadEnv(): EnvVars {
-  if (!IprepPaths.isEnvExists) {
-    return DEFAULTS;
+function resolveEnvPath(): string | null {
+  if (process.env.NODE_ENV === 'development') {
+    // Dev: load from monorepo/project root
+    const devPath = path.join(process.cwd(), '.env');
+    return fs.existsSync(devPath) ? devPath : null;
   }
+  // Production (published install): load from ~/.iprep/.env
+  return IprepPaths.isEnvExists ? IprepPaths.envFilePath : null;
+}
 
-  dotenv.config({ path: IprepPaths.envFilePath });
+function loadEnv(): EnvVars {
+  const envPath = resolveEnvPath();
+
+  if (!envPath) return DEFAULTS;
+
+  dotenv.config({ path: envPath });
 
   const result = EnvSchema.safeParse(process.env);
 

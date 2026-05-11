@@ -5,7 +5,14 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { IprepPaths } from '@iprep/shared';
 import { checkDbHealth } from '@iprep/db';
-import { printBanner, printSeparator, printCommandBadge, printMeta, printStep, log } from '../utils/chalk-helper.js';
+import {
+  printBanner,
+  printSeparator,
+  printCommandBadge,
+  printMeta,
+  printStep,
+  log,
+} from '../utils/chalk-helper.js';
 import { dirExists } from '../utils/fs.utils.js';
 import { isPortInUse } from '../services/server-manager.js';
 
@@ -22,12 +29,15 @@ async function checkAlreadyOnboarded(yes: boolean): Promise<boolean> {
 
   if (yes) return true;
 
-  const { proceed } = await inquirer.prompt([{
-    type: 'confirm',
-    name: 'proceed',
-    message: 'Re-run onboard? This will overwrite your .env and re-create any missing directories.',
-    default: false,
-  }]);
+  const { proceed } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'proceed',
+      message:
+        'Re-run onboard? This will overwrite your .env and re-create any missing directories.',
+      default: false,
+    },
+  ]);
 
   return proceed as boolean;
 }
@@ -37,38 +47,42 @@ async function checkAlreadyOnboarded(yes: boolean): Promise<boolean> {
 async function collectUserInput(yes: boolean): Promise<OnboardConfig> {
   if (yes) return { port: 5545 };
 
-  const { port: rawPort } = await inquirer.prompt([{
-    type: 'input',
-    name: 'port',
-    message: 'Server port:',
-    default: '5545',
-    validate: async (input: string) => {
-      const port = parseInt(input, 10);
-      if (isNaN(port) || port < 1 || port > 65535) {
-        return 'Port must be a number between 1 and 65535';
-      }
-      if (await isPortInUse(port)) {
-        return `Port ${port} is already in use — choose another`;
-      }
-      return true;
+  const { port: rawPort } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'port',
+      message: 'Server port:',
+      default: '5545',
+      validate: async (input: string) => {
+        const port = parseInt(input, 10);
+        if (isNaN(port) || port < 1 || port > 65535) {
+          return 'Port must be a number between 1 and 65535';
+        }
+        if (await isPortInUse(port)) {
+          return `Port ${port} is already in use — choose another`;
+        }
+        return true;
+      },
     },
-  }]);
+  ]);
 
   const config: OnboardConfig = { port: parseInt(rawPort as string, 10) };
 
   // Summary in Paperclip style
   console.log();
   printStep('Server port', String(config.port));
-  printStep('Database',    IprepPaths.dbFile);
-  printStep('Config dir',  IprepPaths.root);
+  printStep('Database', IprepPaths.dbFile);
+  printStep('Config dir', IprepPaths.root);
   console.log();
 
-  const { confirmed } = await inquirer.prompt([{
-    type: 'confirm',
-    name: 'confirmed',
-    message: 'Proceed with setup?',
-    default: true,
-  }]);
+  const { confirmed } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirmed',
+      message: 'Proceed with setup?',
+      default: true,
+    },
+  ]);
 
   if (!confirmed) {
     console.log(log.warn('Onboard cancelled.'));
@@ -82,11 +96,11 @@ async function collectUserInput(yes: boolean): Promise<OnboardConfig> {
 
 function createDirectoryStructure(): void {
   const dirs = [
-    { abs: IprepPaths.root,                               label: '~/.iprep/' },
-    { abs: IprepPaths.database,                           label: '~/.iprep/database/' },
-    { abs: path.join(IprepPaths.root, 'logs'),            label: '~/.iprep/logs/' },
-    { abs: path.join(IprepPaths.root, 'sessions'),        label: '~/.iprep/sessions/' },
-    { abs: path.join(IprepPaths.root, 'exports'),         label: '~/.iprep/exports/' },
+    { abs: IprepPaths.root, label: '~/.iprep/' },
+    { abs: IprepPaths.database, label: '~/.iprep/database/' },
+    { abs: path.join(IprepPaths.root, 'logs'), label: '~/.iprep/logs/' },
+    { abs: path.join(IprepPaths.root, 'sessions'), label: '~/.iprep/sessions/' },
+    { abs: path.join(IprepPaths.root, 'exports'), label: '~/.iprep/exports/' },
   ];
 
   for (const dir of dirs) {
@@ -109,21 +123,24 @@ function createDirectoryStructure(): void {
 async function writeEnvFile(config: OnboardConfig, yes: boolean): Promise<void> {
   const dbUrl = `file:${IprepPaths.dbFile.replace(/\\/g, '/')}`;
 
-  const content = [
-    `PORT=${config.port}`,
-    `NODE_ENV=development`,
-    `DATABASE_URL=${dbUrl}`,
-    `CORS_ORIGIN=http://localhost:5173`,
-    `API_BASE_URL=http://localhost:${config.port}/api/v1`,
-  ].join('\n') + '\n';
+  const content =
+    [
+      `PORT=${config.port}`,
+      `NODE_ENV=production`,
+      `DATABASE_URL=${dbUrl}`,
+      `CORS_ORIGIN=http://localhost:5173`,
+      `API_BASE_URL=http://localhost:${config.port}/api/v1`,
+    ].join('\n') + '\n';
 
   if (IprepPaths.isEnvExists && !yes) {
-    const { overwrite } = await inquirer.prompt([{
-      type: 'confirm',
-      name: 'overwrite',
-      message: `.env already exists. Overwrite it?`,
-      default: false,
-    }]);
+    const { overwrite } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'overwrite',
+        message: `.env already exists. Overwrite it?`,
+        default: false,
+      },
+    ]);
     if (!overwrite) {
       console.log(`  ${log.warn('.env kept unchanged')}`);
       return;
@@ -137,11 +154,9 @@ async function writeEnvFile(config: OnboardConfig, yes: boolean): Promise<void> 
 // ─── Step 5 ────────────────────────────────────────────────────────────────
 
 function runDbMigration(): void {
-  const monorepoRoot = path.dirname(IprepPaths.envFilePath);
-
   try {
     execSync('pnpm --filter=@iprep/db db:migrate', {
-      cwd: monorepoRoot,
+      cwd: process.cwd(),
       stdio: 'pipe',
     });
     console.log(`  ${log.success('Database migrated')}`);
@@ -167,10 +182,10 @@ function runDbMigration(): void {
 async function verifySetup(): Promise<void> {
   const dbHealthy = await checkDbHealth();
   const checks = [
-    { label: 'Config dir exists',    ok: dirExists(IprepPaths.root) },
-    { label: 'Database dir exists',  ok: dirExists(IprepPaths.database) },
+    { label: 'Config dir exists', ok: dirExists(IprepPaths.root) },
+    { label: 'Database dir exists', ok: dirExists(IprepPaths.database) },
     { label: 'Database file exists', ok: fs.existsSync(IprepPaths.dbFile) },
-    { label: 'Database reachable',   ok: dbHealthy },
+    { label: 'Database reachable', ok: dbHealthy },
   ];
 
   for (const check of checks) {
@@ -190,11 +205,13 @@ function showCompletionSummary(config: OnboardConfig): void {
   console.log();
   console.log(chalk.bold.green('  ✓  iPrep setup complete!\n'));
   printStep('Config dir', IprepPaths.root);
-  printStep('Database',   IprepPaths.dbFile);
-  printStep('Port',       String(config.port));
-  printStep('API',        `http://localhost:${config.port}/api/v1`);
+  printStep('Database', IprepPaths.dbFile);
+  printStep('Port', String(config.port));
+  printStep('API', `http://localhost:${config.port}/api/v1`);
   console.log();
-  console.log(`  ${chalk.cyan('Next:')}  run ${chalk.bold.white('iprep start')} to start the server`);
+  console.log(
+    `  ${chalk.cyan('Next:')}  run ${chalk.bold.white('iprep start')} to start the server`,
+  );
   console.log();
 }
 
@@ -206,10 +223,7 @@ export async function runOnBoard(opts: { yes?: boolean }): Promise<void> {
   printBanner();
   printSeparator();
   printCommandBadge('iprep onboard');
-  printMeta([
-    `home: ${IprepPaths.root}`,
-    `config: ${IprepPaths.envFilePath}`,
-  ]);
+  printMeta([`home: ${IprepPaths.root}`, `config: ${IprepPaths.envFilePath}`]);
 
   const proceed = await checkAlreadyOnboarded(yes);
   if (!proceed) {
