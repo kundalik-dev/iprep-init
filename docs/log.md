@@ -31,10 +31,13 @@ Top-level documentation files for navigating the `docs/` folder.
 
 Early product thinking, rough workflows, and discussion notes before ideas become implementation plans.
 
-| File                                         | Description                                                                                                                                     |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `00-iprep-main-pages.md`                     | Brainstorming map of the main iPrep UI pages, including dashboard, interviews, history, AI coach, notes, communication, analysis, and settings. |
-| `01-iprep-onboarding-and-first-interview.md` | Brainstorming document for the iPrep first-run onboarding journey, interview creation paths, and post-session analysis flow.                    |
+| File                                           | Description                                                                                                                                     |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `00-iprep-main-pages.md`                       | Brainstorming map of the main iPrep UI pages, including dashboard, interviews, history, AI coach, notes, communication, analysis, and settings. |
+| `01-iprep-onboarding-and-first-interview.md`   | Brainstorming document for the iPrep first-run onboarding journey, interview creation paths, and post-session analysis flow.                    |
+| `02-iprep-system-design-and-wrokflow.md`       | Brainstorming document for the iPrep system design, monorepo layers, local `.iprep` workspace, package responsibilities, and workflow pipeline. |
+| `api-requirements.md`                          | Future-facing API requirements for the local iPrep server, synthesized from brainstorming docs and demo app API requirements.                   |
+| `iprep-brainstorm-api.postman_collection.json` | Postman collection for the future local iPrep API routes defined in `api-requirements.md`.                                                      |
 
 ---
 
