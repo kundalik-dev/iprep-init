@@ -1,3 +1,11 @@
+---
+name: 01-prisma-schema.md
+description: This file is about prisma schema & its models
+---
+
+This file is about prisma schema
+
+```prisma
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -29,7 +37,7 @@ model User {
 
   interviews Interview[]
   notes      Note[]
-  stats      UserStats?
+  stats      UserStats
   chats      Chat[]
 
   createdAt DateTime @default(now())
@@ -309,3 +317,4 @@ enum Gender {
   F
   O
 }
+```
