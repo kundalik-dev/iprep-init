@@ -13,6 +13,14 @@ Commander.js CLI for iPrep — provides interactive onboarding, project director
 - `@iprep/db` (database queries, `checkDbHealth`)
 - `tsx` for dev (watch mode), `tsc` for builds
 
+## Code Map
+
+**`CLI-MAP.md`** (in this directory) is the function-level reference for every file and export.
+
+- **Check it when:** you need to find which file owns a function, understand the command→handler→service call chain, or look up a function signature without opening source files.
+- **Skip it when:** you are about to edit a file — read the source file directly instead; the map is a navigation aid, not a substitute for the real code.
+- **Keep it updated:** whenever you add, rename, or remove an exported function or command, update `CLI-MAP.md` to match.
+
 ## Structure
 
 ```

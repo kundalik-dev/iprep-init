@@ -1,0 +1,320 @@
+---
+name: 01-prisma-schema.md
+description: This file is about prisma schema & its models
+---
+
+This file is about prisma schema
+
+```prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Health {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("ok")
+  checkedAt DateTime @default(now())
+
+  @@map("health")
+}
+
+// =============================================
+// USER & GLOBAL STATS
+// =============================================
+
+model User {
+  id    String  @id @default(cuid())
+  name  String
+  email String? @unique
+
+  interviews Interview[]
+  notes      Note[]
+  stats      UserStats
+  chats      Chat[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model UserStats {
+  id            String @id @default(cuid())
+  currentStreak Int    @default(0)
+  totalMinutes  Int    @default(0)
+  averageScore  Int    @default(0)
+  commScore     Int    @default(0) // Communication Score trend
+  totalFillers  Int    @default(0) // Running count of filler words
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  updatedAt DateTime @updatedAt
+}
+
+// =============================================
+// AI PROVIDERS
+// =============================================
+model sessions {
+  id          String     @id @default(cuid())
+  aiProvider  AIProvider @default(CLAUDE)
+  aiSessionId String
+}
+
+// =============================================
+// AI COACH CHAT SYSTEM (New: From Chat Screen)
+// =============================================
+
+model Chat {
+  id            String   @id @default(cuid())
+  title         String // e.g., "Behavioral Session Review"
+  lastMessageAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  messages Message[]
+
+  // Contextual links seen in "3 notes loaded"
+  usedNotes Note[] @relation("ChatContext")
+}
+
+model Message {
+  id      String   @id @default(cuid())
+  role    String // "AI" or "USER"
+  content String // Supports Markdown content
+  sentAt  DateTime @default(now())
+
+  chatId String
+  chat   Chat   @relation(fields: [chatId], references: [id])
+
+  // Optional: Link a message to a specific interview report
+  // (Used for "View Full Analysis" buttons inside chat)
+  relatedInterviewId String?
+}
+
+// =============================================
+// THE INTERVIEW SESSION (Core Entity)
+// =============================================
+
+model Interview {
+  id        String          @id @default(cuid())
+  status    InterviewStatus @default(DRAFT)
+  mode      InterviewMode   @default(VOICE)
+  modelUsed String?         @default("claude-3-5-sonnet-20241022")
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  packageId String
+  package   InterviewPackage @relation(fields: [packageId], references: [id], onDelete: Restrict)
+
+  tutorId String?
+  tutor   Tutor?  @relation(fields: [tutorId], references: [id], onDelete: SetNull)
+
+  // Context & Live Data
+  usedNotes   Note[]       @relation("InterviewContext")
+  transcripts Transcript[]
+
+  // Analysis & Feedback
+  analysis         Analysis?
+  questionFeedback QuestionFeedback[]
+
+  // Timing
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  @@index([userId])
+  @@index([packageId])
+  @@index([tutorId])
+}
+
+// =============================================
+// CONFIGURATION MODELS (Packages & Tutors)
+// =============================================
+
+model InterviewPackage {
+  id           String        @id @default(cuid())
+  title        String // e.g., "Behavioral Interview"
+  description  String
+  icon         String
+  difficulty   Difficulty
+  estimatedMin Int
+  numQuestions Int
+  isPro        Boolean       @default(false)
+  type         InterviewType
+  interviews   Interview[]
+}
+
+model Tutor {
+  id            String  @id @default(cuid())
+  name          String
+  initials      String
+  specialty     String
+  bio           String
+  traits        Json // e.g., ["Direct", "Analytical"]
+  avgScore      Int
+  totalSessions Int     @default(0)
+  isPro         Boolean @default(false)
+
+  interviews Interview[]
+}
+
+// =============================================
+// LIVE DATA & CONTENT
+// =============================================
+
+model Transcript {
+  id          String   @id @default(cuid())
+  order       Int
+  speakerRole Speaker
+  speakerName String
+  text        String
+  timestamp   DateTime @default(now())
+
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  @@index([interviewId])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  fileUrl   String?
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  chats      Chat[]      @relation("ChatContext")
+  interviews Interview[] @relation("InterviewContext")
+}
+
+// =============================================
+// POST-SESSION ANALYSIS & FEEDBACK
+// =============================================
+
+model Analysis {
+  id          String    @id @default(cuid())
+  interviewId String    @unique
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  // Overall Metrics
+  overallScore     Int
+  performanceLabel String // e.g., "Strong"
+
+  // Breakdown Scores
+  commScore         Int
+  techScore         Int
+  problemSolveScore Int
+  confidenceScore   Int
+
+  // Communication Stats
+  wordsSpoken      Int
+  turnsTaken       Int
+  totalFillerCount Int
+  fillerWords      FillerWord[]
+
+  // Qualitative Insights
+  strengths       Json
+  weaknesses      Json
+  recommendations Json
+}
+
+model QuestionFeedback {
+  id       String  @id @default(cuid())
+  question String
+  score    Int // e.g., 88
+  feedback String? // AI's specific feedback for this answer
+
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+
+  @@index([interviewId])
+}
+
+model FillerWord {
+  id     String @id @default(cuid())
+  word   String
+  count  Int
+  impact String
+
+  analysisId String
+  analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+}
+
+// =============================================
+// ENUMS
+// =============================================
+
+enum Speaker {
+  AI
+  USER
+}
+
+enum InterviewMode {
+  VOICE
+  CHAT
+  VIDEO
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+  EXPERT
+}
+
+enum InterviewType {
+  BEHAVIORAL
+  TECHNICAL_SCREEN
+  DSA
+  HR_ROUND
+  PRODUCT_MANAGER
+  SYSTEM_DESIGN
+}
+
+enum InterviewStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum AIProvider {
+  CLAUDE
+  CODEX
+  GEMINI
+  OPENROUTER
+  OLLAMA
+  OTHER
+}
+
+enum BYOK {
+  CLAUDE_BYOK
+  CODEX_BYOK
+  GEMINI_BYOK
+  OPEN_ROUTER
+  OTHER
+}
+
+enum Gender {
+  M
+  F
+  O
+}
+```

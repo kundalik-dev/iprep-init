@@ -1,34 +1,46 @@
 {
-  "name": "@iprep/cli",
-  "version": "0.1.0",
-  "description": "@iPrep/cli command line for iPrep",
+  "name": "iprep",
+  "version": "1.2.2",
+  "description": "iPrep — self-hosted interview preparation platform. Run locally with CLI, server, and frontend.",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "bin": {
     "iprep": "dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
+    "build": "tsup",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
     "typecheck": "tsc --noEmit"
   },
   "author": "kundalik.dev",
   "license": "ISC",
   "dependencies": {
-    "@iprep/db": "workspace:*",
-    "@iprep/shared": "workspace:*",
+    "@prisma/adapter-better-sqlite3": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "better-sqlite3": "^12.9.0",
     "chalk": "^5.6.2",
     "commander": "^14.0.3",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "figlet": "^1.11.0",
     "gradient-string": "^3.0.0",
     "inquirer": "^13.4.2"
   },
   "devDependencies": {
+    "@iprep/db": "workspace:*",
+    "@iprep/shared": "workspace:*",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
     "@types/figlet": "^1.7.0",
     "@types/node": "^25.6.2",
+    "cross-env": "^10.1.0",
+    "prisma": "^7.8.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   }

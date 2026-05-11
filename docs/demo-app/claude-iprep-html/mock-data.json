@@ -1,0 +1,746 @@
+{
+  "tutors": [
+    {
+      "slug": "alex",
+      "name": "Alex Chen",
+      "initials": "AC",
+      "color": "#3B82F6",
+      "specialty": "Technical & DSA",
+      "personality": ["Direct", "Analytical", "Challenge-driven"],
+      "description": "Alex specializes in data structures, algorithms, and system-level technical interviews. Expects clean code, big-O analysis, and thorough edge case coverage. Won't let you skip the hard parts.",
+      "voice": "en-US-Neural2-D",
+      "isPro": false,
+      "sessionCount": 142,
+      "avgScore": 84
+    },
+    {
+      "slug": "priya",
+      "name": "Priya Sharma",
+      "initials": "PS",
+      "color": "#10B981",
+      "specialty": "Behavioral & HR",
+      "personality": ["Supportive", "Empathetic", "Detail-oriented"],
+      "description": "Priya coaches behavioral interviews using the STAR method. She helps candidates present authentic, structured stories that resonate with hiring managers across all levels.",
+      "voice": "en-IN-Neural2-A",
+      "isPro": false,
+      "sessionCount": 198,
+      "avgScore": 88
+    },
+    {
+      "slug": "morgan",
+      "name": "Morgan Blake",
+      "initials": "MB",
+      "color": "#8B5CF6",
+      "specialty": "System Design & Product",
+      "personality": ["Strategic", "Big-picture", "Industry-focused"],
+      "description": "Morgan covers system design at scale, product sense, and cross-functional leadership. Brings FAANG-level expectations to every session and pushes for depth in trade-off reasoning.",
+      "voice": "en-US-Neural2-J",
+      "isPro": true,
+      "sessionCount": 89,
+      "avgScore": 91
+    }
+  ],
+  "packages": [
+    {
+      "slug": "behavioral",
+      "name": "Behavioral Interview",
+      "type": "behavioral",
+      "icon": "🧠",
+      "difficulty": "Medium",
+      "duration": 30,
+      "description": "Master STAR storytelling for leadership, conflict, teamwork, and impact questions used by top companies.",
+      "topics": ["Leadership", "Conflict Resolution", "Teamwork", "Failure & Growth", "Impact Stories"],
+      "questionCount": 10,
+      "isPro": false
+    },
+    {
+      "slug": "technical",
+      "name": "Technical Screen",
+      "type": "technical",
+      "icon": "💻",
+      "difficulty": "Hard",
+      "duration": 45,
+      "description": "Full-stack technical screen covering programming, databases, REST APIs, and architecture basics.",
+      "topics": ["Data Structures", "OOP", "REST APIs", "SQL", "Debugging"],
+      "questionCount": 8,
+      "isPro": false
+    },
+    {
+      "slug": "dsa",
+      "name": "DSA Deep Dive",
+      "type": "dsa",
+      "icon": "🔢",
+      "difficulty": "Hard",
+      "duration": 60,
+      "description": "LeetCode-style coding interview with real-time problem solving, complexity analysis, and edge cases.",
+      "topics": ["Arrays", "Trees & Graphs", "Dynamic Programming", "Sorting", "Two Pointers"],
+      "questionCount": 5,
+      "isPro": false
+    },
+    {
+      "slug": "hr-round",
+      "name": "HR Round",
+      "type": "hr",
+      "icon": "🤝",
+      "difficulty": "Easy",
+      "duration": 20,
+      "description": "Salary negotiation, culture fit, expectations alignment, and career goals discussion.",
+      "topics": ["Salary Negotiation", "Culture Fit", "Career Goals", "Notice Period", "Expectations"],
+      "questionCount": 8,
+      "isPro": false
+    },
+    {
+      "slug": "product-manager",
+      "name": "Product Manager",
+      "type": "product",
+      "icon": "📊",
+      "difficulty": "Hard",
+      "duration": 50,
+      "description": "Product sense, metrics definition, roadmap prioritization, and stakeholder management scenarios.",
+      "topics": ["Product Sense", "Metrics & KPIs", "Roadmap Planning", "Trade-offs", "User Research"],
+      "questionCount": 6,
+      "isPro": true
+    },
+    {
+      "slug": "system-design",
+      "name": "System Design",
+      "type": "system-design",
+      "icon": "🏗️",
+      "difficulty": "Expert",
+      "duration": 60,
+      "description": "Design scalable distributed systems — URL shorteners, feeds, messaging platforms, and payment systems.",
+      "topics": ["Scalability", "CAP Theorem", "Caching", "Load Balancing", "Database Design"],
+      "questionCount": 3,
+      "isPro": true
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess_001",
+      "packageSlug": "behavioral",
+      "packageName": "Behavioral Interview",
+      "tutorSlug": "priya",
+      "tutorName": "Priya Sharma",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-05T10:00:00Z",
+      "endedAt": "2026-05-05T10:32:00Z",
+      "durationSec": 1920,
+      "score": 86,
+      "analysisId": "anal_001",
+      "hasRecording": true,
+      "recordingUrl": "mock://recording/sess_001.wav",
+      "recordingDurationSec": 1920,
+      "transcript": [
+        { "speaker": "ai", "text": "Welcome! Let's start with a classic opener — tell me about a time you led a team through a challenging situation.", "timestampSec": 5 },
+        { "speaker": "user", "text": "Sure! At my previous role, um, we had a critical production outage. I basically had to coordinate like four different teams simultaneously.", "timestampSec": 18 },
+        { "speaker": "ai", "text": "Good scenario. Walk me through the specific steps you took to coordinate those teams.", "timestampSec": 42 },
+        { "speaker": "user", "text": "So first I set up a war room — virtual since we were remote — and assigned clear ownership to each team. I made sure everyone had, um, a single source of truth for the incident status.", "timestampSec": 55 },
+        { "speaker": "ai", "text": "Excellent use of structure. What was the measurable outcome of your coordination efforts?", "timestampSec": 95 },
+        { "speaker": "user", "text": "We reduced downtime from an estimated 4 hours to 47 minutes. Customer impact was minimal and we shipped a post-mortem within 48 hours with 12 action items.", "timestampSec": 108 },
+        { "speaker": "ai", "text": "Strong quantified result. What would you do differently in hindsight?", "timestampSec": 148 },
+        { "speaker": "user", "text": "I'd set up better runbooks ahead of time so the coordination wouldn't require as much real-time decision making. Basically reactive preparation rather than being reactive in the moment.", "timestampSec": 162 }
+      ]
+    },
+    {
+      "id": "sess_002",
+      "packageSlug": "dsa",
+      "packageName": "DSA Deep Dive",
+      "tutorSlug": "alex",
+      "tutorName": "Alex Chen",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-04T14:00:00Z",
+      "endedAt": "2026-05-04T15:05:00Z",
+      "durationSec": 3900,
+      "score": 79,
+      "analysisId": "anal_002",
+      "hasRecording": true,
+      "recordingUrl": "mock://recording/sess_002.wav",
+      "recordingDurationSec": 3900,
+      "transcript": [
+        { "speaker": "ai", "text": "Given an unsorted array of integers, find two numbers that add up to a target sum. Return their indices. What's your approach?", "timestampSec": 5 },
+        { "speaker": "user", "text": "Classic two-sum. I'd use a hash map for O(n) time. For each element, check if target minus current exists in the map, otherwise store it.", "timestampSec": 20 },
+        { "speaker": "ai", "text": "Good. Now what if the array is sorted — can you do better in terms of space complexity?", "timestampSec": 45 },
+        { "speaker": "user", "text": "Yes — with sorted input I can use two pointers. O(n) time, O(1) space. Left pointer at start, right at end, move based on sum comparison.", "timestampSec": 60 },
+        { "speaker": "ai", "text": "Correct. Now extend this to three-sum. Constraints: find all unique triplets summing to zero.", "timestampSec": 90 },
+        { "speaker": "user", "text": "Sort first, then for each element use two-pointer on the rest. Total O(n²) time. I need to handle duplicates by skipping equal adjacent elements.", "timestampSec": 110 },
+        { "speaker": "ai", "text": "Good on duplicate handling — most candidates miss that. What about the maximum subarray problem?", "timestampSec": 150 },
+        { "speaker": "user", "text": "Kadane's algorithm. Track current sum and max seen. If current sum drops negative, reset to current element. O(n) time, O(1) space.", "timestampSec": 165 }
+      ]
+    },
+    {
+      "id": "sess_003",
+      "packageSlug": "system-design",
+      "packageName": "System Design",
+      "tutorSlug": "morgan",
+      "tutorName": "Morgan Blake",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-03T09:00:00Z",
+      "endedAt": "2026-05-03T10:05:00Z",
+      "durationSec": 3900,
+      "score": 72,
+      "analysisId": "anal_003",
+      "hasRecording": true,
+      "recordingUrl": "mock://recording/sess_003.wav",
+      "recordingDurationSec": 3900,
+      "transcript": [
+        { "speaker": "ai", "text": "Design a URL shortening service like bit.ly. Start with requirements clarification.", "timestampSec": 5 },
+        { "speaker": "user", "text": "Functional: create short URLs, redirect to original, track analytics. Non-functional: 100M URLs/day, sub-100ms redirect latency, 99.99% availability.", "timestampSec": 25 },
+        { "speaker": "ai", "text": "Good scope. How would you generate the short codes uniquely at scale across multiple servers?", "timestampSec": 60 },
+        { "speaker": "user", "text": "Base62 encoding of an auto-increment ID, or use a distributed ID generator like Snowflake for true horizontal scaling without coordination.", "timestampSec": 75 },
+        { "speaker": "ai", "text": "What about caching? Where would you apply it and what eviction policy makes sense here?", "timestampSec": 120 },
+        { "speaker": "user", "text": "CDN for the redirect layer globally, Redis in-memory cache for hot URLs close to the app servers. LRU eviction since access patterns are highly skewed — 20% of URLs get 80% of traffic.", "timestampSec": 140 }
+      ]
+    },
+    {
+      "id": "sess_004",
+      "packageSlug": "hr-round",
+      "packageName": "HR Round",
+      "tutorSlug": "priya",
+      "tutorName": "Priya Sharma",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-02T11:00:00Z",
+      "endedAt": "2026-05-02T11:24:00Z",
+      "durationSec": 1440,
+      "score": 91,
+      "analysisId": null,
+      "hasRecording": true,
+      "recordingUrl": "mock://recording/sess_004.wav",
+      "recordingDurationSec": 1440,
+      "transcript": [
+        { "speaker": "ai", "text": "What are your salary expectations for this role?", "timestampSec": 5 },
+        { "speaker": "user", "text": "Based on my research and experience level, I'm targeting between $145,000 and $165,000 base, with flexibility depending on the total compensation package including equity.", "timestampSec": 18 },
+        { "speaker": "ai", "text": "What's your current notice period?", "timestampSec": 45 },
+        { "speaker": "user", "text": "I have a 30-day notice period, but I've successfully negotiated it to two weeks in the past when timing was critical for the new employer.", "timestampSec": 58 }
+      ]
+    },
+    {
+      "id": "sess_005",
+      "packageSlug": "technical",
+      "packageName": "Technical Screen",
+      "tutorSlug": "alex",
+      "tutorName": "Alex Chen",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-04-30T15:00:00Z",
+      "endedAt": "2026-04-30T15:48:00Z",
+      "durationSec": 2880,
+      "score": 83,
+      "analysisId": null,
+      "hasRecording": true,
+      "recordingUrl": "mock://recording/sess_005.wav",
+      "recordingDurationSec": 2880,
+      "transcript": [
+        { "speaker": "ai", "text": "Explain the difference between REST and GraphQL. When would you choose one over the other?", "timestampSec": 5 },
+        { "speaker": "user", "text": "REST uses fixed endpoints and HTTP methods — predictable, cacheable. GraphQL gives clients a single endpoint where they specify exactly what data they need, avoiding over-fetching.", "timestampSec": 22 },
+        { "speaker": "ai", "text": "Good. What are the real-world trade-offs of GraphQL in production at scale?", "timestampSec": 55 },
+        { "speaker": "user", "text": "N+1 query problem if not handled with DataLoader, complexity in caching since queries are dynamic, potentially more tooling overhead and schema management at scale.", "timestampSec": 70 }
+      ]
+    },
+    {
+      "id": "sess_006",
+      "packageSlug": "product-manager",
+      "packageName": "Product Manager",
+      "tutorSlug": "morgan",
+      "tutorName": "Morgan Blake",
+      "status": "ABANDONED",
+      "mode": "VOICE",
+      "startedAt": "2026-04-28T09:00:00Z",
+      "endedAt": "2026-04-28T09:12:00Z",
+      "durationSec": 720,
+      "score": null,
+      "analysisId": null,
+      "hasRecording": false,
+      "recordingUrl": null,
+      "recordingDurationSec": null,
+      "transcript": []
+    },
+    {
+      "id": "sess_007",
+      "packageSlug": "behavioral",
+      "packageName": "Behavioral Interview",
+      "tutorSlug": "priya",
+      "tutorName": "Priya Sharma",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-04-25T10:00:00Z",
+      "endedAt": "2026-04-25T10:35:00Z",
+      "durationSec": 2100,
+      "score": 78,
+      "analysisId": null,
+      "hasRecording": true,
+      "recordingUrl": "mock://recording/sess_007.wav",
+      "recordingDurationSec": 2100,
+      "transcript": [
+        { "speaker": "ai", "text": "Tell me about a time you had to make a difficult decision without all the information you needed.", "timestampSec": 5 },
+        { "speaker": "user", "text": "We had to decide whether to delay a product launch by two weeks. Data was incomplete — early signals suggested stability issues. We made the call to launch on schedule with enhanced monitoring.", "timestampSec": 22 }
+      ]
+    },
+    {
+      "id": "sess_008",
+      "packageSlug": "dsa",
+      "packageName": "DSA Deep Dive",
+      "tutorSlug": "alex",
+      "tutorName": "Alex Chen",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-04-20T14:00:00Z",
+      "endedAt": "2026-04-20T15:10:00Z",
+      "durationSec": 4200,
+      "score": 74,
+      "analysisId": null,
+      "hasRecording": true,
+      "recordingUrl": "mock://recording/sess_008.wav",
+      "recordingDurationSec": 4200,
+      "transcript": [
+        { "speaker": "ai", "text": "Implement a binary search tree with insert, search, and in-order traversal.", "timestampSec": 5 },
+        { "speaker": "user", "text": "I'll define a Node class with left/right pointers and a value. Insert recursively comparing values. In-order: left subtree, root, right subtree — gives sorted output.", "timestampSec": 25 }
+      ]
+    }
+  ],
+  "analysis": {
+    "anal_001": {
+      "id": "anal_001",
+      "sessionId": "sess_001",
+      "provider": "claude-3-5-sonnet-20241022",
+      "status": "COMPLETED",
+      "generatedAt": "2026-05-05T10:35:00Z",
+      "scores": {
+        "communication": 82,
+        "technical": 75,
+        "problemSolving": 88,
+        "confidence": 85,
+        "overall": 86
+      },
+      "strengths": [
+        "Excellent use of quantified outcomes — reducing downtime from 4h to 47min is highly compelling to interviewers",
+        "Clear STAR structure maintained throughout every response without prompting",
+        "Demonstrated cross-functional ownership and leadership instincts consistently"
+      ],
+      "improvements": [
+        "Reduce filler word usage (um, basically, like) — appeared 14 times in 32 minutes, impacting perceived confidence",
+        "Expand the Reflection portion of STAR — what did you personally learn from each experience?",
+        "Broaden your story bank — you used the outage story twice, build 5-6 distinct scenarios"
+      ],
+      "answerFeedback": [
+        {
+          "question": "Tell me about a time you led a team through a challenging situation.",
+          "userAnswer": "Coordinated 4 teams during a production outage, set up virtual war room, assigned clear ownership. Reduced downtime from 4h to 47min, shipped post-mortem within 48h.",
+          "feedback": "Strong answer with excellent quantified impact. Missing: learning and reflection component. Add one sentence on what you'd do differently to complete the story arc.",
+          "score": 88
+        },
+        {
+          "question": "Describe a conflict you had with a colleague and how you resolved it.",
+          "userAnswer": "Had a disagreement with a senior engineer on API design philosophy. Proposed a time-boxed spike to test both approaches with real data. Data guided the final decision.",
+          "feedback": "Good conflict resolution using evidence over opinion. The answer feels brief — add emotional context and acknowledge the relationship aftermath to humanize it.",
+          "score": 81
+        },
+        {
+          "question": "What's your biggest professional failure?",
+          "userAnswer": "Underestimated a database migration complexity and missed a deadline by 3 weeks. Worked overtime, communicated proactively with stakeholders, and added buffer to all future estimates.",
+          "feedback": "Honest and shows real accountability. Strengthen the systematic change section — what process did you implement so this specific failure mode can't repeat?",
+          "score": 85
+        }
+      ],
+      "report": "## Session Analysis Report\n\n**Overall Performance:** Strong — Above Average\n\nYou demonstrated genuine leadership capability and a results-oriented mindset throughout this session. Your quantified outcomes set you apart from most candidates at this level.\n\n### What Worked Well\n\n- **Structured thinking:** Every answer had a clear setup, execution, and measurable result\n- **Specificity:** Concrete numbers (47 minutes, 4 teams, 48 hours) make your stories believable and memorable\n- **Ownership language:** Phrases like \"I set up\" and \"I assigned\" show agency without undermining team credit\n- **Proactive follow-through:** Mentioning the post-mortem shows systemic thinking\n\n### Areas to Strengthen\n\n- **Filler words:** 14 instances of 'um', 'basically', and 'like' in 32 minutes. This is your highest-impact improvement area. Practice recording yourself and replaying.\n- **Reflection depth:** Interviewers at senior levels specifically want to know what you *learned*, not just what happened and what resulted\n- **Story breadth:** You leaned on the production outage story in two separate answers. Build a story matrix with at least 5-6 distinct situations mapped to common behavioral themes\n\n### Recommended Next Steps\n\n1. Record yourself answering \"Tell me about a failure\" — focus exclusively on the Reflection section and practice until it sounds natural\n2. Review the STAR-AR extension (Situation, Task, Action, Result, *Reflection*) — the added R is what differentiates senior candidates\n3. Build a story matrix: map 6 experiences to 12 common behavioral themes\n4. Practice 2 more behavioral sessions this week to cement the improvements",
+      "communicationAnalysis": {
+        "sessionId": "sess_001",
+        "analyzedAt": "2026-05-05T10:38:00Z",
+        "totalUserWords": 412,
+        "totalUserTurns": 8,
+        "overallCommunicationScore": 74,
+        "fillerWordStats": [
+          { "word": "um", "count": 8, "percentOfTotal": 1.9, "severity": "high" },
+          { "word": "basically", "count": 4, "percentOfTotal": 1.0, "severity": "medium" },
+          { "word": "like", "count": 2, "percentOfTotal": 0.5, "severity": "low" }
+        ],
+        "topReplacements": [
+          {
+            "original": "um",
+            "betterAlternatives": ["pause silently", "take a breath", "say 'let me think'"],
+            "exampleInContext": "Instead of 'I had to, um, coordinate...' simply pause and say 'I had to coordinate...'"
+          },
+          {
+            "original": "basically",
+            "betterAlternatives": ["essentially", "in summary", "the core idea was", "specifically"],
+            "exampleInContext": "Instead of 'I basically set up a war room' say 'I established a dedicated incident war room'"
+          },
+          {
+            "original": "like",
+            "betterAlternatives": ["approximately", "for example", "such as", "around"],
+            "exampleInContext": "Instead of 'like four different teams' say 'four cross-functional teams'"
+          }
+        ],
+        "sentenceRewrites": [
+          {
+            "original": "I basically had to coordinate like four different teams simultaneously.",
+            "rewritten": "I coordinated four cross-functional teams simultaneously.",
+            "improvement": "Removed two filler words, more precise and confident phrasing"
+          },
+          {
+            "original": "I made sure everyone had, um, a single source of truth.",
+            "rewritten": "I established a shared incident dashboard as the single source of truth.",
+            "improvement": "Removed filler, added specificity that shows structured thinking"
+          },
+          {
+            "original": "Basically reactive preparation rather than being reactive in the moment.",
+            "rewritten": "Proactive runbook preparation rather than reactive improvisation during incidents.",
+            "improvement": "Eliminated filler, parallel structure, professional vocabulary"
+          }
+        ],
+        "strengthsInCommunication": [
+          "Consistent use of active voice throughout all answers",
+          "Clear subject-verb-object sentence structure makes answers easy to follow",
+          "Quantified claims add credibility and specificity"
+        ]
+      }
+    },
+    "anal_002": {
+      "id": "anal_002",
+      "sessionId": "sess_002",
+      "provider": "claude-3-5-sonnet-20241022",
+      "status": "COMPLETED",
+      "generatedAt": "2026-05-04T15:10:00Z",
+      "scores": {
+        "communication": 76,
+        "technical": 85,
+        "problemSolving": 90,
+        "confidence": 72,
+        "overall": 79
+      },
+      "strengths": [
+        "Immediate and correct pattern recognition on two-sum and three-sum variants",
+        "Accurately identified space-time trade-offs across different input constraints",
+        "Articulated complexity analysis unprompted — shows strong algorithmic foundation"
+      ],
+      "improvements": [
+        "Verbalize your reasoning process more — you jump to solutions without showing the path",
+        "Ask clarifying questions before coding (duplicates allowed? negative numbers? sorted input?)",
+        "Test with edge cases — you tested the happy path only, missing empty array and no-solution cases"
+      ],
+      "answerFeedback": [
+        {
+          "question": "Find two numbers that add up to a target sum.",
+          "userAnswer": "Hash map approach O(n) time, two-pointer for sorted input O(n) time O(1) space.",
+          "feedback": "Correct and efficient. Missing: clarifying questions about constraints. Edge cases to add: empty array, no valid pair, duplicate elements.",
+          "score": 88
+        },
+        {
+          "question": "Extend to three-sum (unique triplets summing to zero).",
+          "userAnswer": "Sort + two-pointer, O(n²) time, O(1) extra space, skip duplicates on outer and inner loops.",
+          "feedback": "Correct complexity and correctly mentioned duplicate handling. Strong answer — consider also mentioning the hash map O(n²) space approach as an alternative.",
+          "score": 85
+        },
+        {
+          "question": "Find the maximum subarray sum.",
+          "userAnswer": "Kadane's algorithm. Track current sum and global max. Reset current to element if it goes negative. O(n) time, O(1) space.",
+          "feedback": "Excellent. Clean explanation of Kadane's. Consider mentioning the divide-and-conquer O(n log n) approach to show depth.",
+          "score": 90
+        }
+      ],
+      "report": "## DSA Session Analysis\n\n**Overall Performance:** Competent — Approaching Strong\n\nSolid algorithmic fundamentals with room to grow in communication and edge case coverage. Your pattern recognition is a real strength.\n\n### Technical Strengths\n\n- **Pattern recognition:** Identified optimal approaches (hash map, two-pointer, Kadane's) immediately and correctly\n- **Complexity analysis:** Consistently analyzed time and space without being prompted — this is a differentiator\n- **Trade-off awareness:** Correctly identified when to prefer space efficiency over time savings\n\n### Growth Areas\n\n- **Clarifying questions:** Always clarify constraints before writing a single line. Interviewers explicitly reward this — it shows real-world engineering instinct.\n- **Think out loud:** Your final solutions are correct, but the path there is invisible. Narrate your decision-making in real time.\n- **Edge cases:** Build a mental checklist: empty input, single element, all negatives, duplicates, no valid answer.\n\n### Recommended Practice Plan\n\n1. LeetCode focus: Two Sum (1), 3Sum (15), Maximum Subarray (53) — review editorial solutions\n2. Practice the 'rubber duck' technique: explain your solution aloud before coding it\n3. Spend 10 minutes on edge cases for every problem you solve",
+      "communicationAnalysis": null
+    },
+    "anal_003": {
+      "id": "anal_003",
+      "sessionId": "sess_003",
+      "provider": "claude-3-5-sonnet-20241022",
+      "status": "COMPLETED",
+      "generatedAt": "2026-05-03T10:10:00Z",
+      "scores": {
+        "communication": 78,
+        "technical": 80,
+        "problemSolving": 75,
+        "confidence": 65,
+        "overall": 72
+      },
+      "strengths": [
+        "Methodical requirements gathering — established scale and constraints before jumping to architecture",
+        "Correct identification of distributed ID generation need (Snowflake/base62)",
+        "LRU cache reasoning was sound, justified by realistic access pattern analysis"
+      ],
+      "improvements": [
+        "Rate limiting was never addressed — this is critical for any public API (abuse prevention, cost control)",
+        "Database sharding strategy was vague — be specific about shard key choice and hot-shard mitigation",
+        "No mention of observability — monitoring, alerting, and distributed tracing are table stakes at senior level"
+      ],
+      "answerFeedback": [
+        {
+          "question": "Design a URL shortening service at 100M URLs/day.",
+          "userAnswer": "Requirements clarification, base62 encoding, Redis LRU cache, CDN for redirect layer.",
+          "feedback": "Solid foundation with good justification for each choice. Critical gaps: rate limiting, abuse prevention, analytics pipeline, multi-region failover strategy.",
+          "score": 75
+        },
+        {
+          "question": "How would you handle database scaling at this volume?",
+          "userAnswer": "Horizontal sharding with consistent hashing, read replicas for analytics queries.",
+          "feedback": "Correct direction. Be more specific — shard by hash(short_code) to distribute evenly, explain how you'd handle hot shards for viral URLs.",
+          "score": 72
+        }
+      ],
+      "report": "## System Design Analysis\n\n**Overall Performance:** Developing — Needs Depth\n\nYou show a solid grasp of distributed systems basics, but senior-level system design interviews at FAANG expect depth in observability, failure modes, and abuse prevention.\n\n### What You Did Well\n\n- Requirements gathering was methodical and covered functional and non-functional requirements\n- Caching layer reasoning was well-justified with real access pattern analysis\n- ID generation showed awareness of distributed constraints\n\n### Critical Gaps to Address\n\n- **Rate limiting:** Every public API needs it. Discuss token bucket (burst-friendly) or sliding window (strict). Apply at edge, per-IP, and per-API-key levels.\n- **Observability:** Mention Prometheus metrics (request rate, error rate, latency p99), distributed tracing (Jaeger/OpenTelemetry), and alert thresholds.\n- **Failure modes:** What happens when the cache is cold? When the DB primary fails? When a region goes down? Show you've thought about the unhappy path.\n\n### 30-Day Study Plan\n\n1. Read: *Designing Data-Intensive Applications* (Kleppmann) — Chapters 5-6 on replication and partitioning\n2. Practice: Design Pastebin, TinyURL, then Instagram Feed in order of increasing complexity\n3. Add a mandatory \"failure modes\" and \"observability\" section to every design you practice",
+      "communicationAnalysis": null
+    }
+  },
+  "providers": [
+    {
+      "slug": "deepgram",
+      "name": "Deepgram Nova 2",
+      "type": "Speech-to-Text",
+      "status": "active",
+      "version": "nova-2-general",
+      "note": "Primary STT provider. Provides low-latency streaming transcription with punctuation.",
+      "installHint": null
+    },
+    {
+      "slug": "claude",
+      "name": "Anthropic Claude",
+      "type": "AI Analysis",
+      "status": "active",
+      "version": "claude-3-5-sonnet-20241022",
+      "note": "Primary analysis, coaching, and session generation engine.",
+      "installHint": null
+    },
+    {
+      "slug": "gemini",
+      "name": "Google Gemini",
+      "type": "AI Analysis",
+      "status": "fallback",
+      "version": "gemini-1.5-pro-002",
+      "note": "Fallback AI provider when Claude is rate-limited or unavailable.",
+      "installHint": null
+    },
+    {
+      "slug": "openai",
+      "name": "OpenAI GPT-4o",
+      "type": "AI Analysis",
+      "status": "configured",
+      "version": "gpt-4o-2024-11-20",
+      "note": "Secondary fallback. Higher cost per token than primary providers.",
+      "installHint": null
+    },
+    {
+      "slug": "whisper",
+      "name": "OpenAI Whisper",
+      "type": "Speech-to-Text",
+      "status": "not-configured",
+      "version": "whisper-1",
+      "note": "Alternative STT. Higher accuracy on accented speech, higher latency.",
+      "installHint": null
+    },
+    {
+      "slug": "ollama",
+      "name": "Ollama (Local)",
+      "type": "Local AI",
+      "status": "not-installed",
+      "version": null,
+      "note": "Run models locally for offline use. No API key or internet required.",
+      "installHint": "Run: brew install ollama && ollama pull llama3.2"
+    }
+  ],
+  "stats": {
+    "totalSessions": 8,
+    "completedSessions": 7,
+    "avgScore": 80,
+    "bestCategory": "Problem Solving",
+    "bestScore": 90,
+    "studyStreakDays": 5,
+    "totalMinutes": 342,
+    "sessionsThisWeek": 3,
+    "practiceTip": "Before answering any behavioral question, take 3 seconds to think. Interviewers expect and respect the pause — it signals structured thinking, not uncertainty.",
+    "lifetimeCommunication": {
+      "avgCommunicationScore": 76,
+      "totalFillerWordsAllTime": 68,
+      "topFillerAllTime": "um",
+      "improvementTrend": "+8 pts over last 30 days",
+      "mostImprovedArea": "Active voice usage",
+      "nextFocusArea": "Eliminating filler words under pressure",
+      "allTimeFillerStats": [
+        { "word": "um", "count": 32, "percentOfTotal": 2.1, "severity": "high" },
+        { "word": "basically", "count": 18, "percentOfTotal": 1.2, "severity": "medium" },
+        { "word": "like", "count": 12, "percentOfTotal": 0.8, "severity": "medium" },
+        { "word": "you know", "count": 6, "percentOfTotal": 0.4, "severity": "low" }
+      ],
+      "recentSessionScores": [
+        { "sessionId": "sess_008", "score": 68, "date": "2026-04-20" },
+        { "sessionId": "sess_007", "score": 71, "date": "2026-04-25" },
+        { "sessionId": "sess_005", "score": 73, "date": "2026-04-30" },
+        { "sessionId": "sess_002", "score": 76, "date": "2026-05-04" },
+        { "sessionId": "sess_001", "score": 74, "date": "2026-05-05" }
+      ]
+    }
+  },
+  "transcript_demo": [
+    { "speaker": "ai", "text": "Welcome to your mock interview. I'm ready when you are. Let's start — tell me about yourself and why you're excited about this opportunity.", "timestampSec": 2 },
+    { "speaker": "user", "text": "I'm a software engineer with 5 years of experience in backend systems and distributed architectures. I've led teams at growth-stage startups and worked on systems serving millions of daily active users.", "timestampSec": 16 },
+    { "speaker": "ai", "text": "Solid background. What specifically draws you to this type of role over others you might be exploring right now?", "timestampSec": 40 },
+    { "speaker": "user", "text": "The technical depth here is compelling. The scale problems your team is solving — particularly in real-time data processing — align well with where I've focused the last two years of my career.", "timestampSec": 56 },
+    { "speaker": "ai", "text": "Good. Let's dig into that real-time work. Walk me through the most complex system you've designed or significantly contributed to.", "timestampSec": 83 },
+    { "speaker": "user", "text": "I designed an event-driven notification system processing 40 million events per day across 12 microservices. Used Kafka for message queuing, Redis for deduplication state, and built a custom retry mechanism with exponential backoff.", "timestampSec": 100 },
+    { "speaker": "ai", "text": "What was the hardest technical challenge you faced in that system, and how did you resolve it?", "timestampSec": 138 }
+  ],
+  "conversations": [
+    {
+      "id": "conv_001",
+      "title": "Behavioral Session Review",
+      "createdAt": "2026-05-05T10:45:00Z",
+      "updatedAt": "2026-05-05T11:02:00Z",
+      "messages": [
+        {
+          "id": "msg_001",
+          "role": "ai",
+          "text": "Hey! I've reviewed your latest behavioral session with Priya. You scored **86/100** — that's above average for this package. Here's the quick summary:\n\n**Wins:**\n- Your production outage story had excellent quantified impact (47 min vs 4h)\n- Strong STAR structure maintained throughout\n- Consistent ownership language\n\n**Top 2 improvements:**\n- Filler words appeared 14 times — impacting perceived confidence\n- Add reflection to your stories — what did *you* personally learn?\n\nWant me to drill any specific area?",
+          "ts": "2026-05-05T10:45:00Z",
+          "actions": [
+            { "label": "View Full Analysis", "view": "analysis", "params": { "id": "anal_001" } },
+            { "label": "Practice Behavioral", "view": "new-interview" },
+            { "label": "Check Communication", "view": "communication" }
+          ]
+        },
+        {
+          "id": "msg_002",
+          "role": "user",
+          "text": "What should I focus on to improve my score the most?",
+          "ts": "2026-05-05T10:52:00Z",
+          "actions": []
+        },
+        {
+          "id": "msg_003",
+          "role": "ai",
+          "text": "Based on your last 3 sessions, here are your **top 3 focus areas** ranked by impact-per-effort:\n\n1. **Filler word reduction** — 14 instances in 32 min hurts perceived confidence significantly. Target: under 5 per session. Highest ROI improvement.\n2. **Reflection depth** — Senior interviewers explicitly probe for what you *learned*. Adding 2 sentences to each answer could add 5-8 points.\n3. **Story breadth** — You've used the outage story in 2 of 3 recent sessions. Build a bank of 6+ distinct scenarios mapped to themes.\n\nWhich do you want to tackle first?",
+          "ts": "2026-05-05T10:53:00Z",
+          "actions": [
+            { "label": "Start Practice Session", "view": "new-interview" },
+            { "label": "See Communication Stats", "view": "communication" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conv_002",
+      "title": "DSA Strategy & Practice",
+      "createdAt": "2026-05-04T15:15:00Z",
+      "updatedAt": "2026-05-04T15:30:00Z",
+      "messages": [
+        {
+          "id": "msg_004",
+          "role": "ai",
+          "text": "Your DSA session with Alex scored **79/100**. Your fundamentals are solid — pattern recognition is genuinely strong. The main gap is **communicating your reasoning** in real time.\n\nHere's your **7-day DSA sprint plan:**\n\n**Days 1–2:** Arrays & Hash Maps (Two Sum variants, Group Anagrams, Sliding Window)\n**Days 3–4:** Trees & Graphs (BFS/DFS, Lowest Common Ancestor, Cycle Detection)\n**Days 5–6:** Dynamic Programming (Coin Change, LCS, House Robber)\n**Day 7:** Full mock session + targeted review\n\nReady to start Day 1?",
+          "ts": "2026-05-04T15:15:00Z",
+          "actions": [
+            { "label": "Start DSA Practice", "view": "new-interview" },
+            { "label": "View Session Analysis", "view": "analysis", "params": { "id": "anal_002" } }
+          ]
+        },
+        {
+          "id": "msg_005",
+          "role": "user",
+          "text": "Can you explain the two-pointer technique?",
+          "ts": "2026-05-04T15:22:00Z",
+          "actions": []
+        },
+        {
+          "id": "msg_006",
+          "role": "ai",
+          "text": "**Two-pointer technique** — uses two indices moving through a data structure to reduce O(n²) brute force down to O(n).\n\n**When to reach for it:**\n- Sorted array problems\n- Finding pairs/triplets with a target sum\n- Palindrome / string matching\n- Removing duplicates in-place\n\n**Classic pattern — Two Sum (sorted input):**\n```\nleft = 0, right = n - 1\nwhile left < right:\n  total = arr[left] + arr[right]\n  if total == target:  return [left, right]\n  elif total < target: left++\n  else:                right--\n```\nTime: **O(n)**, Space: **O(1)**\n\n**Key interview tip:** Always state your constraints assumption (\"assuming sorted input\") before applying this pattern — it signals that you understand when it applies.",
+          "ts": "2026-05-04T15:23:00Z",
+          "actions": [
+            { "label": "Practice Two Sum", "trigger": "Give me a two sum problem to practice right now" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conv_003",
+      "title": "System Design Deep Dive",
+      "createdAt": "2026-05-03T10:15:00Z",
+      "updatedAt": "2026-05-03T10:45:00Z",
+      "messages": [
+        {
+          "id": "msg_007",
+          "role": "ai",
+          "text": "I reviewed your system design session with Morgan. Score: **72/100**. You have a real foundation here — the fundamentals are right. But Morgan flagged **3 critical gaps** that FAANG interviewers always probe:\n\n1. **Rate limiting** — zero mention of abuse prevention, which is critical for any public-facing API\n2. **Observability** — no metrics, distributed tracing, or alerting strategy\n3. **Failure modes** — no discussion of component failure handling or graceful degradation\n\nAddressing just these three could move you from 72 → 88+ on your next attempt.",
+          "ts": "2026-05-03T10:15:00Z",
+          "actions": [
+            { "label": "View Full Analysis", "view": "analysis", "params": { "id": "anal_003" } },
+            { "label": "Practice System Design", "view": "new-interview" }
+          ]
+        }
+      ]
+    }
+  ],
+  "fileSystem": {
+    "storageRoot": "/iprep-notes",
+    "folders": [
+      {
+        "id": "folder_001",
+        "name": "Interview Prep Notes",
+        "createdAt": "2026-04-15T09:00:00Z",
+        "files": [
+          {
+            "id": "file_001",
+            "name": "STAR Method Guide.md",
+            "type": "md",
+            "sizeKB": 4.2,
+            "createdAt": "2026-04-15T09:00:00Z",
+            "updatedAt": "2026-05-01T14:30:00Z",
+            "folderId": "folder_001",
+            "content": "# STAR Method Guide\n\n## What is STAR?\n\nSTAR is a structured technique for answering behavioral interview questions clearly and compellingly.\n\n- **S**ituation — Set the scene and provide necessary context\n- **T**ask — Describe your specific responsibility in that situation\n- **A**ction — Explain the specific steps *you* took (use \"I\", not \"we\")\n- **R**esult — Share the outcomes, preferably quantified\n\n## Extended: STAR-AR\n\nAdd a fifth element for senior roles:\n- **R**eflection — What did you personally learn? What would you do differently?\n\n## Time Allocation\n\n- Situation: 10-15% of answer time\n- Task: 10% of answer time\n- **Action: 50-60% of answer time** (this is what interviewers evaluate)\n- Result: 20% of answer time\n- Reflection: 5-10% (senior roles)\n\n## Quantification Tips\n\n- Convert vague results: \"improved performance\" → \"reduced p99 latency from 800ms to 120ms\"\n- Include scale: \"served 2M+ daily users\", \"managed $4M budget\"\n- Use percentages AND absolutes: \"20% reduction = 4 engineer-weeks saved per quarter\"\n\n## Story Matrix Template\n\n| Situation | Leadership | Conflict | Failure | Innovation | Collaboration |\n|-----------|-----------|----------|---------|------------|---------------|\n| Story 1   | ✓         |          | ✓       |            |               |\n| Story 2   |           | ✓        |         | ✓          |               |\n| Story 3   | ✓         |          |         |            | ✓             |\n\n## Common Mistakes\n\n- Too much time on Situation, not enough on Action\n- Vague results (\"it went well\") instead of specific outcomes\n- Using \"we\" when you should take personal ownership with \"I\"\n- Skipping the Reflection — critical for senior candidates\n- Not practicing out loud — writing it is not enough\n"
+          },
+          {
+            "id": "file_002",
+            "name": "DSA Patterns Cheatsheet.md",
+            "type": "md",
+            "sizeKB": 6.8,
+            "createdAt": "2026-04-18T11:00:00Z",
+            "updatedAt": "2026-05-04T16:00:00Z",
+            "folderId": "folder_001",
+            "content": "# DSA Patterns Cheatsheet\n\n## Two Pointers\n\n**Use when:** sorted arrays, pairs/triplets, palindromes, in-place operations\n**Complexity:** O(n) time, O(1) space\n**Problems:** Two Sum (sorted), 3Sum, Container with Most Water, Valid Palindrome\n\n```python\nleft, right = 0, len(arr) - 1\nwhile left < right:\n    # process\n    left += 1  # or right -= 1 based on condition\n```\n\n## Sliding Window\n\n**Use when:** contiguous subarray/substring with max/min condition\n**Complexity:** O(n) time, O(k) space\n**Problems:** Max Sum Subarray of Size K, Longest Substring Without Repeat\n\n```python\nwindow_start = 0\nfor window_end in range(len(arr)):\n    # expand window\n    while condition_violated:\n        # shrink window\n        window_start += 1\n```\n\n## BFS / DFS\n\n**BFS:** shortest path, level-order traversal, minimum steps\n**DFS:** explore all paths, backtracking, connected components\n**Complexity:** O(V + E) for graphs\n\n## Dynamic Programming\n\n**Recognize when:** overlapping subproblems + optimal substructure\n**Approach:** top-down (memoization) or bottom-up (tabulation)\n**Classic problems:** Coin Change, Knapsack, LCS, LIS, Edit Distance\n\n**Template:**\n```python\ndp = [default_value] * (n + 1)\ndp[base_case] = base_value\nfor i in range(...):\n    dp[i] = f(dp[i-1], dp[i-2], ...)\n```\n\n## Binary Search\n\n**Use when:** sorted data, search space can be halved each step\n**Complexity:** O(log n)\n\n```python\nleft, right = 0, len(arr) - 1\nwhile left <= right:\n    mid = left + (right - left) // 2  # avoid overflow\n    if arr[mid] == target: return mid\n    elif arr[mid] < target: left = mid + 1\n    else: right = mid - 1\n```\n\n## Hash Map Patterns\n\n- Frequency counting (anagram detection, majority element)\n- Two-sum complement lookup\n- Grouping (anagram groups, classification)\n- Caching computed results\n\n## Complexity Quick Reference\n\n| Operation | Array | Linked List | Hash Map | BST | Heap |\n|-----------|-------|-------------|----------|-----|------|\n| Access    | O(1)  | O(n)        | O(1)     | O(log n) | O(1) |\n| Search    | O(n)  | O(n)        | O(1)     | O(log n) | O(n) |\n| Insert    | O(n)  | O(1)        | O(1)     | O(log n) | O(log n) |\n| Delete    | O(n)  | O(1)        | O(1)     | O(log n) | O(log n) |\n"
+          }
+        ]
+      },
+      {
+        "id": "folder_002",
+        "name": "Uploaded Documents",
+        "createdAt": "2026-04-20T10:00:00Z",
+        "files": [
+          {
+            "id": "file_003",
+            "name": "System Design Primer.pdf",
+            "type": "pdf",
+            "sizeKB": 842,
+            "createdAt": "2026-04-20T10:00:00Z",
+            "updatedAt": "2026-04-20T10:00:00Z",
+            "folderId": "folder_002",
+            "content": null
+          },
+          {
+            "id": "file_004",
+            "name": "Resume v3 — May 2026.docx",
+            "type": "docx",
+            "sizeKB": 156,
+            "createdAt": "2026-04-22T14:00:00Z",
+            "updatedAt": "2026-05-01T09:30:00Z",
+            "folderId": "folder_002",
+            "content": null
+          }
+        ]
+      }
+    ],
+    "rootFiles": [
+      {
+        "id": "file_005",
+        "name": "Quick Reference.md",
+        "type": "md",
+        "sizeKB": 2.1,
+        "createdAt": "2026-05-01T08:00:00Z",
+        "updatedAt": "2026-05-06T20:00:00Z",
+        "folderId": null,
+        "content": "# Quick Reference — Interview Prep\n\n## This Week's Goals\n\n- [ ] Practice 2 behavioral questions (focus on reflection section)\n- [ ] Review system design: rate limiting patterns\n- [ ] Watch: observability in distributed systems (30 min)\n- [ ] DSA: complete sliding window pattern problems\n\n## Interview Day Reminders\n\n- **Pause before answering.** Silence is fine — it signals structured thinking.\n- **Ask clarifying questions early** — always before coding or designing.\n- **Quantify everything** — numbers beat adjectives every time.\n- **Think out loud** — interviewers evaluate process, not just answers.\n\n## Emergency Phrases\n\n- \"That's a great question. Let me think through it for a moment...\"\n- \"My initial instinct is X, but let me verify by considering Y first...\"\n- \"I've seen a similar pattern before. Let me apply that approach and see if it holds here...\"\n- \"I want to make sure I understand the constraints before I commit to an approach.\"\n\n## Key Metrics to Remember\n\n- Notification system: 40M events/day, 12 microservices\n- Production outage: reduced from 4h to 47min\n- Team size: led 4 cross-functional teams\n"
+      }
+    ]
+  }
+}

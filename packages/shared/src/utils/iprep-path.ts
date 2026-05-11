@@ -17,22 +17,19 @@ import fs from 'node:fs';
 export const IPREP_HOME = path.join(os.homedir(), '.iprep');
 
 const dirName = path.dirname(fileURLToPath(import.meta.url));
-const envExists = fs.existsSync(path.resolve(dirName, '../../../../.env'));
 
 export const IprepPaths = {
-  // The directory where iprep stores all user data, including configs, logs, and cache.
-
   /** Root: ~/.iprep/ */
   root: IPREP_HOME,
 
-  // checks CWD directory
+  /** Package source directory (dev use only) */
   cwd: dirName,
 
-  //checks if .env file exists
-  isEnvExists: envExists,
+  /** ~/.iprep/.env */
+  envFilePath: path.join(IPREP_HOME, '.env'),
 
-  // .env file path
-  envFilePath: path.resolve(dirName, '../../../../.env'),
+  /** true when ~/.iprep/.env exists on disk */
+  isEnvExists: fs.existsSync(path.join(IPREP_HOME, '.env')),
 
   /** SQLite database folder: ~/.iprep/database/ */
   database: path.join(IPREP_HOME, 'database'),

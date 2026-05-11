@@ -1,0 +1,1322 @@
+{
+  "info": {
+    "_postman_id": "4fbb7c70-3427-47f3-9e55-iprep-brainstorm-api",
+    "name": "iPrep Brainstorm API",
+    "description": "Postman collection for the future iPrep local server API defined in docs/brain-storming/api-requirements.md. Defaults to http://localhost:5545/api/v1.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5545",
+      "type": "string"
+    },
+    {
+      "key": "apiPrefix",
+      "value": "api/v1",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "user_001",
+      "type": "string"
+    },
+    {
+      "key": "packageId",
+      "value": "pkg_behavioral",
+      "type": "string"
+    },
+    {
+      "key": "packageSlug",
+      "value": "behavioral",
+      "type": "string"
+    },
+    {
+      "key": "tutorId",
+      "value": "tutor_priya",
+      "type": "string"
+    },
+    {
+      "key": "tutorSlug",
+      "value": "priya",
+      "type": "string"
+    },
+    {
+      "key": "interviewId",
+      "value": "int_001",
+      "type": "string"
+    },
+    {
+      "key": "analysisId",
+      "value": "analysis_001",
+      "type": "string"
+    },
+    {
+      "key": "conversationId",
+      "value": "conv_001",
+      "type": "string"
+    },
+    {
+      "key": "documentId",
+      "value": "doc_resume_001",
+      "type": "string"
+    },
+    {
+      "key": "folderId",
+      "value": "folder_001",
+      "type": "string"
+    },
+    {
+      "key": "providerKey",
+      "value": "claude",
+      "type": "string"
+    },
+    {
+      "key": "exportId",
+      "value": "export_001",
+      "type": "string"
+    },
+    {
+      "key": "backupId",
+      "value": "backup_001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health And Bootstrap",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "health"]
+            },
+            "description": "Checks whether the local iPrep server is running."
+          },
+          "response": []
+        },
+        {
+          "name": "Bootstrap App",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/bootstrap",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "bootstrap"]
+            },
+            "description": "Initial frontend payload replacing the demo mock-data.json startup call."
+          },
+          "response": []
+        },
+        {
+          "name": "Local Workspace Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/local/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "local", "status"]
+            },
+            "description": "Returns local workspace, database, config, and provider readiness."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Onboarding And Profile",
+      "item": [
+        {
+          "name": "Get Onboarding Progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/onboarding",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "onboarding"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Profile Step",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kundalik\",\n  \"email\": \"kundalik@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/onboarding/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "onboarding", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Goal Step",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"goal\": \"Prepare for Java backend interviews\",\n  \"resumeDocumentId\": \"{{documentId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/onboarding/goal",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "onboarding", "goal"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Provider Step",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"{{providerKey}}\",\n  \"apiKey\": \"replace-with-local-test-key\",\n  \"makeDefault\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/onboarding/provider",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "onboarding", "provider"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Complete Onboarding",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/onboarding/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "onboarding", "complete"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kundalik\",\n  \"goal\": \"Improve system design and behavioral interviews\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "user"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "dashboard"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "stats"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Anonymous Leaderboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/leaderboard/anonymous",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "leaderboard", "anonymous"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Packages And Tutors",
+      "item": [
+        {
+          "name": "List Packages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/packages",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "packages"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Package",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/packages/{{packageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "packages", "{{packageId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Tutors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/tutors",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "tutors"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Tutor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/tutors/{{tutorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "tutors", "{{tutorId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Interviews",
+      "item": [
+        {
+          "name": "List Interviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews?status=COMPLETED&page=1&pageSize=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Interview",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"source\": \"template\",\n  \"packageSlug\": \"{{packageSlug}}\",\n  \"difficulty\": \"MEDIUM\",\n  \"durationMin\": 25,\n  \"mode\": \"VOICE\",\n  \"tutorSlug\": \"{{tutorSlug}}\",\n  \"contextDocumentIds\": [\"{{documentId}}\"],\n  \"customQuestions\": [\n    \"Tell me about a time you handled conflict.\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Interview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Draft Interview",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"durationMin\": 30,\n  \"mode\": \"CHAT\",\n  \"contextDocumentIds\": [\"{{documentId}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Start Interview",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/start",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "start"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "End Interview",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"endedReason\": \"user_completed\",\n  \"autoAnalyze\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/end",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "end"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Interview",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"user_cancelled\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "cancel"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Interview",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transcript And Recording",
+      "item": [
+        {
+          "name": "Get Transcript",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/transcript",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "transcript"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Append Transcript Turns",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"turns\": [\n    {\n      \"speaker\": \"user\",\n      \"text\": \"I led a five-person team to improve deployment reliability.\",\n      \"timestampSec\": 42\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/transcript",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "transcript"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Recording Metadata",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/recording",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "recording"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Recording",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/recording/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "recording", "download"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Transcript",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/transcript/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "transcript", "download"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analysis",
+      "item": [
+        {
+          "name": "Trigger Interview Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"{{providerKey}}\",\n  \"includeCommunicationFeedback\": true,\n  \"forceRegenerate\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/analysis",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "analysis"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Interview Analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/analysis",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "analysis"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Analysis By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/analysis/{{analysisId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "analysis", "{{analysisId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Analysis Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/analysis/{{analysisId}}/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "analysis", "{{analysisId}}", "download"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "History",
+      "item": [
+        {
+          "name": "Get History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/history?status=COMPLETED",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "history"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/history/search?q=cache",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "history", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "cache"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AI Coach",
+      "item": [
+        {
+          "name": "List Conversations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/conversations",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "conversations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Conversation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Interview planning\",\n  \"initialContextDocumentIds\": [\"{{documentId}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/conversations",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "conversations"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Conversation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "conversations", "{{conversationId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Conversation",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Behavioral interview planning\",\n  \"isArchived\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "conversations", "{{conversationId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Conversation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/conversations/{{conversationId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "conversations", "{{conversationId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Create a 25 minute behavioral interview using my resume.\",\n  \"contextDocumentIds\": [\"{{documentId}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/conversations/{{conversationId}}/messages",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "conversations", "{{conversationId}}", "messages"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Interview Plan From Chat",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/conversations/{{conversationId}}/interview-plan",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "conversations", "{{conversationId}}", "interview-plan"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documents And Folders",
+      "item": [
+        {
+          "name": "List Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Markdown Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Behavioral prep notes\",\n  \"type\": \"md\",\n  \"folderId\": \"{{folderId}}\",\n  \"contentMarkdown\": \"# STAR Stories\\n\\n\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "folderId",
+                  "value": "{{folderId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "convertToMarkdown",
+                  "value": "true",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents", "upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents/{{documentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents", "{{documentId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Document",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Behavioral prep notes\",\n  \"contentMarkdown\": \"# Updated STAR Stories\\n\\n\",\n  \"tags\": [\"behavioral\", \"star\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents/{{documentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents", "{{documentId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents/{{documentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents", "{{documentId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Convert Document To Markdown",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents/{{documentId}}/convert",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents", "{{documentId}}", "convert"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Optimize Document With AI",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"goal\": \"Improve this note for Java backend interview practice\",\n  \"provider\": \"{{providerKey}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents/{{documentId}}/optimize",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents", "{{documentId}}", "optimize"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Document",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/documents/{{documentId}}/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "documents", "{{documentId}}", "download"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Folders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/folders",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "folders"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Folder",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Interview Notes\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/folders",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "folders"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Folder",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Behavioral Interview Notes\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/folders/{{folderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "folders", "{{folderId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Folder",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/folders/{{folderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "folders", "{{folderId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Communication",
+      "item": [
+        {
+          "name": "Communication Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/communication",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "communication"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Communication Examples",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/communication/examples",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "communication", "examples"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Communication Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/communication/sessions",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "communication", "sessions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Interview Communication Analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/interviews/{{interviewId}}/communication",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interviews", "{{interviewId}}", "communication"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Providers And Settings",
+      "item": [
+        {
+          "name": "List Providers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/providers",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "providers"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Provider",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"provider\": \"{{providerKey}}\",\n  \"apiKey\": \"replace-with-local-test-key\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/providers/validate",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "providers", "validate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Provider Key",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apiKey\": \"replace-with-local-test-key\",\n  \"label\": \"Local development key\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/providers/{{providerKey}}/keys",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "providers", "{{providerKey}}", "keys"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Provider Key",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/providers/{{providerKey}}/keys",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "providers", "{{providerKey}}", "keys"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "settings"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"defaultTutorSlug\": \"{{tutorSlug}}\",\n  \"defaultPackageSlug\": \"{{packageSlug}}\",\n  \"voiceMode\": true,\n  \"autoAnalyzeOnEnd\": true,\n  \"theme\": \"dark\",\n  \"serverPort\": 5545\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "settings"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exports And Backups",
+      "item": [
+        {
+          "name": "Create Interview Export",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"markdown\",\n  \"includeTranscript\": true,\n  \"includeAnalysis\": true,\n  \"includeRecording\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/exports/interviews/{{interviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "exports", "interviews", "{{interviewId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Export",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/exports/{{exportId}}/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "exports", "{{exportId}}", "download"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Backup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/backups",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "backups"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Backups",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/backups",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "backups"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Backup",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/{{apiPrefix}}/backups/{{backupId}}/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "backups", "{{backupId}}", "download"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

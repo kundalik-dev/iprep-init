@@ -1,5 +1,7 @@
 import net from 'node:net';
 import path from 'node:path';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { checkDbHealth } from '@iprep/db';
 import { IprepPaths } from '@iprep/shared';
@@ -28,12 +30,23 @@ function isPortInUse(port: number): Promise<boolean> {
 
 // Start server
 function startServer(port: number): ChildProcess {
-  const monorepoRoot = path.dirname(IprepPaths.envFilePath);
-  const serverEntry = path.join(monorepoRoot, 'apps', 'server', 'dist', 'index.js');
+  // Production (bundled): server.js lives next to index.js in dist/
+  // Dev (tsx): fall back to the built server in the monorepo (process.cwd() = monorepo root)
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const bundledPath = path.join(__dirname, 'server.js');
+  const devPath = path.join(process.cwd(), 'apps', 'server', 'dist', 'server.js');
+  const serverEntry = existsSync(bundledPath) ? bundledPath : devPath;
+
   return spawn('node', [serverEntry], {
-    cwd: monorepoRoot,
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, PORT: String(port) },
+    env: {
+      ...process.env,
+      NODE_ENV: env.NODE_ENV,
+      PORT: String(port),
+      DATABASE_URL: env.DATABASE_URL,
+      CORS_ORIGIN: env.CORS_ORIGIN,
+      API_BASE_URL: env.API_BASE_URL,
+    },
   });
 }
 

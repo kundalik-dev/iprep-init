@@ -1,7 +1,7 @@
 {
   "name": "@iprep/shared",
-  "version": "0.1.0",
-  "description": "@iprep/shared package",
+  "version": "1.2.2",
+  "description": "@iprep/shared — env loading, constants, path utils, and formatters for iPrep",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",

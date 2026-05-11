@@ -2,16 +2,41 @@ import fs from 'node:fs';
 import type { ChildProcess } from 'node:child_process';
 import chalk from 'chalk';
 import { IprepPaths } from '@iprep/shared';
+import { checkDbHealth } from '@iprep/db';
 import { isPortInUse, startServer, checkHealth } from '../services/server-manager.js';
-import { log } from '../utils/chalk-helper.js';
+import {
+  log,
+  printBanner,
+  printSeparator,
+  printCommandBadge,
+  printMeta,
+} from '../utils/chalk-helper.js';
+import { dirExists } from '../utils/fs.utils.js';
 import { env } from '../config/env.js';
 
 // ─── Step 1 ─────────────────────────────────────────────────────────────────
 
-function checkOnboardedFirst(): void {
-  if (!fs.existsSync(IprepPaths.root) || !IprepPaths.isEnvExists) {
-    console.log(log.error('iPrep is not set up yet.'));
-    console.log(chalk.dim('\n  Run: iprep onboard\n'));
+async function verifyPrerequisites(): Promise<void> {
+  const dbHealthy = await checkDbHealth();
+
+  const checks = [
+    { label: 'Config dir exists', ok: dirExists(IprepPaths.root) },
+    { label: 'Database dir exists', ok: dirExists(IprepPaths.database) },
+    { label: 'Database file exists', ok: fs.existsSync(IprepPaths.dbFile) },
+    { label: 'Env file exists', ok: IprepPaths.isEnvExists },
+    { label: 'Database reachable', ok: dbHealthy },
+  ];
+
+  const allOk = checks.every((c) => c.ok);
+
+  if (!allOk) {
+    console.log(log.warn('iPrep setup is incomplete:\n'));
+    for (const check of checks) {
+      console.log(`  ${check.ok ? log.success(check.label) : log.error(check.label)}`);
+    }
+    console.log();
+    console.log(chalk.dim('  → Fix it by running: ') + chalk.bold.white('iprep onboard --yes'));
+    console.log();
     process.exit(1);
   }
 }
@@ -105,9 +130,15 @@ function attachShutdownHook(child: ChildProcess): void {
 // ─── Orchestrator ────────────────────────────────────────────────────────────
 
 export async function runStart(_opts: Record<string, unknown>): Promise<void> {
-  checkOnboardedFirst();
+  printBanner();
+  printSeparator();
+  printCommandBadge('iprep start');
 
   const port = readPort();
+
+  printMeta([`port: ${port}`, `server: http://localhost:${port}`, `db: ${IprepPaths.dbFile}`]);
+
+  await verifyPrerequisites();
 
   await guardPortFree(port);
 

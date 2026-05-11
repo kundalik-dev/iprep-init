@@ -56,7 +56,8 @@ pnpm typecheck    # tsc --noEmit
 ## Current Focus
 
 `env.constants.ts` implements three-case env loading:
+
 1. No `.env` file → use DEFAULTS silently
 2. `.env` exists + all fields valid → use parsed values
 3. `.env` exists + missing/invalid fields → print `[iPrep] .env file is missing required fields:` per field and exit
-`formatters.ts` exposes `randomId()` (via `crypto.randomUUID()`), `slugify`, `truncate`, `formatDate`, `formatTimestamp`.
+   `formatters.ts` exposes `randomId()` (via `crypto.randomUUID()`), `slugify`, `truncate`, `formatDate`, `formatTimestamp`.

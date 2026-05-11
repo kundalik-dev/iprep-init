@@ -1,3 +1,8 @@
+---
+name: CLI Learning Notes
+description: Learning notes for CLI development with Commander.js — patterns, options, subcommands, and iPrep-specific usage examples.
+---
+
 # CLI Learning — Building a CLI with Commander.js
 
 A short reference for how `@iprep/cli` is structured and how to add commands to it.

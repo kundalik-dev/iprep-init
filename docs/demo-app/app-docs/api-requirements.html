@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>iPrep Current API Requirements</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f7f8fb;
+        color: #172033;
+        line-height: 1.5;
+      }
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+      h1,
+      h2,
+      h3 {
+        margin: 0 0 12px;
+        line-height: 1.2;
+      }
+      h1 {
+        font-size: 32px;
+      }
+      h2 {
+        margin-top: 32px;
+        padding-top: 20px;
+        border-top: 1px solid #d9dfeb;
+        font-size: 22px;
+      }
+      h3 {
+        margin-top: 20px;
+        font-size: 17px;
+      }
+      p,
+      li {
+        color: #4b5870;
+      }
+      ul {
+        margin-top: 8px;
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+        margin: 24px 0;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #d9dfeb;
+        border-radius: 10px;
+        padding: 16px;
+        box-shadow: 0 8px 24px rgba(20, 32, 55, 0.06);
+      }
+      .card strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 22px;
+        background: #fff;
+        border: 1px solid #d9dfeb;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(20, 32, 55, 0.04);
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid #edf0f6;
+        vertical-align: top;
+        font-size: 14px;
+      }
+      th {
+        background: #eef2ff;
+        color: #28324a;
+        font-weight: 700;
+      }
+      tr:last-child td {
+        border-bottom: 0;
+      }
+      code,
+      pre {
+        font-family: Consolas, monospace;
+        background: #eef2f7;
+        border: 1px solid #dce3ee;
+        border-radius: 5px;
+      }
+      code {
+        padding: 2px 5px;
+        white-space: nowrap;
+      }
+      pre {
+        padding: 12px;
+        overflow: auto;
+        font-size: 13px;
+      }
+      .method {
+        display: inline-block;
+        min-width: 54px;
+        text-align: center;
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+      }
+      .get {
+        background: #2563eb;
+      }
+      .post {
+        background: #059669;
+      }
+      .patch {
+        background: #d97706;
+      }
+      .delete {
+        background: #dc2626;
+      }
+      .note {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #7c2d12;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin: 18px 0;
+      }
+      .ok {
+        background: #ecfdf5;
+        border-color: #a7f3d0;
+        color: #065f46;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>iPrep Current API Requirements</h1>
+      <p>
+        This page matches the current <code>demo-app-2/app.js</code>. It
+        replaces the existing <code>MockAPI</code> methods and direct in-memory
+        edits with real endpoints. It does not include future auth, billing,
+        WebSocket, or real audio APIs.
+      </p>
+
+      <div class="summary">
+        <div class="card"><strong>Base URL</strong><code>/api</code></div>
+        <div class="card">
+          <strong>Source</strong><code>demo-app-2/app.js</code>
+        </div>
+        <div class="card">
+          <strong>Scores</strong>Current app uses <code>0-100</code>
+        </div>
+        <div class="card">
+          <strong>Persistence</strong>Replace memory mutations with APIs
+        </div>
+      </div>
+
+      <div class="note">
+        The current app boots from <code>mock-data.json</code>. The simplest
+        backend replacement is <code>GET /api/bootstrap</code>, returning the
+        same top-level data shape.
+      </div>
+
+      <h2>Startup</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/bootstrap</code></td>
+          <td>
+            <code>MockAPI.load()</code>, <code>fetch('mock-data.json')</code>
+          </td>
+          <td>App boot</td>
+        </tr>
+      </table>
+      <pre>
+{
+  "tutors": [],
+  "packages": [],
+  "sessions": [],
+  "analysis": {},
+  "providers": [],
+  "stats": {},
+  "transcript_demo": [],
+  "conversations": [],
+  "fileSystem": {}
+}</pre
+      >
+
+      <h2>Dashboard</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions</code></td>
+          <td><code>MockAPI.getSessions()</code></td>
+          <td>Recent sessions</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/stats</code></td>
+          <td><code>MockAPI.getStats()</code></td>
+          <td>Dashboard cards and quick stats</td>
+        </tr>
+      </table>
+
+      <h2>New Interview</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/packages</code></td>
+          <td><code>MockAPI.getPackages()</code></td>
+          <td>Package selection</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/tutors</code></td>
+          <td><code>MockAPI.getTutors()</code></td>
+          <td>Tutor selection</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/sessions/start</code></td>
+          <td><code>MockAPI.startSession(pkgSlug, tutorSlug)</code></td>
+          <td>Start Interview button</td>
+        </tr>
+      </table>
+      <pre>
+POST /api/sessions/start
+{
+  "packageSlug": "behavioral",
+  "tutorSlug": "priya"
+}</pre
+      >
+
+      <h2>Live Session</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions/{sessionId}/demo-transcript</code></td>
+          <td><code>State.data.transcript_demo</code></td>
+          <td>Live transcript simulation</td>
+        </tr>
+        <tr>
+          <td><span class="method patch">PATCH</span></td>
+          <td><code>/api/sessions/{sessionId}/mic</code></td>
+          <td><code>toggleMic()</code> local state</td>
+          <td>Optional mic state persistence</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/sessions/{sessionId}/end</code></td>
+          <td><code>MockAPI.endSession(id)</code></td>
+          <td>End Session button</td>
+        </tr>
+      </table>
+      <pre>
+POST /api/sessions/{sessionId}/end
+{
+  "analysisId": "anal_001"
+}</pre
+      >
+
+      <h2>Analysis</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/analysis/{analysisId}</code></td>
+          <td><code>MockAPI.getAnalysis(id)</code></td>
+          <td>Analysis Report page</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions/{sessionId}</code></td>
+          <td><code>State.data.sessions.find(...)</code></td>
+          <td>Analysis page session detail</td>
+        </tr>
+      </table>
+      <p>
+        The current app expects <code>communicationAnalysis</code> to be
+        included inside the analysis response when the Communication tab is
+        shown.
+      </p>
+
+      <h2>History</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions</code></td>
+          <td><code>MockAPI.getSessions()</code></td>
+          <td>All Sessions filter</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions?status=COMPLETED</code></td>
+          <td>Local history filter</td>
+          <td>Completed filter</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions?status=ABANDONED</code></td>
+          <td>Local history filter</td>
+          <td>Abandoned filter</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions/{sessionId}/recording</code></td>
+          <td>Session recording fields</td>
+          <td>Recording panel</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions/{sessionId}/transcript</code></td>
+          <td><code>s.transcript</code></td>
+          <td>Transcript panel</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions/{sessionId}/recording/download</code></td>
+          <td><code>exportRecording(id)</code></td>
+          <td>Export Recording</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/sessions/{sessionId}/transcript/download</code></td>
+          <td><code>exportTranscript(id)</code></td>
+          <td>Export Transcript</td>
+        </tr>
+      </table>
+
+      <h2>AI Chat</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/conversations</code></td>
+          <td><code>MockAPI.getConversations()</code></td>
+          <td>Chat sidebar</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/conversations</code></td>
+          <td><code>MockAPI.createConversation(title)</code></td>
+          <td>New Chat button</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/conversations/{conversationId}</code></td>
+          <td>Active conversation lookup</td>
+          <td>Message history</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/conversations/{conversationId}/messages</code></td>
+          <td>
+            User <code>addMessage</code>, <code>getAIResponse()</code>, AI
+            <code>addMessage</code>
+          </td>
+          <td>Send message</td>
+        </tr>
+      </table>
+      <p>
+        The backend response should include both the saved user message and
+        generated AI message. It replaces browser-side
+        <code>getAIResponse(userText)</code>.
+      </p>
+
+      <h2>Notes And Files</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/file-system</code></td>
+          <td><code>State.data.fileSystem</code></td>
+          <td>Files view initial render</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/files/{fileId}</code></td>
+          <td><code>findFile(id)</code></td>
+          <td>File selection/editor</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/files</code></td>
+          <td><code>createFile()</code></td>
+          <td>New markdown note</td>
+        </tr>
+        <tr>
+          <td><span class="method patch">PATCH</span></td>
+          <td><code>/api/files/{fileId}</code></td>
+          <td>
+            <code>saveFile(id)</code>, autosave from
+            <code>fileEditorChange()</code>
+          </td>
+          <td>Editor save/autosave</td>
+        </tr>
+        <tr>
+          <td><span class="method delete">DELETE</span></td>
+          <td><code>/api/files/{fileId}</code></td>
+          <td><code>deleteFile(id)</code></td>
+          <td>Delete file</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/folders</code></td>
+          <td><code>createFolder()</code></td>
+          <td>New folder</td>
+        </tr>
+        <tr>
+          <td><span class="method delete">DELETE</span></td>
+          <td><code>/api/folders/{folderId}</code></td>
+          <td><code>deleteFolder(id)</code></td>
+          <td>Delete folder</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/uploads</code></td>
+          <td><code>uploadFile()</code></td>
+          <td>
+            Upload <code>.md</code>, <code>.pdf</code>, <code>.docx</code>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/files/{fileId}/download</code></td>
+          <td>Simulated PDF/DOCX download</td>
+          <td>Download</td>
+        </tr>
+      </table>
+
+      <h2>Communication Coach</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/stats</code></td>
+          <td><code>MockAPI.getStats()</code></td>
+          <td>Communication overview</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/communication</code></td>
+          <td><code>stats.lifetimeCommunication</code></td>
+          <td>Optional focused endpoint</td>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/communication/examples</code></td>
+          <td><code>analysis.anal_001.communicationAnalysis</code> examples</td>
+          <td>Replacement and rewrite cards</td>
+        </tr>
+      </table>
+
+      <h2>Providers And Settings</h2>
+      <table>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Replaces</th>
+          <th>Used By</th>
+        </tr>
+        <tr>
+          <td><span class="method get">GET</span></td>
+          <td><code>/api/providers</code></td>
+          <td><code>MockAPI.getProviders()</code></td>
+          <td>Providers tab</td>
+        </tr>
+        <tr>
+          <td><span class="method post">POST</span></td>
+          <td><code>/api/settings/api-keys</code></td>
+          <td><code>saveAPIKeys()</code></td>
+          <td>API Keys tab</td>
+        </tr>
+        <tr>
+          <td><span class="method patch">PATCH</span></td>
+          <td><code>/api/settings/preferences</code></td>
+          <td><code>savePreferences()</code></td>
+          <td>Preferences tab</td>
+        </tr>
+      </table>
+
+      <h2>Exact Endpoint List Needed Now</h2>
+      <pre>
+GET    /api/bootstrap
+
+GET    /api/stats
+GET    /api/tutors
+GET    /api/packages
+GET    /api/providers
+
+GET    /api/sessions
+GET    /api/sessions?status=COMPLETED
+GET    /api/sessions?status=ABANDONED
+GET    /api/sessions/{sessionId}
+POST   /api/sessions/start
+GET    /api/sessions/{sessionId}/demo-transcript
+PATCH  /api/sessions/{sessionId}/mic
+POST   /api/sessions/{sessionId}/end
+GET    /api/sessions/{sessionId}/recording
+GET    /api/sessions/{sessionId}/transcript
+GET    /api/sessions/{sessionId}/recording/download
+GET    /api/sessions/{sessionId}/transcript/download
+
+GET    /api/analysis/{analysisId}
+
+GET    /api/conversations
+POST   /api/conversations
+GET    /api/conversations/{conversationId}
+POST   /api/conversations/{conversationId}/messages
+
+GET    /api/file-system
+GET    /api/files/{fileId}
+POST   /api/files
+PATCH  /api/files/{fileId}
+DELETE /api/files/{fileId}
+POST   /api/folders
+DELETE /api/folders/{folderId}
+POST   /api/uploads
+GET    /api/files/{fileId}/download
+
+GET    /api/communication
+GET    /api/communication/examples
+
+POST   /api/settings/api-keys
+PATCH  /api/settings/preferences</pre
+      >
+
+      <h2>Priority Order</h2>
+      <ol>
+        <li><code>GET /api/bootstrap</code></li>
+        <li><code>GET /api/sessions</code> and <code>GET /api/stats</code></li>
+        <li>
+          <code>GET /api/packages</code>, <code>GET /api/tutors</code>, session
+          start/end
+        </li>
+        <li><code>GET /api/analysis/{id}</code></li>
+        <li>Chat endpoints</li>
+        <li>File-system endpoints</li>
+        <li>Communication endpoints</li>
+        <li>Provider and settings endpoints</li>
+      </ol>
+
+      <h2>Not Needed By Current App</h2>
+      <div class="note ok">
+        Login/logout, billing, pro subscription enforcement, real audio
+        streaming, WebSocket, real speech-to-text, separate analysis job status,
+        and separate tutor/package detail APIs are not required by the current
+        <code>demo-app-2/app.js</code>.
+      </div>
+    </main>
+  </body>
+</html>
