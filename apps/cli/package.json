@@ -4,6 +4,9 @@
   "description": "@iPrep/cli command line for iPrep",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "iprep": "dist/index.js"
+  },
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",

@@ -18,5 +18,28 @@ export const log = {
 export function printBanner(): void {
   const ascii = figlet.textSync('iPrep', { font: 'Standard' });
   console.log(iprepGradient.multiline(ascii));
-  console.log(chalk.dim('  Interview Preparation Platform\n'));
+  console.log(chalk.dim('  Interview Preparation Platform'));
+}
+
+export function printSeparator(): void {
+  console.log(iprepGradient('  ' + '─'.repeat(52)));
+  console.log();
+}
+
+export function printCommandBadge(command: string): void {
+  console.log(`  ${chalk.bgHex('#312e81').hex('#a5b4fc')(` ${command} `)}`);
+  console.log();
+}
+
+export function printMeta(parts: string[]): void {
+  console.log(`  ${chalk.dim(parts.join('  |  '))}`);
+  console.log();
+}
+
+export function printStep(title: string, value?: string): void {
+  console.log(`  ${chalk.green('o')}  ${chalk.bold.white(title)}`);
+  if (value) {
+    console.log(`  ${chalk.dim('|')}  ${chalk.dim(value)}`);
+  }
+  console.log(`  ${chalk.dim('|')}`);
 }
