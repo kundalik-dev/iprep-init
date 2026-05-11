@@ -13,9 +13,9 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(cuid())
+  id    String  @id @default(cuid())
   name  String
-  email String @unique
+  email String? @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,4 +29,10 @@ model Health {
   checkedAt DateTime @default(now())
 
   @@map("health")
+}
+
+enum genderEnum {
+  M
+  F
+  O
 }
