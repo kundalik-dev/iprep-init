@@ -1,0 +1,842 @@
+{
+  "tutors": [
+    {
+      "slug": "alex",
+      "name": "Alex",
+      "initials": "AX",
+      "color": "#3B82F6",
+      "specialty": "Technical & DSA",
+      "personality": ["Direct", "Challenging", "No-nonsense"],
+      "description": "Expects clean code and optimal solutions. Will push you on time/space complexity and edge cases.",
+      "voice": "aura-asteria-en",
+      "isPro": false,
+      "sessionCount": 142,
+      "avgScore": 7.4
+    },
+    {
+      "slug": "priya",
+      "name": "Priya",
+      "initials": "PR",
+      "color": "#EC4899",
+      "specialty": "Behavioral & HR",
+      "personality": ["Warm", "Supportive", "Structured"],
+      "description": "Guides you through STAR method storytelling, culture-fit, and salary negotiation with empathy.",
+      "voice": "aura-luna-en",
+      "isPro": false,
+      "sessionCount": 98,
+      "avgScore": 8.1
+    },
+    {
+      "slug": "morgan",
+      "name": "Morgan",
+      "initials": "MG",
+      "color": "#10B981",
+      "specialty": "System Design & PM",
+      "personality": ["Methodical", "Strategic", "Thorough"],
+      "description": "Digs into trade-offs, scalability, and product sense. Expects you to think at scale from the start.",
+      "voice": "aura-zeus-en",
+      "isPro": true,
+      "sessionCount": 67,
+      "avgScore": 7.8
+    }
+  ],
+  "packages": [
+    {
+      "slug": "behavioral",
+      "name": "Behavioral",
+      "type": "BEHAVIORAL",
+      "icon": "🧠",
+      "difficulty": "Medium",
+      "duration": "30 min",
+      "description": "STAR method, leadership, conflict resolution, and team dynamics.",
+      "topics": ["Leadership", "Conflict", "Teamwork", "Growth mindset"],
+      "questionCount": 8,
+      "isPro": false
+    },
+    {
+      "slug": "technical",
+      "name": "Technical",
+      "type": "TECHNICAL",
+      "icon": "💻",
+      "difficulty": "Hard",
+      "duration": "45 min",
+      "description": "Coding problems, OOP, debugging, and system concepts for SDE roles.",
+      "topics": ["OOP", "Debugging", "Patterns", "Complexity"],
+      "questionCount": 6,
+      "isPro": false
+    },
+    {
+      "slug": "dsa",
+      "name": "DSA",
+      "type": "DSA",
+      "icon": "⚡",
+      "difficulty": "Hard",
+      "duration": "60 min",
+      "description": "LeetCode-style problems: arrays, trees, graphs, DP, sliding window.",
+      "topics": ["Arrays", "Trees", "Graphs", "Dynamic Programming"],
+      "questionCount": 5,
+      "isPro": false
+    },
+    {
+      "slug": "hr",
+      "name": "HR Round",
+      "type": "HR",
+      "icon": "🤝",
+      "difficulty": "Easy",
+      "duration": "20 min",
+      "description": "Culture fit, salary negotiation, career goals, and offer discussion.",
+      "topics": ["Culture fit", "Salary", "Career goals", "Offer"],
+      "questionCount": 7,
+      "isPro": false
+    },
+    {
+      "slug": "pm",
+      "name": "Product Manager",
+      "type": "PM",
+      "icon": "🎯",
+      "difficulty": "Hard",
+      "duration": "45 min",
+      "description": "Product sense, metrics, root-cause analysis, and roadmap prioritization.",
+      "topics": ["Product sense", "Metrics", "Roadmap", "Stakeholders"],
+      "questionCount": 6,
+      "isPro": true
+    },
+    {
+      "slug": "system-design",
+      "name": "System Design",
+      "type": "SYSTEM_DESIGN",
+      "icon": "🏗️",
+      "difficulty": "Expert",
+      "duration": "60 min",
+      "description": "Design URL shorteners, chat apps, and distributed systems at scale.",
+      "topics": ["Scalability", "Databases", "Caching", "Load balancing"],
+      "questionCount": 4,
+      "isPro": true
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess_001",
+      "packageSlug": "behavioral",
+      "packageName": "Behavioral",
+      "tutorSlug": "priya",
+      "tutorName": "Priya",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-06T10:00:00Z",
+      "endedAt": "2026-05-06T10:32:00Z",
+      "durationSec": 1920,
+      "score": 8.2,
+      "analysisId": "anal_001",
+      "hasRecording": true,
+      "recordingUrl": "mock://recordings/sess_001.mp3",
+      "recordingDurationSec": 1920,
+      "transcript": [
+        { "speaker": "ai", "text": "Welcome, Kundalik! Let's start with a classic behavioral question. Tell me about a time you led a team through a difficult project.", "timestampSec": 8 },
+        { "speaker": "user", "text": "Yeah so basically I was the lead on this project, and um, we had like five teams involved in a 48-hour hackathon. Three members dropped out suddenly and I kind of had to just figure it out.", "timestampSec": 22 },
+        { "speaker": "ai", "text": "Good context. What specific actions did you take as the leader to keep things on track?", "timestampSec": 52 },
+        { "speaker": "user", "text": "So I kind of just redistributed the tasks you know, basically matched people to what they were strongest at. And honestly I stayed up the last night debugging. We placed 2nd out of 80 teams.", "timestampSec": 66 },
+        { "speaker": "ai", "text": "Excellent result! Now, describe a conflict you had with a teammate and how you resolved it.", "timestampSec": 96 },
+        { "speaker": "user", "text": "Honestly, a teammate and I disagreed on the tech stack. I like scheduled a 1:1 and um, listened to his reasoning, then proposed we prototype both options for like 2 days. We went with his choice — the data supported it.", "timestampSec": 112 }
+      ]
+    },
+    {
+      "id": "sess_002",
+      "packageSlug": "dsa",
+      "packageName": "DSA",
+      "tutorSlug": "alex",
+      "tutorName": "Alex",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-05T14:00:00Z",
+      "endedAt": "2026-05-05T15:05:00Z",
+      "durationSec": 3900,
+      "score": 6.8,
+      "analysisId": "anal_002",
+      "hasRecording": true,
+      "recordingUrl": "mock://recordings/sess_002.mp3",
+      "recordingDurationSec": 3900,
+      "transcript": [
+        { "speaker": "ai", "text": "Let's start with a classic. Find the longest substring without repeating characters. What's your approach?", "timestampSec": 10 },
+        { "speaker": "user", "text": "So um, I'll basically use two nested loops to check all substrings and track the max length. It's like O(n squared) time.", "timestampSec": 24 },
+        { "speaker": "ai", "text": "That's correct but not optimal. Can you bring it down to O(n)?", "timestampSec": 48 },
+        { "speaker": "user", "text": "Hmm, yeah I think I can kind of use a hash set and two pointers? Basically like move the right pointer forward, and if we find a repeat, move the left pointer until the window is valid again.", "timestampSec": 62 },
+        { "speaker": "ai", "text": "Exactly — that's the sliding window pattern. Now, maximum path sum in a binary tree.", "timestampSec": 98 },
+        { "speaker": "user", "text": "Okay so I'll use DFS recursion. Basically at each node I consider the left and right paths. Um, if a child returns a negative value, I just ignore it by taking the max of 0 and the child result.", "timestampSec": 115 }
+      ]
+    },
+    {
+      "id": "sess_003",
+      "packageSlug": "system-design",
+      "packageName": "System Design",
+      "tutorSlug": "morgan",
+      "tutorName": "Morgan",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-04T09:30:00Z",
+      "endedAt": "2026-05-04T10:28:00Z",
+      "durationSec": 3480,
+      "score": 7.5,
+      "analysisId": "anal_003",
+      "hasRecording": true,
+      "recordingUrl": "mock://recordings/sess_003.mp3",
+      "recordingDurationSec": 3480,
+      "transcript": [
+        { "speaker": "ai", "text": "Design a URL shortener like bit.ly that handles 100 million URLs per day. Walk me through your approach.", "timestampSec": 12 },
+        { "speaker": "user", "text": "Sure. So basically first I'd clarify requirements — do we need custom short codes, analytics, expiration? Assuming a standard read-heavy workload with eventual consistency.", "timestampSec": 28 },
+        { "speaker": "ai", "text": "Good clarification habit. Proceed with the core design.", "timestampSec": 60 },
+        { "speaker": "user", "text": "So like I'd use a distributed key-value store — DynamoDB for example. A hashing service to generate like 7-character IDs. Then a load balancer in front and CDN for caching popular URLs.", "timestampSec": 74 },
+        { "speaker": "ai", "text": "Solid core. What about failure modes and operational concerns?", "timestampSec": 118 },
+        { "speaker": "user", "text": "Hmm, yeah I kind of didn't fully think about that. Um, I guess we'd need monitoring? And basically some kind of rate limiting too — hadn't considered that angle.", "timestampSec": 132 }
+      ]
+    },
+    {
+      "id": "sess_004",
+      "packageSlug": "hr",
+      "packageName": "HR Round",
+      "tutorSlug": "priya",
+      "tutorName": "Priya",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-03T11:00:00Z",
+      "endedAt": "2026-05-03T11:22:00Z",
+      "durationSec": 1320,
+      "score": 9.0,
+      "analysisId": "anal_004",
+      "hasRecording": true,
+      "recordingUrl": "mock://recordings/sess_004.mp3",
+      "recordingDurationSec": 1320,
+      "transcript": [
+        { "speaker": "ai", "text": "Tell me about yourself and why you're interested in this role.", "timestampSec": 8 },
+        { "speaker": "user", "text": "I'm a final-year CS student with two internships in backend development. I'm genuinely excited about this role because of the technical challenges and the product's real impact on users.", "timestampSec": 22 },
+        { "speaker": "ai", "text": "What is your expected salary range for this position?", "timestampSec": 55 },
+        { "speaker": "user", "text": "Based on my research and the market for this role in Bangalore, I'm looking at 12 to 15 LPA. I'm open to discussion depending on the full compensation package.", "timestampSec": 68 },
+        { "speaker": "ai", "text": "Where do you see yourself in 5 years?", "timestampSec": 100 },
+        { "speaker": "user", "text": "I want to grow into a senior engineering role with strong system design skills, and eventually move toward technical leadership. This company's growth trajectory aligns well with that path.", "timestampSec": 114 }
+      ]
+    },
+    {
+      "id": "sess_005",
+      "packageSlug": "technical",
+      "packageName": "Technical",
+      "tutorSlug": "alex",
+      "tutorName": "Alex",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-02T16:00:00Z",
+      "endedAt": "2026-05-02T16:48:00Z",
+      "durationSec": 2880,
+      "score": 7.1,
+      "analysisId": "anal_005",
+      "hasRecording": true,
+      "recordingUrl": "mock://recordings/sess_005.mp3",
+      "recordingDurationSec": 2880,
+      "transcript": [
+        { "speaker": "ai", "text": "Explain the difference between a process and a thread, and when you'd use each.", "timestampSec": 10 },
+        { "speaker": "user", "text": "So basically a process is um, like an independent program with its own memory space. A thread is kind of a lightweight unit within a process that shares memory. I'd use threads for concurrent I/O and processes for isolation.", "timestampSec": 24 },
+        { "speaker": "ai", "text": "Good. What's a closure in JavaScript? Give me a practical example.", "timestampSec": 60 },
+        { "speaker": "user", "text": "A closure is basically when a function kind of retains access to its outer scope variables even after the outer function has returned. Like, you know, the counter pattern — you create a function that returns an increment function.", "timestampSec": 75 },
+        { "speaker": "ai", "text": "Correct. Now explain the Node.js event loop.", "timestampSec": 112 },
+        { "speaker": "user", "text": "Node is single-threaded and basically uses an event loop. It handles async operations like I/O through callbacks. Um, when an async operation completes, its callback is pushed to the event queue and processed when the call stack is empty.", "timestampSec": 126 }
+      ]
+    },
+    {
+      "id": "sess_006",
+      "packageSlug": "behavioral",
+      "packageName": "Behavioral",
+      "tutorSlug": "alex",
+      "tutorName": "Alex",
+      "status": "ABANDONED",
+      "mode": "VOICE",
+      "startedAt": "2026-05-01T08:00:00Z",
+      "endedAt": "2026-05-01T08:10:00Z",
+      "durationSec": 600,
+      "score": null,
+      "analysisId": null,
+      "hasRecording": false,
+      "recordingUrl": null,
+      "recordingDurationSec": null,
+      "transcript": []
+    },
+    {
+      "id": "sess_007",
+      "packageSlug": "pm",
+      "packageName": "Product Manager",
+      "tutorSlug": "morgan",
+      "tutorName": "Morgan",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-04-30T13:00:00Z",
+      "endedAt": "2026-04-30T13:47:00Z",
+      "durationSec": 2820,
+      "score": 7.9,
+      "analysisId": "anal_007",
+      "hasRecording": true,
+      "recordingUrl": "mock://recordings/sess_007.mp3",
+      "recordingDurationSec": 2820,
+      "transcript": [
+        { "speaker": "ai", "text": "How would you decide whether to build a new feature or fix an existing bug?", "timestampSec": 12 },
+        { "speaker": "user", "text": "I'd basically look at impact versus effort. For bugs, I'd consider severity and user impact — like a checkout flow bug is critical. For features, I'd use a framework like RICE to prioritize.", "timestampSec": 28 },
+        { "speaker": "ai", "text": "Define the key success metrics for a food delivery app.", "timestampSec": 72 },
+        { "speaker": "user", "text": "The core metric would be um, order completion rate. Then like key supporting metrics — delivery time, customer satisfaction score, restaurant partner retention. And basically I'd also track revenue per order as a financial health indicator.", "timestampSec": 88 },
+        { "speaker": "ai", "text": "Engineering says a feature takes 3 months. CEO wants it in 4 weeks. How do you handle this?", "timestampSec": 142 },
+        { "speaker": "user", "text": "I'd start by kind of understanding the full scope — what's the absolute minimum viable version for 4 weeks. Then basically negotiate a phased delivery, ship the core in 4 weeks and iterate. I'd make the trade-offs fully transparent to the CEO.", "timestampSec": 158 }
+      ]
+    },
+    {
+      "id": "sess_008",
+      "packageSlug": "dsa",
+      "packageName": "DSA",
+      "tutorSlug": "alex",
+      "tutorName": "Alex",
+      "status": "COMPLETED",
+      "mode": "VOICE",
+      "startedAt": "2026-04-29T10:00:00Z",
+      "endedAt": "2026-04-29T11:02:00Z",
+      "durationSec": 3720,
+      "score": 6.2,
+      "analysisId": "anal_008",
+      "hasRecording": true,
+      "recordingUrl": "mock://recordings/sess_008.mp3",
+      "recordingDurationSec": 3720,
+      "transcript": [
+        { "speaker": "ai", "text": "Classic: Two Sum. Given an array and a target, find two indices whose values sum to the target.", "timestampSec": 10 },
+        { "speaker": "user", "text": "Um, so basically I'd just do two nested loops. Like for each element, check all other elements. It's O(n squared) time, O(1) space.", "timestampSec": 24 },
+        { "speaker": "ai", "text": "Correct. Can you do better? Aim for O(n).", "timestampSec": 52 },
+        { "speaker": "user", "text": "Yeah I think so. Like I can kind of use a hash map. Basically for each number, I check if the complement is already in the map. If not, I add the current number with its index to the map.", "timestampSec": 66 },
+        { "speaker": "ai", "text": "Exactly. Now merge two sorted linked lists into one sorted list.", "timestampSec": 108 },
+        { "speaker": "user", "text": "Um, I'll create a dummy head node. Then basically like compare the values at each list's current node, um attach the smaller one, and move that list's pointer forward. Continue until one list is exhausted.", "timestampSec": 124 }
+      ]
+    }
+  ],
+  "analysis": {
+    "anal_001": {
+      "id": "anal_001",
+      "sessionId": "sess_001",
+      "provider": "Gemini 2.0 Flash",
+      "status": "COMPLETED",
+      "scores": {
+        "communication": 9,
+        "technical": 6,
+        "problemSolving": 8,
+        "confidence": 8,
+        "overall": 8.2
+      },
+      "strengths": [
+        "Excellent use of STAR method throughout all answers",
+        "Strong storytelling — made answers memorable and specific",
+        "Showed genuine ownership and accountability in conflict scenario",
+        "Good energy and confidence in voice delivery"
+      ],
+      "improvements": [
+        "Quantify impact more — 'increased efficiency' needs a number",
+        "Avoid over-explaining setup; get to the action faster",
+        "Prepare a stronger 'weakness' answer — current one felt rehearsed"
+      ],
+      "answerFeedback": [
+        {
+          "question": "Tell me about a time you led a team through a difficult project.",
+          "userAnswer": "I led our college team in a 48-hour hackathon where three members dropped out. I redistributed tasks, stayed up the last night debugging, and we placed 2nd out of 80 teams.",
+          "feedback": "Strong situation and result. The action is clear but could use more detail — what specific decision did you make about task redistribution? Adding the team size and the result metric (2nd/80) is great. Score: 8/10.",
+          "score": 8
+        },
+        {
+          "question": "Describe a conflict you had with a teammate and how you resolved it.",
+          "userAnswer": "A teammate and I disagreed on the tech stack. I scheduled a 1:1, listened to his reasoning, then proposed we prototype both options for 2 days. We went with his choice because the data supported it. No hard feelings.",
+          "feedback": "Excellent. You showed maturity by validating the other perspective and letting data decide. This is exactly the answer hiring managers want. Could briefly mention what you learned. Score: 9/10.",
+          "score": 9
+        },
+        {
+          "question": "What is your biggest weakness?",
+          "userAnswer": "I sometimes over-engineer solutions. I'm working on setting timebox constraints for myself before writing code.",
+          "feedback": "Acceptable but slightly generic — this answer comes up very often. Make it more specific to your actual experience. The mitigation strategy is good though. Score: 7/10.",
+          "score": 7
+        }
+      ],
+      "report": "## Interview Analysis — Behavioral Round\n\n### Overall Performance: 8.2/10\n\nKundalik demonstrated strong behavioral interviewing skills with consistent use of the STAR framework. Answers were well-structured and showed genuine reflection on past experiences.\n\n### Key Strengths\n- **Storytelling clarity**: Each answer had a clear situation, specific actions, and measurable results.\n- **Self-awareness**: Honest acknowledgment of team dynamics and personal role in outcomes.\n- **Composure**: Confident voice tone maintained throughout even during complex questions.\n\n### Areas to Develop\n- **Quantification**: Most answers lacked specific metrics. Replace 'we improved performance' with 'we reduced load time by 40%'.\n- **Conciseness**: Answers averaged 90 seconds when 60-75 seconds is optimal for most rounds.\n\n### Recommendation\nReady for mid-level behavioral rounds at product companies. Suggested next step: practice with a System Design or Technical round to round out preparation.",
+      "generatedAt": "2026-05-06T10:35:00Z",
+      "communicationAnalysis": {
+        "sessionId": "sess_001",
+        "analyzedAt": "2026-05-06T10:36:00Z",
+        "totalUserWords": 892,
+        "totalUserTurns": 3,
+        "overallCommunicationScore": 6.8,
+        "fillerWordStats": [
+          { "word": "like", "count": 4, "percentOfTotal": 0.45, "severity": "high" },
+          { "word": "basically", "count": 3, "percentOfTotal": 0.34, "severity": "medium" },
+          { "word": "um", "count": 3, "percentOfTotal": 0.34, "severity": "medium" },
+          { "word": "kind of", "count": 2, "percentOfTotal": 0.22, "severity": "medium" },
+          { "word": "honestly", "count": 2, "percentOfTotal": 0.22, "severity": "low" },
+          { "word": "you know", "count": 1, "percentOfTotal": 0.11, "severity": "low" }
+        ],
+        "topReplacements": [
+          {
+            "original": "like",
+            "betterAlternatives": ["such as", "for example", "(remove)"],
+            "exampleInContext": "\"we had like five teams\" → \"we had five cross-functional teams\""
+          },
+          {
+            "original": "basically",
+            "betterAlternatives": ["fundamentally", "in essence", "at its core"],
+            "exampleInContext": "\"basically stayed up the last night\" → \"I worked through the night to ensure delivery\""
+          },
+          {
+            "original": "kind of",
+            "betterAlternatives": ["to some extent", "partially", "(remove)"],
+            "exampleInContext": "\"I kind of just redistributed\" → \"I redistributed tasks based on remaining capacity\""
+          }
+        ],
+        "sentenceRewrites": [
+          {
+            "original": "Yeah so basically I was the lead on this project and um we had like five teams involved and I kind of had to just figure it out",
+            "rewritten": "I served as the technical lead on this initiative, coordinating across five cross-functional teams under significant time pressure.",
+            "improvement": "Removed 5 filler words, replaced vague 'figure it out' with specific responsibility framing"
+          },
+          {
+            "original": "I kind of just redistributed the tasks you know, basically matched people to what they were strongest at",
+            "rewritten": "I redistributed tasks based on each member's strongest skills, optimizing for both speed and quality.",
+            "improvement": "Removed 4 filler words, added the 'why' behind the action (optimization intent)"
+          }
+        ],
+        "strengthsInCommunication": [
+          "Clear chronological sequencing of events throughout each answer",
+          "Included a quantified result (2nd out of 80 teams) — great habit",
+          "Good pacing — paused appropriately before complex answers"
+        ]
+      }
+    },
+    "anal_002": {
+      "id": "anal_002",
+      "sessionId": "sess_002",
+      "provider": "Claude CLI v1.2.3",
+      "status": "COMPLETED",
+      "scores": {
+        "communication": 7,
+        "technical": 7,
+        "problemSolving": 6,
+        "confidence": 7,
+        "overall": 6.8
+      },
+      "strengths": [
+        "Got the brute-force solution quickly on all problems",
+        "Clear verbalization of thought process",
+        "Good edge case awareness for the array problems"
+      ],
+      "improvements": [
+        "Struggled to optimize from O(n²) to O(n) on the two-sum variant",
+        "Did not consider space complexity trade-offs",
+        "Missed the sliding window pattern in Q3 — jumped to recursion"
+      ],
+      "answerFeedback": [
+        {
+          "question": "Find the longest substring without repeating characters.",
+          "userAnswer": "I used two nested loops to check all substrings and track the max. It's O(n²) time.",
+          "feedback": "Correct brute force. Alex was expecting you to optimize to O(n) using a sliding window with a hash set. You should have recognized the 'substring' pattern immediately. Score: 6/10.",
+          "score": 6
+        },
+        {
+          "question": "Given a binary tree, find the maximum path sum.",
+          "userAnswer": "I used DFS recursion, tracking the max at each node considering left and right paths. Handled negatives by using max(0, child).",
+          "feedback": "Very solid. You handled the negative child case correctly which most candidates miss. Explanation was clear. Score: 8/10.",
+          "score": 8
+        }
+      ],
+      "report": "## Interview Analysis — DSA Round\n\n### Overall Performance: 6.8/10\n\nSolid fundamentals but optimization patterns need more practice. Alex noted you default to brute force and wait for hints before optimizing.\n\n### Recommendation\nFocus on: Sliding Window, Two Pointers, Monotonic Stack patterns. Aim to state optimal complexity before coding.",
+      "generatedAt": "2026-05-05T15:10:00Z",
+      "communicationAnalysis": {
+        "sessionId": "sess_002",
+        "analyzedAt": "2026-05-05T15:11:00Z",
+        "totalUserWords": 634,
+        "totalUserTurns": 3,
+        "overallCommunicationScore": 6.1,
+        "fillerWordStats": [
+          { "word": "like", "count": 5, "percentOfTotal": 0.79, "severity": "high" },
+          { "word": "basically", "count": 4, "percentOfTotal": 0.63, "severity": "high" },
+          { "word": "um", "count": 4, "percentOfTotal": 0.63, "severity": "high" },
+          { "word": "kind of", "count": 2, "percentOfTotal": 0.32, "severity": "medium" },
+          { "word": "I think", "count": 1, "percentOfTotal": 0.16, "severity": "low" }
+        ],
+        "topReplacements": [
+          {
+            "original": "like",
+            "betterAlternatives": ["such as", "for example", "(remove)"],
+            "exampleInContext": "\"It's like O(n squared)\" → \"The time complexity is O(n²)\""
+          },
+          {
+            "original": "basically / um",
+            "betterAlternatives": ["(silent pause)", "specifically", "concretely"],
+            "exampleInContext": "\"I'll basically use... um...\" → \"I'll use...\" with a deliberate 1-second pause"
+          }
+        ],
+        "sentenceRewrites": [
+          {
+            "original": "So um I'll basically use two nested loops to check all substrings and track the max length, it's like O(n squared) time",
+            "rewritten": "My initial approach is two nested loops to enumerate all substrings — O(n²) time, O(1) space. I can optimize this to O(n) using a sliding window.",
+            "improvement": "Removed 3 filler words, used proper notation, stated space complexity, and proactively offered the optimization path"
+          }
+        ],
+        "strengthsInCommunication": [
+          "Clear verbalization of approach before coding — Alex rewards this",
+          "Named the algorithm pattern (sliding window) correctly when prompted",
+          "Explained the negative-child case in the tree problem with precision"
+        ]
+      }
+    },
+    "anal_003": {
+      "id": "anal_003",
+      "sessionId": "sess_003",
+      "provider": "Gemini 2.0 Flash",
+      "status": "COMPLETED",
+      "scores": {
+        "communication": 8,
+        "technical": 7,
+        "problemSolving": 8,
+        "confidence": 7,
+        "overall": 7.5
+      },
+      "strengths": [
+        "Correctly identified the need for a CDN and load balancer upfront",
+        "Good database partitioning strategy for the URL shortener",
+        "Asked clarifying questions before diving into design"
+      ],
+      "improvements": [
+        "Did not mention rate limiting — critical for public APIs",
+        "Cache eviction policy not discussed (LRU vs LFU trade-off)",
+        "Monitoring and observability completely skipped"
+      ],
+      "answerFeedback": [
+        {
+          "question": "Design a URL shortener like bit.ly that handles 100M URLs/day.",
+          "userAnswer": "I'd use a distributed key-value store like DynamoDB, a hashing service to generate 7-char IDs, a load balancer, and CDN for popular URLs.",
+          "feedback": "Good foundation. You nailed the core components. Missing: rate limiting on write endpoints, cache eviction strategy, and how you'd handle hash collisions at scale. Score: 7/10.",
+          "score": 7
+        }
+      ],
+      "report": "## Interview Analysis — System Design Round\n\n### Overall Performance: 7.5/10\n\nStrong instincts on core architecture. Morgan wants to see more depth on operational concerns (rate limiting, observability, failure modes).\n\n### Recommendation\nStudy: Rate limiting patterns (token bucket), cache eviction policies, and the CAP theorem application in your designs.",
+      "generatedAt": "2026-05-04T10:32:00Z",
+      "communicationAnalysis": {
+        "sessionId": "sess_003",
+        "analyzedAt": "2026-05-04T10:33:00Z",
+        "totalUserWords": 711,
+        "totalUserTurns": 3,
+        "overallCommunicationScore": 6.5,
+        "fillerWordStats": [
+          { "word": "like", "count": 4, "percentOfTotal": 0.56, "severity": "high" },
+          { "word": "basically", "count": 3, "percentOfTotal": 0.42, "severity": "medium" },
+          { "word": "um", "count": 3, "percentOfTotal": 0.42, "severity": "medium" },
+          { "word": "kind of", "count": 2, "percentOfTotal": 0.28, "severity": "medium" },
+          { "word": "I guess", "count": 1, "percentOfTotal": 0.14, "severity": "low" }
+        ],
+        "topReplacements": [
+          {
+            "original": "like",
+            "betterAlternatives": ["such as", "specifically", "for example"],
+            "exampleInContext": "\"DynamoDB for example\" → \"I'd use DynamoDB as the primary key-value store, chosen for its horizontal scaling\""
+          },
+          {
+            "original": "I guess",
+            "betterAlternatives": ["I would implement", "the solution is", "I'd add"],
+            "exampleInContext": "\"I guess we'd need monitoring\" → \"I'd add Prometheus metrics with Grafana dashboards for observability\""
+          }
+        ],
+        "sentenceRewrites": [
+          {
+            "original": "I kind of didn't fully think about that. Um, I guess we'd need monitoring? And basically some kind of rate limiting too",
+            "rewritten": "For operational concerns: I'd implement token-bucket rate limiting at 100 reads/min per IP, and add Prometheus + Grafana for observability with P99 latency alerts.",
+            "improvement": "Replaced guessing language with confident, specific technical choices and concrete numbers"
+          }
+        ],
+        "strengthsInCommunication": [
+          "Started with requirement clarification before jumping to design — Morgan loves this",
+          "Logical flow: requirements → components → trade-offs",
+          "Used specific technology names (DynamoDB, CDN) instead of generic terms"
+        ]
+      }
+    }
+  },
+  "providers": [
+    {
+      "key": "deepgramAgent",
+      "name": "Deepgram Voice Agent",
+      "type": "agent",
+      "status": "active",
+      "version": "2.0",
+      "note": "BYOK — key configured",
+      "installHint": null
+    },
+    {
+      "key": "claudeCLI",
+      "name": "Claude CLI",
+      "type": "llm",
+      "status": "active",
+      "version": "1.2.3",
+      "note": "Detected at /usr/local/bin/claude",
+      "installHint": null
+    },
+    {
+      "key": "geminiFree",
+      "name": "Gemini 2.0 Flash (Free)",
+      "type": "llm",
+      "status": "active",
+      "version": null,
+      "note": "Free tier — no key required",
+      "installHint": null
+    },
+    {
+      "key": "geminiCLI",
+      "name": "Gemini CLI",
+      "type": "llm",
+      "status": "inactive",
+      "version": null,
+      "note": "Not installed",
+      "installHint": "npm install -g @google/gemini-cli"
+    },
+    {
+      "key": "codexCLI",
+      "name": "Codex CLI",
+      "type": "llm",
+      "status": "inactive",
+      "version": null,
+      "note": "Not installed",
+      "installHint": "npm install -g @openai/codex"
+    },
+    {
+      "key": "ollama",
+      "name": "Ollama (Local)",
+      "type": "llm",
+      "status": "warning",
+      "version": null,
+      "note": "Installed but not running",
+      "installHint": "Run: ollama serve"
+    },
+    {
+      "key": "claudeAPI",
+      "name": "Claude API",
+      "type": "llm",
+      "status": "inactive",
+      "version": null,
+      "note": "API key not set",
+      "installHint": "Add ANTHROPIC_API_KEY in Settings"
+    },
+    {
+      "key": "openaiAPI",
+      "name": "OpenAI API",
+      "type": "llm",
+      "status": "inactive",
+      "version": null,
+      "note": "API key not set",
+      "installHint": "Add OPENAI_API_KEY in Settings"
+    }
+  ],
+  "stats": {
+    "totalSessions": 8,
+    "completedSessions": 7,
+    "avgScore": 7.5,
+    "bestCategory": "HR Round",
+    "bestScore": 9.0,
+    "studyStreakDays": 7,
+    "totalMinutes": 312,
+    "lifetimeCommunication": {
+      "avgCommunicationScore": 6.4,
+      "totalFillerWordsAllTime": 187,
+      "topFillerAllTime": "like",
+      "improvementTrend": [
+        { "sessionLabel": "Apr 29", "score": 5.8 },
+        { "sessionLabel": "May 2", "score": 6.1 },
+        { "sessionLabel": "May 4", "score": 6.5 },
+        { "sessionLabel": "May 5", "score": 6.1 },
+        { "sessionLabel": "May 6", "score": 6.8 }
+      ],
+      "mostImprovedArea": "Reduced 'basically' usage by 40% over last 3 sessions",
+      "nextFocusArea": "Replace 'like' as filler — still 4-5 occurrences per session",
+      "allTimeFillerStats": [
+        { "word": "like", "count": 87, "severity": "high" },
+        { "word": "um", "count": 63, "severity": "high" },
+        { "word": "basically", "count": 47, "severity": "medium" },
+        { "word": "just", "count": 37, "severity": "low" },
+        { "word": "kind of", "count": 21, "severity": "medium" },
+        { "word": "honestly", "count": 16, "severity": "low" }
+      ],
+      "recentSessionScores": [
+        { "sessionId": "sess_001", "packageName": "Behavioral", "tutorName": "Priya", "date": "2026-05-06", "score": 6.8 },
+        { "sessionId": "sess_002", "packageName": "DSA", "tutorName": "Alex", "date": "2026-05-05", "score": 6.1 },
+        { "sessionId": "sess_003", "packageName": "System Design", "tutorName": "Morgan", "date": "2026-05-04", "score": 6.5 },
+        { "sessionId": "sess_005", "packageName": "Technical", "tutorName": "Alex", "date": "2026-05-02", "score": 6.1 }
+      ]
+    }
+  },
+  "transcript_demo": [
+    { "role": "tutor", "text": "Welcome! Let's start with a quick intro — tell me about your background.", "ts": 0 },
+    { "role": "user", "text": "I'm a final-year CS student with 2 internships in backend development, mostly Node.js and Python.", "ts": 8 },
+    { "role": "tutor", "text": "Great. Tell me about a time you faced a tough technical challenge and how you resolved it.", "ts": 16 },
+    { "role": "user", "text": "During my second internship, we had a memory leak in our Express app that only appeared under load. I used clinic.js to profile it and traced it to a closure holding references to large buffers.", "ts": 28 },
+    { "role": "tutor", "text": "Good. What was the impact before and after you fixed it?", "ts": 45 },
+    { "role": "user", "text": "Before: the server would crash every 6 hours. After the fix, it ran stable for 3 weeks in prod with no restarts.", "ts": 52 },
+    { "role": "tutor", "text": "Nice. Now let's talk about system design briefly — how would you scale that Express app to handle 10x traffic?", "ts": 64 }
+  ],
+  "conversations": [
+    {
+      "id": "conv_001",
+      "title": "Behavioral session review",
+      "createdAt": "2026-05-06T11:00:00Z",
+      "updatedAt": "2026-05-06T11:08:00Z",
+      "messages": [
+        {
+          "id": "cmsg_001_1",
+          "role": "user",
+          "text": "How did my last behavioral session go?",
+          "ts": "2026-05-06T11:00:00Z",
+          "actions": []
+        },
+        {
+          "id": "cmsg_001_2",
+          "role": "ai",
+          "text": "Your most recent session was **Behavioral** with **Priya** on 6 May 2026.\n\n**Overall Score: 8.2/10**\n\n**Score breakdown:**\n- Communication: 9/10\n- Technical: 6/10\n- Problem Solving: 8/10\n- Confidence: 8/10\n\n**Top strength:** Excellent use of STAR method throughout all answers\n\n**Key improvement:** Quantify impact more — 'increased efficiency' needs a number\n\nWant the full analysis or tips on what to practice next?",
+          "ts": "2026-05-06T11:00:08Z",
+          "actions": [
+            { "label": "View Full Analysis", "view": "analysis", "params": { "analysisId": "anal_001" } },
+            { "label": "What to Practice Next", "trigger": "What should I focus on improving?" }
+          ]
+        },
+        {
+          "id": "cmsg_001_3",
+          "role": "user",
+          "text": "What should I focus on improving?",
+          "ts": "2026-05-06T11:01:30Z",
+          "actions": []
+        },
+        {
+          "id": "cmsg_001_4",
+          "role": "ai",
+          "text": "Based on your last **3 sessions**, here are your prioritized improvement areas:\n\n**1.** Quantify impact more — 'increased efficiency' needs a number\n\n**2.** Struggled to optimize from O(n2) to O(n) on the two-sum variant\n\n**3.** Did not mention rate limiting — critical for public APIs\n\n**4.** Avoid over-explaining setup; get to the action faster\n\n**My recommendation:** Tackle behavioral quantification first — highest ROI. Then focus on DSA optimization patterns (sliding window, two pointers). Your base scores are solid; these refinements will push you to 8.5+ average.",
+          "ts": "2026-05-06T11:01:42Z",
+          "actions": [
+            { "label": "Start Behavioral Session", "view": "new-interview" },
+            { "label": "View History", "view": "history" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conv_002",
+      "title": "DSA improvement strategy",
+      "createdAt": "2026-05-05T16:00:00Z",
+      "updatedAt": "2026-05-05T16:10:00Z",
+      "messages": [
+        {
+          "id": "cmsg_002_1",
+          "role": "user",
+          "text": "I scored 6.8 in my DSA session. What went wrong and how do I improve?",
+          "ts": "2026-05-05T16:00:00Z",
+          "actions": []
+        },
+        {
+          "id": "cmsg_002_2",
+          "role": "ai",
+          "text": "**DSA Performance — 2 sessions, avg 6.5/10:**\n\n**Your strengths:** Tree DFS/BFS, brute-force identification, edge case awareness for arrays.\n\n**What needs work:**\n- Sliding window pattern (missed in your last DSA session)\n- Space complexity trade-offs (never mentioned)\n- Hash map optimization: O(n2) to O(n)\n\n**7-day plan:**\n- Days 1-2: 10 Sliding Window problems (Easy to Medium)\n- Days 3-4: 8 Two Pointer problems\n- Day 5: 6 HashMap pattern problems\n- Days 6-7: Full 60-min mock session with Alex\n\n**One tip:** Before every problem, state the pattern name + target complexity. If you cannot name it, study it first.",
+          "ts": "2026-05-05T16:00:12Z",
+          "actions": [
+            { "label": "Start DSA Session", "view": "new-interview" },
+            { "label": "View DSA Analysis", "view": "analysis", "params": { "analysisId": "anal_002" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conv_003",
+      "title": "System design gaps",
+      "createdAt": "2026-05-04T12:00:00Z",
+      "updatedAt": "2026-05-04T12:12:00Z",
+      "messages": [
+        {
+          "id": "cmsg_003_1",
+          "role": "user",
+          "text": "Tell me about my system design session with Morgan. What did I miss?",
+          "ts": "2026-05-04T12:00:00Z",
+          "actions": []
+        },
+        {
+          "id": "cmsg_003_2",
+          "role": "ai",
+          "text": "**System Design — 7.5/10 with Morgan:**\n\n**Your instincts are solid:**\n- CDN + load balancer identified upfront\n- Asked clarifying requirements first (Morgan loves this)\n- DynamoDB choice well-justified\n\n**The 3 gaps that cost you roughly 1 point each:**\n\n**1. Rate Limiting** — Every public API needs it. Use token bucket: 100 reads/min per IP, 10 writes/min per user.\n\n**2. Cache Eviction Policy** — You said 'use a cache' but not LRU vs LFU. For URL shorteners, LFU keeps popular URLs warm.\n\n**3. Observability** — Morgan's rule: always answer 'how would you know this is broken at 3am?' Metrics, logs, alerting.\n\n**These 3 items will push you to 8.5+ guaranteed.**",
+          "ts": "2026-05-04T12:00:15Z",
+          "actions": [
+            { "label": "Practice System Design", "view": "new-interview" },
+            { "label": "View Analysis", "view": "analysis", "params": { "analysisId": "anal_003" } }
+          ]
+        }
+      ]
+    }
+  ],
+  "fileSystem": {
+    "storageRoot": "~/.iprep/uploads/",
+    "folders": [
+      {
+        "id": "folder_001",
+        "name": "Interview Notes",
+        "createdAt": "2026-04-20T10:00:00Z",
+        "files": [
+          {
+            "id": "file_001",
+            "name": "behavioral-prep.md",
+            "type": "md",
+            "sizeKB": 4.2,
+            "createdAt": "2026-04-20T10:05:00Z",
+            "updatedAt": "2026-05-01T14:22:00Z",
+            "content": "# Behavioral Interview Prep\n\n## STAR Method\n\n**Situation** — Set the context briefly. One or two sentences.\n\n**Task** — Describe your responsibility. What were you asked to do?\n\n**Action** — Explain what YOU specifically did. Use 'I' not 'we'.\n\n**Result** — Share the outcome. Always add a metric.\n\n---\n\n## My Stories\n\n### Leadership — Hackathon Story\n\n- **Situation:** 48-hour hackathon, 3 members dropped out\n- **Task:** Keep the team focused and ship something complete\n- **Action:** Redistributed tasks by skill, worked through the night debugging\n- **Result:** Placed 2nd out of 80 teams\n\n### Conflict Resolution — Tech Stack Disagreement\n\n- **Situation:** Teammate and I disagreed on stack choice\n- **Task:** Resolve professionally without damaging the relationship\n- **Action:** Called a 1:1, proposed a 2-day prototype comparison\n- **Result:** Used his choice — data supported it. Better outcome.\n\n---\n\n## Quantification Bank\n\n- Reduced load time by **40%** using lazy loading\n- Fixed crash that was **100% reproducible** under load\n- Server ran stable for **3 weeks** after memory leak fix\n- Placed **2nd of 80** teams in hackathon",
+            "folderId": "folder_001"
+          },
+          {
+            "id": "file_002",
+            "name": "system-design-notes.md",
+            "type": "md",
+            "sizeKB": 6.8,
+            "createdAt": "2026-04-25T09:00:00Z",
+            "updatedAt": "2026-05-04T11:45:00Z",
+            "content": "# System Design Notes\n\n## The Morgan Checklist\n\n1. Functional requirements (clarify first)\n2. Non-functional requirements (scale, latency, availability)\n3. Core components and data flow\n4. Data model and storage choice\n5. API design\n6. Failure modes and mitigation\n7. Monitoring and observability\n\n---\n\n## Common Patterns\n\n### Rate Limiting\n- Token bucket: allows bursts, smooth on average\n- Leaky bucket: constant output rate\n- Fixed window counter: simple but has edge-case issues\n- Sliding window: most accurate\n\n### Caching Eviction\n- **LRU** — good for recency-biased access patterns\n- **LFU** — good for stable popular content (URL shorteners)\n\n### Database Choices\n- High read, simple lookups → DynamoDB, Redis\n- Relational + ACID transactions → PostgreSQL\n- Time-series data → InfluxDB\n- Full-text search → Elasticsearch\n\n---\n\n## URL Shortener Design\n\n**Components:** Load balancer → App servers → Redis cache → DynamoDB\n\n**Hash generation:** Base62 encoding, 7 chars = 62^7 ≈ 3.5 trillion unique URLs\n\n**Missed in last session:**\n- Rate limiting (token bucket, 100 reads/min per IP)\n- Cache eviction policy (LFU for popular URLs)\n- Observability (Prometheus + Grafana, P99 latency alerts)",
+            "folderId": "folder_001"
+          }
+        ]
+      },
+      {
+        "id": "folder_002",
+        "name": "Uploaded Docs",
+        "createdAt": "2026-04-28T08:00:00Z",
+        "files": [
+          {
+            "id": "file_003",
+            "name": "resume-v3.pdf",
+            "type": "pdf",
+            "sizeKB": 184.0,
+            "createdAt": "2026-04-28T08:15:00Z",
+            "updatedAt": "2026-04-28T08:15:00Z",
+            "content": null,
+            "folderId": "folder_002"
+          },
+          {
+            "id": "file_004",
+            "name": "offer-comparison.pdf",
+            "type": "pdf",
+            "sizeKB": 92.5,
+            "createdAt": "2026-05-01T10:00:00Z",
+            "updatedAt": "2026-05-01T10:00:00Z",
+            "content": null,
+            "folderId": "folder_002"
+          }
+        ]
+      }
+    ],
+    "rootFiles": [
+      {
+        "id": "file_005",
+        "name": "quick-notes.md",
+        "type": "md",
+        "sizeKB": 1.1,
+        "createdAt": "2026-05-06T18:00:00Z",
+        "updatedAt": "2026-05-06T18:30:00Z",
+        "content": "# Quick Notes\n\n## Before every interview:\n- Review STAR stories (see behavioral-prep.md)\n- Run through Morgan's checklist for system design\n- Practice numbers — always quantify results\n- Watch the fillers: 'basically', 'like', 'um', 'kind of'\n\n## Reminders:\n- Set a 90-second timer when practicing answers\n- Start with the conclusion, then explain\n- Pause instead of saying 'um'",
+        "folderId": null
+      }
+    ]
+  }
+}
