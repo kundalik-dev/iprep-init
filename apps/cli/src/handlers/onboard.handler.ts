@@ -1,10 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import { IprepPaths } from '@iprep/shared';
-import { checkDbHealth } from '@iprep/db';
+import { checkDbHealth, runDbMigrations } from '@iprep/db';
 import {
   printBanner,
   printSeparator,
@@ -14,13 +13,9 @@ import {
   log,
 } from '../utils/chalk-helper.js';
 import { dirExists } from '../utils/fs.utils.js';
-import { isPortInUse } from '../services/server-manager.js';
+import { env } from '../config/env.js';
 
-interface OnboardConfig {
-  port: number;
-}
-
-// ─── Step 1 ────────────────────────────────────────────────────────────────
+// Step 1 ---------------------------------------------------------------------
 
 async function checkAlreadyOnboarded(yes: boolean): Promise<boolean> {
   if (!dirExists(IprepPaths.root)) return true;
@@ -42,37 +37,15 @@ async function checkAlreadyOnboarded(yes: boolean): Promise<boolean> {
   return proceed as boolean;
 }
 
-// ─── Step 2 ────────────────────────────────────────────────────────────────
+// Step 2 ---------------------------------------------------------------------
 
-async function collectUserInput(yes: boolean): Promise<OnboardConfig> {
-  if (yes) return { port: 5545 };
+async function collectUserInput(yes: boolean): Promise<void> {
+  if (yes) return;
 
-  const { port: rawPort } = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'port',
-      message: 'Server port:',
-      default: '5545',
-      validate: async (input: string) => {
-        const port = parseInt(input, 10);
-        if (isNaN(port) || port < 1 || port > 65535) {
-          return 'Port must be a number between 1 and 65535';
-        }
-        if (await isPortInUse(port)) {
-          return `Port ${port} is already in use — choose another`;
-        }
-        return true;
-      },
-    },
-  ]);
-
-  const config: OnboardConfig = { port: parseInt(rawPort as string, 10) };
-
-  // Summary in Paperclip style
   console.log();
-  printStep('Server port', String(config.port));
+  printStep('Root dir', IprepPaths.root);
+  printStep('Server port', String(env.PORT));
   printStep('Database', IprepPaths.dbFile);
-  printStep('Config dir', IprepPaths.root);
   console.log();
 
   const { confirmed } = await inquirer.prompt([
@@ -88,25 +61,23 @@ async function collectUserInput(yes: boolean): Promise<OnboardConfig> {
     console.log(log.warn('Onboard cancelled.'));
     process.exit(0);
   }
-
-  return config;
 }
 
-// ─── Step 3 ────────────────────────────────────────────────────────────────
+// Step 3 ---------------------------------------------------------------------
 
 function createDirectoryStructure(): void {
   const dirs = [
-    { abs: IprepPaths.root,                                          label: '~/.iprep/' },
-    { abs: IprepPaths.database,                                      label: '~/.iprep/database/' },
-    { abs: path.join(IprepPaths.root, 'logs'),                       label: '~/.iprep/logs/' },
-    { abs: path.join(IprepPaths.root, 'logs', 'cli-log'),            label: '~/.iprep/logs/cli-log/' },
-    { abs: path.join(IprepPaths.root, 'logs', 'server-log'),         label: '~/.iprep/logs/server-log/' },
-    { abs: path.join(IprepPaths.root, 'sessions'),                   label: '~/.iprep/sessions/' },
-    { abs: path.join(IprepPaths.root, 'skills'),                     label: '~/.iprep/skills/' },
-    { abs: path.join(IprepPaths.root, 'docs'),                       label: '~/.iprep/docs/' },
-    { abs: path.join(IprepPaths.root, 'interview-data'),             label: '~/.iprep/interview-data/' },
-    { abs: path.join(IprepPaths.root, 'exports'),                    label: '~/.iprep/exports/' },
-    { abs: path.join(IprepPaths.root, 'backups'),                    label: '~/.iprep/backups/' },
+    { abs: IprepPaths.root, label: '~/.iprep/' },
+    { abs: IprepPaths.database, label: '~/.iprep/database/' },
+    { abs: path.join(IprepPaths.root, 'logs'), label: '~/.iprep/logs/' },
+    { abs: path.join(IprepPaths.root, 'logs', 'cli-log'), label: '~/.iprep/logs/cli-log/' },
+    { abs: path.join(IprepPaths.root, 'logs', 'server-log'), label: '~/.iprep/logs/server-log/' },
+    { abs: path.join(IprepPaths.root, 'sessions'), label: '~/.iprep/sessions/' },
+    { abs: path.join(IprepPaths.root, 'skills'), label: '~/.iprep/skills/' },
+    { abs: path.join(IprepPaths.root, 'docs'), label: '~/.iprep/docs/' },
+    { abs: path.join(IprepPaths.root, 'interview-data'), label: '~/.iprep/interview-data/' },
+    { abs: path.join(IprepPaths.root, 'exports'), label: '~/.iprep/exports/' },
+    { abs: path.join(IprepPaths.root, 'backups'), label: '~/.iprep/backups/' },
   ];
 
   for (const dir of dirs) {
@@ -116,7 +87,7 @@ function createDirectoryStructure(): void {
     } catch (err: unknown) {
       if ((err as NodeJS.ErrnoException).code === 'EACCES') {
         throw new Error(
-          `Permission denied creating ${dir.abs} — check your home directory permissions`,
+          `Permission denied creating ${dir.abs} - check your home directory permissions`,
         );
       }
       throw err;
@@ -124,18 +95,18 @@ function createDirectoryStructure(): void {
   }
 }
 
-// ─── Step 4 ────────────────────────────────────────────────────────────────
+// Step 4 ---------------------------------------------------------------------
 
-async function writeEnvFile(config: OnboardConfig, yes: boolean): Promise<void> {
+async function writeEnvFile(yes: boolean): Promise<void> {
   const dbUrl = `file:${IprepPaths.dbFile.replace(/\\/g, '/')}`;
 
   const content =
     [
-      `PORT=${config.port}`,
-      `NODE_ENV=production`,
+      `PORT=${env.PORT}`,
+      `NODE_ENV=${env.NODE_ENV}`,
       `DATABASE_URL=${dbUrl}`,
-      `CORS_ORIGIN=http://localhost:5173`,
-      `API_BASE_URL=http://localhost:${config.port}/api/v1`,
+      `CORS_ORIGIN=${env.CORS_ORIGIN}`,
+      `API_BASE_URL=${env.API_BASE_URL}`,
     ].join('\n') + '\n';
 
   if (IprepPaths.isEnvExists && !yes) {
@@ -154,36 +125,33 @@ async function writeEnvFile(config: OnboardConfig, yes: boolean): Promise<void> 
   }
 
   fs.writeFileSync(IprepPaths.envFilePath, content, 'utf-8');
-  console.log(`  ${log.success('.env written → ' + IprepPaths.envFilePath)}`);
+  console.log(`  ${log.success('.env written -> ' + IprepPaths.envFilePath)}`);
 }
 
-// ─── Step 5 ────────────────────────────────────────────────────────────────
+// Step 5 ---------------------------------------------------------------------
 
-function runDbMigration(): void {
+async function runDbMigration(): Promise<void> {
   try {
-    execSync('pnpm --filter=@iprep/db db:migrate', {
-      cwd: process.cwd(),
-      stdio: 'pipe',
-    });
+    await runDbMigrations();
     console.log(`  ${log.success('Database migrated')}`);
   } catch (err: unknown) {
-    const stderr = (err as { stderr?: Buffer }).stderr?.toString() ?? '';
+    const message = err instanceof Error ? err.message : String(err);
     console.log(`  ${log.error('Migration failed')}`);
 
-    if (stderr.includes('better-sqlite3')) {
-      console.log(chalk.dim('\n  → Native bindings missing. Fix with:'));
-      console.log(chalk.dim('    pnpm rebuild better-sqlite3'));
+    if (message.includes('better-sqlite3')) {
+      console.log(chalk.dim('\n  -> Native bindings missing. Fix with:'));
+      console.log(chalk.dim('    npm rebuild better-sqlite3'));
       console.log(chalk.dim('    then re-run: iprep onboard\n'));
     } else {
-      console.log(chalk.dim(`\n  → ${stderr.trim()}`));
-      console.log(chalk.dim('  → Run manually: pnpm --filter=@iprep/db db:migrate\n'));
+      console.log(chalk.dim(`\n  -> ${message.trim()}`));
+      console.log(chalk.dim('  -> Re-run: iprep onboard\n'));
     }
 
     throw new Error('migration failed');
   }
 }
 
-// ─── Step 6 ────────────────────────────────────────────────────────────────
+// Step 6 ---------------------------------------------------------------------
 
 async function verifySetup(): Promise<void> {
   const dbHealthy = await checkDbHealth();
@@ -199,21 +167,21 @@ async function verifySetup(): Promise<void> {
   }
 
   if (!dbHealthy) {
-    console.log(chalk.dim('\n  → Native bindings missing. Fix with:'));
-    console.log(chalk.dim('    pnpm rebuild better-sqlite3'));
+    console.log(chalk.dim('\n  -> Native bindings missing. Fix with:'));
+    console.log(chalk.dim('    npm rebuild better-sqlite3'));
     console.log(chalk.dim('    then re-run: iprep onboard\n'));
   }
 }
 
-// ─── Step 7 ────────────────────────────────────────────────────────────────
+// Step 7 ---------------------------------------------------------------------
 
-function showCompletionSummary(config: OnboardConfig): void {
+function showCompletionSummary(): void {
   console.log();
-  console.log(chalk.bold.green('  ✓  iPrep setup complete!\n'));
+  console.log(chalk.bold.green('  OK  iPrep setup complete!\n'));
   printStep('Config dir', IprepPaths.root);
   printStep('Database', IprepPaths.dbFile);
-  printStep('Port', String(config.port));
-  printStep('API', `http://localhost:${config.port}/api/v1`);
+  printStep('Port', String(env.PORT));
+  printStep('API', `${env.API_BASE_URL}`);
   console.log();
   console.log(
     `  ${chalk.cyan('Next:')}  run ${chalk.bold.white('iprep start')} to start the server`,
@@ -221,7 +189,7 @@ function showCompletionSummary(config: OnboardConfig): void {
   console.log();
 }
 
-// ─── Orchestrator ──────────────────────────────────────────────────────────
+// Orchestrator ---------------------------------------------------------------
 
 export async function runOnBoard(opts: { yes?: boolean }): Promise<void> {
   const yes = opts.yes ?? false;
@@ -237,24 +205,24 @@ export async function runOnBoard(opts: { yes?: boolean }): Promise<void> {
     return;
   }
 
-  const config = await collectUserInput(yes);
+  await collectUserInput(yes);
 
   console.log(log.bold('\nCreating directories...\n'));
   createDirectoryStructure();
 
   console.log(log.bold('\nWriting config...\n'));
-  await writeEnvFile(config, yes);
+  await writeEnvFile(yes);
 
   console.log(log.bold('\nSetting up database...\n'));
   try {
-    runDbMigration();
+    await runDbMigration();
   } catch {
-    console.log(log.warn('\nSetup incomplete — fix the migration error and re-run iprep onboard'));
+    console.log(log.warn('\nSetup incomplete - fix the migration error and re-run iprep onboard'));
     return;
   }
 
   console.log(log.bold('\nVerifying setup...\n'));
   await verifySetup();
 
-  showCompletionSummary(config);
+  showCompletionSummary();
 }

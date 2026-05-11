@@ -9,14 +9,14 @@ export const APP_VERSION = '1.2.0';
 
 const DEFAULTS: EnvVars = {
   PORT: 5545,
-  NODE_ENV: 'development',
+  NODE_ENV: 'production',
   DATABASE_URL: IprepPaths.dbFile,
   CORS_ORIGIN: 'http://localhost:5173',
   API_BASE_URL: 'http://localhost:5545/api/v1',
 };
 
 function resolveEnvPath(): string | null {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV && process.env.NODE_ENV === 'development') {
     // Dev: load from monorepo/project root
     const devPath = path.join(process.cwd(), '.env');
     return fs.existsSync(devPath) ? devPath : null;

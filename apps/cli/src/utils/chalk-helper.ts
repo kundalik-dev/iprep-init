@@ -15,8 +15,10 @@ export const log = {
   highlight: (msg: string) => iprepGradient(msg),
 };
 
+// Prints iPrep as banner on terminal
 export function printBanner(): void {
   const ascii = figlet.textSync('iPrep', { font: 'ANSI Shadow' });
+  console.log();
   console.log(iprepGradient.multiline(ascii));
   console.log(chalk.dim('  Interview Preparation Platform'));
 }
