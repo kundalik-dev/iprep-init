@@ -1,3 +1,8 @@
+---
+name: CLI Testing Log
+description: Manual CLI testing log — issues found, test steps, and results from CLI testing sessions.
+---
+
 # CLI Testing
 
 ## Issues 11-05-2026

@@ -1,3 +1,8 @@
+---
+name: Demo App Docs — Claude Context
+description: Claude instructions for the demo-app/app-docs folder — explains the HTML prototype purpose, structure, and how to use it as a design reference.
+---
+
 # iPrep Demo App — Claude Context
 
 > This folder contains a fully interactive HTML/CSS/JS prototype of the iPrep platform.
@@ -8,11 +13,11 @@
 
 ## Project Layout
 
-| Folder | Status | Notes |
-|--------|--------|-------|
-| `demo-app/` | ✅ Complete (v1) | Original prototype — 7 views, all features working |
+| Folder        | Status              | Notes                                                                     |
+| ------------- | ------------------- | ------------------------------------------------------------------------- |
+| `demo-app/`   | ✅ Complete (v1)    | Original prototype — 7 views, all features working                        |
 | `demo-app-2/` | 🔄 In Progress (v2) | Rebuilt from spec (`02-feature.md`) — 3 of 4 files done, `app.js` missing |
-| `app-docs/` | — | This file, plan docs, feature specs |
+| `app-docs/`   | —                   | This file, plan docs, feature specs                                       |
 
 ---
 
@@ -20,14 +25,15 @@
 
 Generated from spec: `app-docs/02-feature.md`
 
-| File | Status | Lines | Notes |
-|------|--------|-------|-------|
-| `index.html` | ✅ Done | 129 | Full shell, all 7 nav routes, sidebar, toast container |
-| `style.css` | ✅ Done | 1893 | Full design system, dark/light tokens, all component classes |
-| `mock-data.json` | ✅ Done | 746 | Tutors, packages, 6+ sessions w/ transcripts, analysis, fileSystem, communicationAnalysis, lifetimeCommunication |
-| `app.js` | ❌ Missing | — | Router, MockAPI, State, all 9 view renderers — **next step** |
+| File             | Status     | Lines | Notes                                                                                                            |
+| ---------------- | ---------- | ----- | ---------------------------------------------------------------------------------------------------------------- |
+| `index.html`     | ✅ Done    | 129   | Full shell, all 7 nav routes, sidebar, toast container                                                           |
+| `style.css`      | ✅ Done    | 1893  | Full design system, dark/light tokens, all component classes                                                     |
+| `mock-data.json` | ✅ Done    | 746   | Tutors, packages, 6+ sessions w/ transcripts, analysis, fileSystem, communicationAnalysis, lifetimeCommunication |
+| `app.js`         | ❌ Missing | —     | Router, MockAPI, State, all 9 view renderers — **next step**                                                     |
 
 ### Routes in demo-app-2
+
 `#dashboard` · `#new-interview` · `#session` · `#analysis` · `#history` · `#chat` · `#files` · `#communication` · `#settings`
 
 ---
@@ -44,37 +50,48 @@ Open `index.html` to use it.
 
 ## demo-app (v1) — Files
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `index.html` | ~85 | SPA shell — sidebar, main content area, toast container |
-| `style.css` | ~1400 | Full design system + all component + view styles |
-| `app.js` | ~1100 | Router, MockAPI, State, all view renderers, AI chat engine |
-| `mock-data.json` | ~540 | All mock data — tutors, packages, sessions, analysis, providers, conversations |
-| `CLAUDE.md` | — | This file |
+| File             | Lines | Purpose                                                                        |
+| ---------------- | ----- | ------------------------------------------------------------------------------ |
+| `index.html`     | ~85   | SPA shell — sidebar, main content area, toast container                        |
+| `style.css`      | ~1400 | Full design system + all component + view styles                               |
+| `app.js`         | ~1100 | Router, MockAPI, State, all view renderers, AI chat engine                     |
+| `mock-data.json` | ~540  | All mock data — tutors, packages, sessions, analysis, providers, conversations |
+| `CLAUDE.md`      | —     | This file                                                                      |
 
 ---
 
 ## Architecture
 
 ### State (global singleton)
+
 ```js
 const State = {
-  currentView, selectedPackage, selectedTutor, wizardStep,
-  activeSessionId, sessionTimer, sessionSeconds, sessionMicOn,
-  transcriptInterval, transcriptIndex,
-  settingsTab, historyFilter,
-  theme,          // 'dark' | 'light' — persisted to localStorage
-  currentConvId,  // active chat conversation ID
-  data,           // loaded from mock-data.json
-}
+  currentView,
+  selectedPackage,
+  selectedTutor,
+  wizardStep,
+  activeSessionId,
+  sessionTimer,
+  sessionSeconds,
+  sessionMicOn,
+  transcriptInterval,
+  transcriptIndex,
+  settingsTab,
+  historyFilter,
+  theme, // 'dark' | 'light' — persisted to localStorage
+  currentConvId, // active chat conversation ID
+  data, // loaded from mock-data.json
+};
 ```
 
 ### MockAPI (Promise-based, 200–800ms artificial delay)
+
 Methods: `load()`, `getTutors()`, `getPackages()`, `getSessions()`, `getAnalysis(id)`,
 `getProviders()`, `getStats()`, `startSession()`, `endSession()`,
 `getConversations()`, `getConversation(id)`, `createConversation()`, `addMessage()`
 
 ### Router (hash-based)
+
 `navigate(view, params)` → clears timers → updates State → calls `renderView()` → updates nav active state → sets `window.location.hash`
 
 Views registered in `viewMap`: `dashboard`, `new-interview`, `session`, `analysis`, `history`, `settings`, `chat`
@@ -83,28 +100,31 @@ Views registered in `viewMap`: `dashboard`, `new-interview`, `session`, `analysi
 
 ## Views — Completion Status
 
-| View | Route | Status | Notes |
-|------|-------|--------|-------|
-| Dashboard | `#dashboard` | ✅ Complete | Stats grid, quick-start, recent sessions, tip/streak widgets |
-| New Interview | `#new-interview` | ✅ Complete | 2-step wizard — package select → tutor select → start |
-| Interview Session | `#session` | ✅ Complete | Live timer, waveform animation, transcript feed, mic toggle |
-| Analysis Results | `#analysis` | ✅ Complete | Animated score rings, strengths/improvements, accordion feedback, full report |
-| History | `#history` | ✅ Complete | Search, 7 filter chips, table with hover actions |
-| Settings | `#settings` | ✅ Complete | 3 tabs: Providers, API Keys, Preferences |
-| AI Chat | `#chat` | ✅ Complete | Two-panel layout, conversation list, AI engine, typing indicator, action buttons |
+| View              | Route            | Status      | Notes                                                                            |
+| ----------------- | ---------------- | ----------- | -------------------------------------------------------------------------------- |
+| Dashboard         | `#dashboard`     | ✅ Complete | Stats grid, quick-start, recent sessions, tip/streak widgets                     |
+| New Interview     | `#new-interview` | ✅ Complete | 2-step wizard — package select → tutor select → start                            |
+| Interview Session | `#session`       | ✅ Complete | Live timer, waveform animation, transcript feed, mic toggle                      |
+| Analysis Results  | `#analysis`      | ✅ Complete | Animated score rings, strengths/improvements, accordion feedback, full report    |
+| History           | `#history`       | ✅ Complete | Search, 7 filter chips, table with hover actions                                 |
+| Settings          | `#settings`      | ✅ Complete | 3 tabs: Providers, API Keys, Preferences                                         |
+| AI Chat           | `#chat`          | ✅ Complete | Two-panel layout, conversation list, AI engine, typing indicator, action buttons |
 
 ---
 
 ## Features Implemented
 
 ### Light / Dark Mode
+
 - Toggled via sidebar button (☀️/🌙) or Settings → Preferences → Dark Theme toggle
 - CSS: dark values in `:root`, light overrides in `[data-theme="light"]`
 - Persisted to `localStorage` key `iprep-theme`
 - Score ring SVG track color adapts to theme in `scoreRing()` JS function
 
 ### AI Chat Engine (`getAIResponse()`)
+
 Keyword-based intent matching with 11 patterns. All responses reference real mock data:
+
 - `last session / recent / how did I do` → pulls latest completed session + analysis scores
 - `improve / weakness / focus` → aggregates improvements across last 3 sessions
 - `stats / progress / streak` → pulls from `stats` object
@@ -121,6 +141,7 @@ Markdown formatter `formatAIText()`: XSS-safe, handles `**bold**`, `*italic*`, b
 Action buttons in AI messages use `window._chatActions` registry (keyed by random ID) to avoid `JSON.stringify` in `onclick` attributes.
 
 ### Session Timer Cleanup
+
 `clearSessionTimers()` is called by `navigate()` to prevent `setInterval` leaks when leaving the session view.
 
 ---
@@ -145,23 +166,13 @@ conversations[]   3 seed conversations (conv_001–003) covering behavioral revi
 
 ```css
 /* Dark (default in :root) */
---bg-primary:    #07070F    /* page background */
---bg-surface:    #0D0D1F    /* card / sidebar background */
---bg-elevated:   #141428    /* elevated card */
---bg-border:     #1C1C38    /* borders */
---bg-hover:      #1A1A32    /* hover state */
---card-bg:       rgba(13,13,31,0.8)  /* glass card (uses backdrop-filter) */
-
---accent-purple: #7C3AED
---accent-blue:   #3B82F6
---accent-grad:   linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%)
-
---text-primary:  #F1F5F9
---text-secondary:#CBD5E1
---text-muted:    #64748B
---text-faint:    #334155
-
---success: #10B981   --warning: #F59E0B   --error: #EF4444
+--bg-primary: #07070f /* page background */ --bg-surface: #0d0d1f /* card / sidebar background */
+  --bg-elevated: #141428 /* elevated card */ --bg-border: #1c1c38 /* borders */ --bg-hover: #1a1a32
+  /* hover state */ --card-bg: rgba(13, 13, 31, 0.8) /* glass card (uses backdrop-filter) */
+  --accent-purple: #7c3aed --accent-blue: #3b82f6
+  --accent-grad: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%) --text-primary: #f1f5f9
+  --text-secondary: #cbd5e1 --text-muted: #64748b --text-faint: #334155 --success: #10b981
+  --warning: #f59e0b --error: #ef4444;
 ```
 
 Light mode overrides all `--bg-*` and `--text-*` under `[data-theme="light"]`.

@@ -1,3 +1,8 @@
+---
+name: Demo App Feature Specification
+description: Feature specification details for the iPrep demo app — screens, interactions, and component breakdown for the prototype.
+---
+
 # iPrep Demo App - Feature Specification
 
 Use this single file as the source of truth to generate a fresh vanilla web app from scratch.

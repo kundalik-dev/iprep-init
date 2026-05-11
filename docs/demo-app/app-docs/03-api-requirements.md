@@ -1,3 +1,8 @@
+---
+name: Demo App API Requirements
+description: API requirements for the iPrep demo app — endpoints, request and response shapes, and integration notes for the prototype backend.
+---
+
 # iPrep Current API Requirements
 
 This file lists the APIs needed by the current `demo-app-2/app.js`.

@@ -1,3 +1,8 @@
+---
+name: Start Command Plan
+description: Detailed design plan for the iprep start command — prerequisite checks, server spawn, health polling, and handler architecture (runStart).
+---
+
 # iPrep CLI — `start` Command Plan
 
 Entry point: `runStart(opts)` in `src/handlers/start.handler.ts`

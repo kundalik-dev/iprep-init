@@ -1,3 +1,8 @@
+---
+name: CLI Plan
+description: Master CLI plan — stack, folder structure, all commands, utilities, local iPrep home structure, and implementation phases. Primary reference for CLI design.
+---
+
 # iPrep CLI Plan
 
 > Last updated: 2026-05-11

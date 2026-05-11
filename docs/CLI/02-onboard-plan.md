@@ -1,3 +1,8 @@
+---
+name: Onboard Command Plan
+description: Detailed design plan for the iprep onboard command — 7-step setup flow, inputs, outputs, and handler architecture (runOnBoard).
+---
+
 # iPrep CLI — `onboard` Command Plan
 
 Entry point: `runOnBoard(opts)` in `src/handlers/onboard.handler.ts`

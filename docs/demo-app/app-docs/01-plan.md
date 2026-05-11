@@ -1,3 +1,8 @@
+---
+name: Demo App Feature Plan
+description: Feature plan for three new areas in the iPrep demo app prototype — used as a design reference before the real frontend was built.
+---
+
 # Demo App — Feature Plan 01
 
 > Plan for three new feature areas to add to the iPrep demo app prototype.

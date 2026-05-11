@@ -1,5 +1,9 @@
 {
   "permissions": {
-    "allow": ["Bash(pnpm typecheck *)"]
+    "allow": [
+      "Bash(pnpm typecheck *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\coding2k26\\\\iPrep-practice\\\\04-iPrep-setup-monorepo\\\\apps\\\\cli\\\\src\" -Recurse -File)",
+      "Bash(Select-Object FullName)"
+    ]
   }
 }
