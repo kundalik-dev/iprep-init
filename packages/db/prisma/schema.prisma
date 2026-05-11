@@ -273,7 +273,7 @@ enum Difficulty {
 
 enum InterviewType {
   BEHAVIORAL
-  TECHNICAL_SCREEN
+  TECHNICAL
   DSA
   HR_ROUND
   PRODUCT_MANAGER
