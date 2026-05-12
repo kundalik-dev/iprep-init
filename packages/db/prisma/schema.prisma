@@ -14,6 +14,8 @@ model Health {
   id        Int      @id @default(autoincrement())
   status    String   @default("ok")
   checkedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("health")
 }
@@ -26,6 +28,7 @@ model User {
   id    String  @id @default(cuid())
   name  String
   email String? @unique
+  phone Int?    @unique
 
   interviews Interview[]
   notes      Note[]
@@ -33,23 +36,39 @@ model User {
   chats      Chat[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("users")
 }
 
+model ResumeDetail {
+  id           String    @id @default(cuid())
+  location     String?
+  resumeMail   String?
+  resumePhone  Int?
+  socialLinkId String?
+  jobTitle     String?
+  jobSector    String?
+  education    String?
+  passOutYear  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
 model UserStats {
-  id            String @id @default(cuid())
-  currentStreak Int    @default(0)
-  totalMinutes  Int    @default(0)
-  averageScore  Int    @default(0)
-  commScore     Int    @default(0) // Communication Score trend
-  totalFillers  Int    @default(0) // Running count of filler words
+  id            String   @id @default(cuid())
+  currentStreak Int      @default(0)
+  totalMinutes  Int      @default(0)
+  averageScore  Int      @default(0)
+  commScore     Int      @default(0) // Communication Score trend
+  totalFillers  Int      @default(0) // Running count of filler words
+  createdAt     DateTime @default(now())
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 // =============================================
@@ -59,6 +78,8 @@ model sessions {
   id          String     @id @default(cuid())
   aiProvider  AIProvider @default(CLAUDE)
   aiSessionId String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt
 }
 
 // =============================================
@@ -69,6 +90,8 @@ model Chat {
   id            String   @id @default(cuid())
   title         String // e.g., "Behavioral Session Review"
   lastMessageAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -80,10 +103,12 @@ model Chat {
 }
 
 model Message {
-  id      String   @id @default(cuid())
-  role    String // "AI" or "USER"
-  content String // Supports Markdown content
-  sentAt  DateTime @default(now())
+  id        String   @id @default(cuid())
+  role      String // "AI" or "USER"
+  content   String // Supports Markdown content
+  sentAt    DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   chatId String
   chat   Chat   @relation(fields: [chatId], references: [id])
@@ -101,7 +126,7 @@ model Interview {
   id        String          @id @default(cuid())
   status    InterviewStatus @default(DRAFT)
   mode      InterviewMode   @default(VOICE)
-  modelUsed String?         @default("claude-3-5-sonnet-20241022")
+  modelUsed AIModelsList    @default(Claude)
 
   // Relations
   userId String
@@ -123,6 +148,7 @@ model Interview {
 
   // Timing
   createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
   startedAt   DateTime?
   completedAt DateTime?
 
@@ -146,6 +172,8 @@ model InterviewPackage {
   isPro        Boolean       @default(false)
   type         InterviewType
   interviews   Interview[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
 }
 
 model Tutor {
@@ -160,6 +188,8 @@ model Tutor {
   isPro         Boolean @default(false)
 
   interviews Interview[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now()) @updatedAt
 }
 
 // =============================================
@@ -173,6 +203,8 @@ model Transcript {
   speakerName String
   text        String
   timestamp   DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 
   interviewId String
   interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
@@ -186,6 +218,7 @@ model Note {
   content   String?
   fileUrl   String?
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -202,6 +235,8 @@ model Analysis {
   id          String    @id @default(cuid())
   interviewId String    @unique
   interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
 
   // Overall Metrics
   overallScore     Int
@@ -226,10 +261,12 @@ model Analysis {
 }
 
 model QuestionFeedback {
-  id       String  @id @default(cuid())
-  question String
-  score    Int // e.g., 88
-  feedback String? // AI's specific feedback for this answer
+  id        String   @id @default(cuid())
+  question  String
+  score     Int // e.g., 88
+  feedback  String? // AI's specific feedback for this answer
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   interviewId String
   interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
@@ -238,10 +275,12 @@ model QuestionFeedback {
 }
 
 model FillerWord {
-  id     String @id @default(cuid())
-  word   String
-  count  Int
-  impact String
+  id        String   @id @default(cuid())
+  word      String
+  count     Int
+  impact    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   analysisId String
   analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
@@ -254,7 +293,7 @@ model userInfo {
   username  String
   email     String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 // =============================================
@@ -316,4 +355,8 @@ enum Gender {
   M
   F
   O
+}
+
+enum AIModelsList {
+  Claude
 }
