@@ -21,7 +21,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "turbo run test",
-    "test:watch": "turbo run test:watch"
+    "test:watch": "turbo run test:watch",
+    "gitnexus_impact": "powershell -ExecutionPolicy Bypass -File ./scripts/gitnexus_impact.ps1",
+    "gitnexus_detect_changes": "powershell -ExecutionPolicy Bypass -File ./scripts/gitnexus_detect_changes.ps1"
   },
   "author": "kundalik.dev",
   "license": "ISC",
@@ -31,6 +33,7 @@
     "@typescript-eslint/parser": "^8.59.2",
     "eslint": "^10.3.0",
     "eslint-config-prettier": "^10.1.8",
+    "gitnexus": "1.6.4",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.3",
     "prettier": "^3.8.3",
