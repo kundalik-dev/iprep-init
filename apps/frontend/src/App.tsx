@@ -1,23 +1,6 @@
-import { useEffect, useMemo, useState, type ComponentType } from 'react';
-import {
-  BarChart3,
-  Bot,
-  CheckCircle2,
-  Clock3,
-  FileText,
-  FolderOpen,
-  History,
-  Mic,
-  Moon,
-  Play,
-  Settings,
-  Sparkles,
-  Target,
-} from 'lucide-react';
+import { useEffect, useState, type ComponentType } from 'react';
+import { BarChart3, Bot, FolderOpen, History, Mic, Moon, Sun, Play, Settings, Plus } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen';
 import {
   checkHealth,
@@ -25,14 +8,14 @@ import {
   getOnboardingProgress,
 } from '@/features/onboarding/api';
 import type { OnboardingProgress, ServerStatus } from '@/features/onboarding/types';
-import { API_BASE_URL, LOCAL_SERVER_PORT } from '@/lib/api';
+import { LOCAL_SERVER_PORT } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 type ViewId =
   | 'dashboard'
   | 'new-interview'
   | 'history'
-  | 'coach'
+  | 'chat'
   | 'files'
   | 'communication'
   | 'settings';
@@ -40,7 +23,7 @@ type ViewId =
 type NavItem = {
   id: ViewId;
   label: string;
-  icon: ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string; size?: number; strokeWidth?: number }>;
   badge?: string;
 };
 
@@ -51,55 +34,20 @@ const practiceNav: NavItem[] = [
 ];
 
 const toolNav: NavItem[] = [
-  { id: 'coach', label: 'AI Coach', icon: Bot },
+  { id: 'chat', label: 'AI Coach', icon: Bot },
   { id: 'files', label: 'Notes & Files', icon: FolderOpen },
   { id: 'communication', label: 'Communication', icon: Mic },
 ];
 
-const stats = [
-  { label: 'Sessions', value: '8', meta: '4 this week' },
-  { label: 'Average score', value: '79', meta: '+6 from last week' },
-  { label: 'Study streak', value: '7d', meta: 'Daily practice' },
-  { label: 'Minutes', value: '312', meta: 'Total practice' },
-];
-
-const setupActions = [
-  'Confirm interview goal',
-  'Upload resume context',
-  'Add Deepgram key for voice mode',
-];
-
-const interviewTemplates = [
-  {
-    title: 'Behavioral Interview',
-    detail: 'STAR method, leadership, conflict, ownership',
-    meta: '25 min',
-    level: 'Medium',
-  },
-  {
-    title: 'Technical Interview',
-    detail: 'Backend design, debugging, tradeoff questions',
-    meta: '30 min',
-    level: 'Hard',
-  },
-  {
-    title: 'Communication Drill',
-    detail: 'Filler words, clarity, pacing, concise answers',
-    meta: '15 min',
-    level: 'Easy',
-  },
-];
-
-function App() {
+export default function App() {
   const [activeView, setActiveView] = useState<ViewId>('dashboard');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
   const [serverStatus, setServerStatus] = useState<ServerStatus>('checking');
   const [onboardingProgress, setOnboardingProgress] = useState<OnboardingProgress | null>(null);
 
-  const activeTitle = useMemo(() => {
-    return [...practiceNav, ...toolNav, { id: 'settings', label: 'Settings' }].find(
-      (item) => item.id === activeView,
-    )?.label;
-  }, [activeView]);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   useEffect(() => {
     void loadStartupState();
@@ -150,64 +98,110 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <div className="sidebar-brand">
-          <div className="brand-mark">i</div>
-          <div>
-            <div className="brand-name">iPrep</div>
-            <div className="brand-tag">AI Coach</div>
+    <div id="app">
+      <aside id="sidebar">
+        <div className="sb-brand">
+          <div className="sb-logo">
+            <span
+              style={{
+                fontSize: '20px',
+                fontWeight: 800,
+                color: '#fff',
+                fontStyle: 'italic',
+                lineHeight: 1,
+                letterSpacing: '-1px',
+              }}
+            >
+              i
+            </span>
+          </div>
+          <div className="sb-brand-text">
+            <span className="sb-name">iPrep</span>
+            <span className="sb-tag">AI Coach</span>
           </div>
         </div>
 
-        <nav className="sidebar-nav" aria-label="Primary">
-          <NavSection
-            label="Practice"
-            items={practiceNav}
-            activeView={activeView}
-            onSelect={setActiveView}
-          />
-          <NavSection
-            label="Tools"
-            items={toolNav}
-            activeView={activeView}
-            onSelect={setActiveView}
-          />
+        <nav className="sb-nav">
+          <div className="sb-nav-section">
+            <span className="sb-section-label">Practice</span>
+            {practiceNav.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={cn('nav-item', activeView === item.id && 'active')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setActiveView(item.id);
+                  }}
+                >
+                  <span className="nav-icon">
+                    <Icon size={16} strokeWidth={2} />
+                  </span>
+                  <span className="nav-label">{item.label}</span>
+                  {item.badge && <span className="nav-badge">{item.badge}</span>}
+                </a>
+              );
+            })}
+          </div>
+
+          <div className="sb-nav-section" style={{ marginTop: '16px' }}>
+            <span className="sb-section-label">Tools</span>
+            {toolNav.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  className={cn('nav-item', activeView === item.id && 'active')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setActiveView(item.id);
+                  }}
+                >
+                  <span className="nav-icon">
+                    <Icon size={16} strokeWidth={2} />
+                  </span>
+                  <span className="nav-label">{item.label}</span>
+                  {item.badge && <span className="nav-badge">{item.badge}</span>}
+                </a>
+              );
+            })}
+          </div>
         </nav>
 
-        <div className="sidebar-footer">
-          <Button variant="secondary" size="icon" aria-label="Theme">
-            <Moon />
-          </Button>
+        <div className="sb-footer">
           <button
-            className={cn('nav-item flex-1', activeView === 'settings' && 'active')}
-            type="button"
-            onClick={() => setActiveView('settings')}
+            className="theme-btn"
+            title="Toggle theme"
+            onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
           >
-            <Settings className="nav-icon" />
-            <span>Settings</span>
+            <span id="theme-icon">
+              {theme === 'dark' ? <Sun size={15} strokeWidth={2} /> : <Moon size={15} strokeWidth={2} />}
+            </span>
           </button>
+          <a
+            href="#settings"
+            className={cn('nav-item nav-settings', activeView === 'settings' && 'active')}
+            style={{ flex: 1 }}
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveView('settings');
+            }}
+          >
+            <span className="nav-icon">
+              <Settings size={16} strokeWidth={2} />
+            </span>
+            <span className="nav-label">Settings</span>
+          </a>
         </div>
       </aside>
 
-      <main className="main-panel">
-        <header className="page-header">
-          <div>
-            <h1>{activeTitle}</h1>
-            <p>Local API: {API_BASE_URL}</p>
-          </div>
-          <div className="header-actions">
-            <Badge variant="success">Port {LOCAL_SERVER_PORT}</Badge>
-            <Button>
-              <Play />
-              Start Interview
-            </Button>
-          </div>
-        </header>
-
-        <section className="page-body">
+      <main id="main">
+        <div id="view-root">
           {activeView === 'dashboard' ? <Dashboard /> : <Placeholder view={activeView} />}
-        </section>
+        </div>
       </main>
     </div>
   );
@@ -215,10 +209,9 @@ function App() {
 
 function StartupScreen() {
   return (
-    <div className="center-screen">
-      <div className="brand-mark">i</div>
-      <h1>Connecting to iPrep</h1>
-      <p>Checking the local server and onboarding status.</p>
+    <div className="loading-screen">
+      <div className="spinner"></div>
+      <p style={{ color: 'var(--text-s)' }}>Connecting to iPrep</p>
     </div>
   );
 }
@@ -226,139 +219,348 @@ function StartupScreen() {
 function ConnectLocalScreen({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="center-screen">
-      <Card className="connect-card">
-        <CardHeader>
-          <Badge variant="warning">Local server offline</Badge>
-          <CardTitle>Connect the hosted UI to your local iPrep server</CardTitle>
-          <CardDescription>
+      <div className="card connect-card">
+        <div style={{ marginBottom: '16px' }}>
+          <span className="badge badge-warning" style={{ marginBottom: '8px' }}>
+            Local server offline
+          </span>
+          <div className="page-title">Connect the hosted UI to your local iPrep server</div>
+          <div className="page-subtitle">
             Start the local server on port {LOCAL_SERVER_PORT}, then retry.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="connect-actions">
+          </div>
+        </div>
+        <div className="connect-actions">
           <code>iprep start</code>
-          <Button onClick={onRetry}>Retry Connection</Button>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function NavSection({
-  label,
-  items,
-  activeView,
-  onSelect,
-}: {
-  label: string;
-  items: NavItem[];
-  activeView: ViewId;
-  onSelect: (view: ViewId) => void;
-}) {
-  return (
-    <div className="nav-section">
-      <span className="nav-section-label">{label}</span>
-      {items.map((item) => {
-        const Icon = item.icon;
-
-        return (
-          <button
-            className={cn('nav-item', activeView === item.id && 'active')}
-            key={item.id}
-            type="button"
-            onClick={() => onSelect(item.id)}
-          >
-            <Icon className="nav-icon" />
-            <span>{item.label}</span>
-            {item.badge ? <span className="nav-badge">{item.badge}</span> : null}
+          <button className="btn btn-primary" onClick={onRetry}>
+            Retry Connection
           </button>
-        );
-      })}
+        </div>
+      </div>
     </div>
   );
 }
 
 function Dashboard() {
   return (
-    <div className="dashboard-grid">
-      <section className="dashboard-hero">
-        <div>
-          <Badge>
-            <Sparkles />
-            Ready for first run
-          </Badge>
-          <h2>Practice interviews, review transcripts, and improve with local AI context.</h2>
-          <p>
-            The frontend is shaped around the `/api/v1` local server contract and the Claude HTML
-            prototype visual system.
-          </p>
+    <div style={{ padding: 0 }}>
+      <div
+        className="page-header"
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          padding: '28px 32px 0',
+          gap: '20px',
+        }}
+      >
+        <div className="page-header-left">
+          <div className="page-title">Dashboard</div>
+          <div className="page-subtitle">Your interview prep at a glance</div>
         </div>
-        <div className="hero-actions">
-          <Button>
-            <Play />
-            New Interview
-          </Button>
-          <Button variant="secondary">
-            <FileText />
-            Add Notes
-          </Button>
+        <div className="page-header-actions">
+          <button className="btn btn-primary">
+            <Plus size={14} style={{ marginRight: 6 }} /> New Interview
+          </button>
         </div>
-      </section>
-
-      <div className="stats-grid">
-        {stats.map((stat) => (
-          <Card key={stat.label}>
-            <CardHeader>
-              <CardDescription>{stat.label}</CardDescription>
-              <CardTitle className="stat-value">{stat.value}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <span className="stat-meta">{stat.meta}</span>
-            </CardContent>
-          </Card>
-        ))}
       </div>
 
-      <Card className="panel-card">
-        <CardHeader>
-          <CardTitle>Setup Actions</CardTitle>
-          <CardDescription>First-run tasks from onboarding docs</CardDescription>
-        </CardHeader>
-        <CardContent className="setup-list">
-          {setupActions.map((action) => (
-            <div className="setup-row" key={action}>
-              <CheckCircle2 />
-              <span>{action}</span>
+      <div className="page-body" style={{ padding: '24px 32px 40px' }}>
+        <div
+          className="dashboard-hero"
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: '24px',
+            border: '1px solid var(--bg-border)',
+            borderRadius: '20px',
+            background:
+              'radial-gradient(circle at 18% 10%, rgba(139, 92, 246, 0.24), transparent 28%), linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%)',
+            padding: '28px',
+            marginBottom: '24px',
+          }}
+        >
+          <div className="hero-text">
+            <span className="hero-greeting" style={{ color: 'var(--text-m)' }}>
+              Good evening 👋
+            </span>
+            <div
+              className="hero-title"
+              style={{
+                fontSize: '28px',
+                fontWeight: 800,
+                lineHeight: 1.12,
+                margin: '18px 0 10px',
+                color: 'var(--text-p)',
+              }}
+            >
+              Ready to ace today?
             </div>
-          ))}
-        </CardContent>
-      </Card>
+            <div className="hero-sub" style={{ fontSize: '14px', color: 'var(--text-s)' }}>
+              7-day streak · 4 sessions this week · 312 total minutes practiced
+            </div>
+          </div>
+          <div className="hero-actions" style={{ display: 'flex', gap: '10px' }}>
+            <button className="btn btn-secondary">View History</button>
+            <button className="btn btn-primary btn-lg">
+              <Play size={16} style={{ marginRight: 6 }} /> Start Interview
+            </button>
+          </div>
+        </div>
 
-      <Card className="panel-card">
-        <CardHeader>
-          <CardTitle>Interview Templates</CardTitle>
-          <CardDescription>Initial ready-made flow</CardDescription>
-        </CardHeader>
-        <CardContent className="template-list">
-          {interviewTemplates.map((template) => (
-            <div className="template-row" key={template.title}>
-              <div>
-                <strong>{template.title}</strong>
-                <p>{template.detail}</p>
+        <div
+          className="stats-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+            gap: '14px',
+            marginBottom: '24px',
+          }}
+        >
+          <div className="card stat-card" style={{ padding: '16px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
+              }}
+            >
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(139, 92, 246, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                }}
+              >
+                🎯
               </div>
-              <div className="template-meta">
-                <Badge variant="muted">
-                  <Clock3 />
-                  {template.meta}
-                </Badge>
-                <Badge variant="warning">
-                  <Target />
-                  {template.level}
-                </Badge>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--success)' }}>
+                +2 this week
+              </span>
+            </div>
+            <div style={{ fontSize: '30px', fontWeight: 800 }}>8</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-m)' }}>Sessions Completed</div>
+          </div>
+          <div className="card stat-card" style={{ padding: '16px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
+              }}
+            >
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(59, 130, 246, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                }}
+              >
+                ⭐
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--success)' }}>
+                +4 pts
+              </span>
+            </div>
+            <div className="gradient-text" style={{ fontSize: '30px', fontWeight: 800 }}>
+              79
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--text-m)' }}>Average Score</div>
+          </div>
+          <div className="card stat-card" style={{ padding: '16px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
+              }}
+            >
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                }}
+              >
+                🏆
               </div>
             </div>
-          ))}
-        </CardContent>
-      </Card>
+            <div
+              style={{
+                fontSize: '16px',
+                fontWeight: 700,
+                letterSpacing: '-0.3px',
+                marginTop: '14px',
+              }}
+            >
+              Technical
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--text-m)' }}>Best Category</div>
+          </div>
+          <div className="card stat-card" style={{ padding: '16px' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
+              }}
+            >
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(245, 158, 11, 0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                }}
+              >
+                🔥
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--success)' }}>
+                Personal best
+              </span>
+            </div>
+            <div style={{ fontSize: '30px', fontWeight: 800 }}>7d</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-m)' }}>Day Streak</div>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 360px', gap: '18px' }}>
+          <div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '12px',
+              }}
+            >
+              <span className="section-title" style={{ margin: 0 }}>
+                Recent Sessions
+              </span>
+              <button className="btn btn-ghost btn-sm">View all →</button>
+            </div>
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="card interactive"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  padding: '14px 16px',
+                  marginBottom: '10px',
+                  cursor: 'pointer',
+                }}
+              >
+                <div
+                  style={{
+                    width: '38px',
+                    height: '38px',
+                    borderRadius: '10px',
+                    background: '#3b82f6',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    fontWeight: 700,
+                  }}
+                >
+                  CL
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-p)' }}>
+                    Technical Interview
+                  </div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-m)', marginTop: '2px' }}>
+                    Claude · Yesterday · 25m
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '16px', fontWeight: 700, color: 'var(--success)' }}>
+                    85
+                  </div>
+                  <div style={{ fontSize: '10px', color: 'var(--text-m)' }}>Strong</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div
+              className="card"
+              style={{
+                padding: '16px',
+                background: 'var(--accent-soft)',
+                borderColor: 'rgba(139, 92, 246, 0.2)',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  color: 'var(--accent-v)',
+                  marginBottom: '6px',
+                }}
+              >
+                💡 Practice Tip
+              </div>
+              <div style={{ fontSize: '13px', color: 'var(--text-s)', lineHeight: 1.5 }}>
+                Your average response time is slightly high. Try to pause for 2 seconds to gather
+                thoughts, then answer concisely.
+              </div>
+            </div>
+
+            <div className="card card-sm" style={{ padding: '16px' }}>
+              <div className="section-title" style={{ marginBottom: '10px' }}>
+                Quick Stats
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div
+                  style={{ background: 'var(--bg-elevated)', borderRadius: '8px', padding: '12px' }}
+                >
+                  <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-p)' }}>
+                    5h
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>
+                    Total Practice
+                  </div>
+                </div>
+                <div
+                  style={{ background: 'var(--bg-elevated)', borderRadius: '8px', padding: '12px' }}
+                >
+                  <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-p)' }}>4</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>
+                    This Week
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -368,23 +570,21 @@ function Placeholder({ view }: { view: ViewId }) {
     dashboard: 'Dashboard',
     'new-interview': 'New Interview',
     history: 'History',
-    coach: 'AI Coach',
+    chat: 'AI Coach',
     files: 'Notes & Files',
     communication: 'Communication',
     settings: 'Settings',
   };
 
   return (
-    <Card className="placeholder-card">
-      <CardHeader>
-        <CardTitle>{labels[view]}</CardTitle>
-        <CardDescription>Boilerplate route shell</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Button variant="secondary">Connect API View</Button>
-      </CardContent>
-    </Card>
+    <div style={{ padding: '32px' }}>
+      <div className="card" style={{ maxWidth: '600px' }}>
+        <div style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>{labels[view]}</div>
+        <p style={{ color: 'var(--text-s)', marginBottom: '16px' }}>
+          This view is under construction.
+        </p>
+        <button className="btn btn-secondary">Connect API View</button>
+      </div>
+    </div>
   );
 }
-
-export default App;
