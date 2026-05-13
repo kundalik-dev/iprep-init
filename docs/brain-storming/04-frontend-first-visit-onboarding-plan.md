@@ -66,13 +66,13 @@ The frontend should treat the server response as authoritative because the user 
 
 Suggested frontend routes:
 
-| Route | Purpose |
-| ----- | ------- |
-| `/connect-local` | Shown when `localhost:5545` is unreachable. |
-| `/onboarding/profile` | Page 1: name and email. |
-| `/onboarding/goal` | Page 2: goal and resume context. |
-| `/onboarding/provider` | Page 3: AI provider setup. |
-| `/dashboard` | First normal app screen after onboarding completion. |
+| Route                  | Purpose                                              |
+| ---------------------- | ---------------------------------------------------- |
+| `/connect-local`       | Shown when `localhost:5545` is unreachable.          |
+| `/onboarding/profile`  | Page 1: name and email.                              |
+| `/onboarding/goal`     | Page 2: goal and resume context.                     |
+| `/onboarding/provider` | Page 3: AI provider setup.                           |
+| `/dashboard`           | First normal app screen after onboarding completion. |
 
 If using React Router later, guard app routes with an onboarding loader:
 
@@ -86,10 +86,10 @@ Purpose: collect local user identity for dashboards, reports, and AI personaliza
 
 Fields:
 
-| Field | Required | Notes |
-| ----- | -------- | ----- |
-| Name | Yes | Display name used throughout reports and AI prompts. |
-| Email | No | Optional local profile metadata. No login in first version. |
+| Field | Required | Notes                                                       |
+| ----- | -------- | ----------------------------------------------------------- |
+| Name  | Yes      | Display name used throughout reports and AI prompts.        |
+| Email | No       | Optional local profile metadata. No login in first version. |
 
 Validation:
 
@@ -133,18 +133,18 @@ Layout:
 
 Goal cards:
 
-| Value | Label | Description |
-| ----- | ----- | ----------- |
-| `INTERVIEW_PRACTICE` | Interview practice | Practice realistic HR, behavioral, technical, DSA, system design, or role-specific interviews. |
-| `COMMUNICATION_IMPROVEMENT` | Communication improvement | Improve clarity, confidence, vocabulary, filler words, pacing, and answer structure. |
+| Value                       | Label                     | Description                                                                                    |
+| --------------------------- | ------------------------- | ---------------------------------------------------------------------------------------------- |
+| `INTERVIEW_PRACTICE`        | Interview practice        | Practice realistic HR, behavioral, technical, DSA, system design, or role-specific interviews. |
+| `COMMUNICATION_IMPROVEMENT` | Communication improvement | Improve clarity, confidence, vocabulary, filler words, pacing, and answer structure.           |
 
 Fields:
 
-| Field | Required | Notes |
-| ----- | -------- | ----- |
-| Goal type | Yes | Both cards can be selected. Interview practice is for interview preparation; communication improvement is for client-facing or English communication improvement. |
-| Short description | Yes | User describes target role, interview type, weakness, timeline, or communication goal. |
-| Resume upload | No | Accept `.pdf`, `.docx`, `.md` for first version. |
+| Field             | Required | Notes                                                                                                                                                             |
+| ----------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Goal type         | Yes      | Both cards can be selected. Interview practice is for interview preparation; communication improvement is for client-facing or English communication improvement. |
+| Short description | Yes      | User describes target role, interview type, weakness, timeline, or communication goal.                                                                            |
+| Resume upload     | No       | Accept `.pdf`, `.docx`, `.md` for first version.                                                                                                                  |
 
 Decision:
 
@@ -156,8 +156,8 @@ Resume upload flow:
 
 1. If user selects a resume, keep it in frontend form state until the user clicks `Continue`.
 2. On `Continue`, upload it first with `POST /api/v1/documents/upload`.
-2. Read returned `data.id` as `resumeDocumentId`.
-3. Save goal with `POST /api/v1/onboarding/goal`.
+3. Read returned `data.id` as `resumeDocumentId`.
+4. Save goal with `POST /api/v1/onboarding/goal`.
 
 Upload API:
 
@@ -208,9 +208,9 @@ Default state:
 
 Provider modes:
 
-| Mode | Providers | Required fields |
-| ---- | --------- | --------------- |
-| CLI | Claude, Codex, Gemini | Provider selection, optional model name, local CLI test. |
+| Mode    | Providers                                 | Required fields                                           |
+| ------- | ----------------------------------------- | --------------------------------------------------------- |
+| CLI     | Claude, Codex, Gemini                     | Provider selection, optional model name, local CLI test.  |
 | API key | Claude, Codex, Gemini, Ollama, OpenRouter | Provider selection, API key, model name, test connection. |
 
 UI shape:
@@ -231,12 +231,12 @@ apps/frontend/src/lib/provider-models.ts
 
 Initial default model decisions:
 
-| Provider | Default model | Notes |
-| -------- | ------------- | ----- |
-| Claude | `claude-sonnet-4-20250514` | Balanced default for interviews and coaching. |
-| Codex | `gpt-5.3-codex` | Best current Codex default for agentic coding and technical practice. |
-| Gemini | `gemini-2.5-flash` | Best price-performance default. |
-| Ollama | `qwen3` | Local default with broad reasoning coverage. |
+| Provider   | Default model               | Notes                                                                                           |
+| ---------- | --------------------------- | ----------------------------------------------------------------------------------------------- |
+| Claude     | `claude-sonnet-4-20250514`  | Balanced default for interviews and coaching.                                                   |
+| Codex      | `gpt-5.3-codex`             | Best current Codex default for agentic coding and technical practice.                           |
+| Gemini     | `gemini-2.5-flash`          | Best price-performance default.                                                                 |
+| Ollama     | `qwen3`                     | Local default with broad reasoning coverage.                                                    |
 | OpenRouter | `anthropic/claude-sonnet-4` | Quality-first OpenRouter default; exact availability can be checked with OpenRouter models API. |
 
 These values are configurable and should not be hardcoded inside onboarding components.
@@ -316,30 +316,30 @@ Expected behavior:
 Recommended frontend state:
 
 ```ts
-type OnboardingStep = 'profile' | 'goal' | 'provider' | 'complete'
+type OnboardingStep = 'profile' | 'goal' | 'provider' | 'complete';
 
 type OnboardingState = {
-  isLoading: boolean
-  serverStatus: 'checking' | 'online' | 'offline'
-  isComplete: boolean
-  currentStep: OnboardingStep
-  missingSteps: string[]
+  isLoading: boolean;
+  serverStatus: 'checking' | 'online' | 'offline';
+  isComplete: boolean;
+  currentStep: OnboardingStep;
+  missingSteps: string[];
   profile: {
-    name: string
-    email?: string
-  }
+    name: string;
+    email?: string;
+  };
   goal: {
-    goalTypes: Array<'INTERVIEW_PRACTICE' | 'COMMUNICATION_IMPROVEMENT'>
-    description: string
-    resumeDocumentId?: string
-  }
+    goalTypes: Array<'INTERVIEW_PRACTICE' | 'COMMUNICATION_IMPROVEMENT'>;
+    description: string;
+    resumeDocumentId?: string;
+  };
   provider: {
-    provider: 'claude' | 'codex' | 'gemini' | 'ollama' | 'openrouter'
-    mode: 'CLI' | 'API_KEY'
-    modelName?: string
-    testStatus: 'idle' | 'testing' | 'passed' | 'failed'
-  }
-}
+    provider: 'claude' | 'codex' | 'gemini' | 'ollama' | 'openrouter';
+    mode: 'CLI' | 'API_KEY';
+    modelName?: string;
+    testStatus: 'idle' | 'testing' | 'passed' | 'failed';
+  };
+};
 ```
 
 ## API Contract Gaps To Resolve
@@ -368,14 +368,14 @@ The current API requirement only stores `goal` as text. The UI wants card-based 
 
 The onboarding UI should handle these states explicitly:
 
-| State | UI behavior |
-| ----- | ----------- |
-| Local server offline | Show `/connect-local` with command guidance to run `iprep start` or onboarding CLI. |
-| Database not ready | Show local status issue and retry button. |
-| Resume upload fails | Keep user on Page 2; allow continuing without resume. |
-| Provider test fails | Show provider-specific error and keep `Finish Setup` disabled. |
-| API key save fails | Do not clear the key input until user edits or leaves the page. |
-| Onboarding complete fails | Show missing required setup returned by server. |
+| State                     | UI behavior                                                                         |
+| ------------------------- | ----------------------------------------------------------------------------------- |
+| Local server offline      | Show `/connect-local` with command guidance to run `iprep start` or onboarding CLI. |
+| Database not ready        | Show local status issue and retry button.                                           |
+| Resume upload fails       | Keep user on Page 2; allow continuing without resume.                               |
+| Provider test fails       | Show provider-specific error and keep `Finish Setup` disabled.                      |
+| API key save fails        | Do not clear the key input until user edits or leaves the page.                     |
+| Onboarding complete fails | Show missing required setup returned by server.                                     |
 
 ## Implementation Order
 

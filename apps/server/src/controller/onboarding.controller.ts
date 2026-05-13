@@ -136,7 +136,11 @@ function mapProviders(state: Awaited<ReturnType<typeof OnboardingQuery.getOnboar
       isWorking: provider.isWorking,
       lastTestPassed: provider.lastTestPassed,
       lastTestedAt: provider.lastTestedAt,
-      status: provider.isWorking ? 'working' : provider.lastTestPassed === false ? 'failed' : 'pending',
+      status: provider.isWorking
+        ? 'working'
+        : provider.lastTestPassed === false
+          ? 'failed'
+          : 'pending',
     })) ?? []
   );
 }
@@ -260,12 +264,10 @@ export const saveOnboardingProvider: RequestHandler = asyncHandler(async (req, r
 
   const connection = runProviderConnectionTest(result.data);
   if (!connection.success) {
-    throw new ApiError(
-      StatusCodes.BAD_REQUEST,
-      'provider test failed',
-      [connection.message],
-      { provider: result.data.provider, mode: result.data.mode },
-    );
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'provider test failed', [connection.message], {
+      provider: result.data.provider,
+      mode: result.data.mode,
+    });
   }
 
   const dbProvider = PROVIDER_TO_DB[result.data.provider];

@@ -41,11 +41,9 @@ export const uploadDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   const extension = path.extname(file.originalname).toLowerCase();
   if (!SUPPORTED_UPLOAD_EXTENSIONS.has(extension)) {
-    throw new ApiError(
-      StatusCodes.BAD_REQUEST,
-      'unsupported file type',
-      [`supported extensions: ${[...SUPPORTED_UPLOAD_EXTENSIONS].join(', ')}`],
-    );
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'unsupported file type', [
+      `supported extensions: ${[...SUPPORTED_UPLOAD_EXTENSIONS].join(', ')}`,
+    ]);
   }
 
   const initialDocument = await DocumentQuery.createDocument({
@@ -61,11 +59,7 @@ export const uploadDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   const document = await DocumentQuery.updateDocumentFileUrl(initialDocument.id, originalPath);
 
-  res.status(StatusCodes.OK).json(
-    new ApiResponse(
-      StatusCodes.OK,
-      mapDocument(document),
-      'Document uploaded successfully',
-    ),
-  );
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, mapDocument(document), 'Document uploaded successfully'));
 });

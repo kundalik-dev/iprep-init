@@ -18,11 +18,9 @@ function normalizeError(error: unknown): ApiError {
   }
 
   if (isPrismaErrorWithCode(error, 'P2002')) {
-    return new ApiError(
-      StatusCodes.CONFLICT,
-      'user with this email or phone already exists',
-      ['unique constraint violation'],
-    );
+    return new ApiError(StatusCodes.CONFLICT, 'user with this email or phone already exists', [
+      'unique constraint violation',
+    ]);
   }
 
   if (isPrismaErrorWithCode(error, 'P2025')) {
@@ -48,4 +46,3 @@ export const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
     .status(apiError.statusCode)
     .json(new ApiResponse(apiError.statusCode, errorData, apiError.message));
 };
-

@@ -18,4 +18,3 @@ router.post('/provider', saveOnboardingProvider);
 router.post('/complete', completeOnboarding);
 
 export { router as onboardingRoutes };
-

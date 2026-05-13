@@ -7,4 +7,3 @@ router.get('/', getLocalUserProfile);
 router.patch('/', updateLocalUserProfile);
 
 export { router as profileRoutes };
-

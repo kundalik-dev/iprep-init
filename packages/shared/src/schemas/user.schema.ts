@@ -4,12 +4,14 @@ const UserEmailSchema = z.string().trim().email().nullable().optional();
 const UserPhoneSchema = z.number().int().nullable().optional();
 const UserIdSchema = z.string().trim().min(1, 'user id is required');
 
-export const CreateUserRequestSchema = z.object({
-  id: UserIdSchema.optional(),
-  name: z.string().trim().min(1),
-  email: UserEmailSchema,
-  phone: UserPhoneSchema,
-}).strict();
+export const CreateUserRequestSchema = z
+  .object({
+    id: UserIdSchema.optional(),
+    name: z.string().trim().min(1),
+    email: UserEmailSchema,
+    phone: UserPhoneSchema,
+  })
+  .strict();
 
 export const UpdateUserRequestSchema = z
   .object({

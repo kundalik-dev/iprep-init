@@ -1,11 +1,7 @@
 import type { RequestHandler } from 'express';
 import { UserQuery } from '@iprep/db';
 import type { CreateUserInput, UpdateUserInput } from '@iprep/db';
-import {
-  CreateUserRequestSchema,
-  UpdateUserRequestSchema,
-  UserIdParamSchema,
-} from '@iprep/shared';
+import { CreateUserRequestSchema, UpdateUserRequestSchema, UserIdParamSchema } from '@iprep/shared';
 import { ApiError, ApiResponse, StatusCodes, asyncHandler } from '../utils/index.js';
 
 type ValidationIssue = {
@@ -41,9 +37,11 @@ function parseUserId(params: unknown): string {
 export const findAllUsers: RequestHandler = asyncHandler(async (_req, res) => {
   const users = await UserQuery.findAll();
 
-  res.status(StatusCodes.OK).json(
-    new ApiResponse(StatusCodes.OK, { users, total: users.length }, 'Users fetched successfully'),
-  );
+  res
+    .status(StatusCodes.OK)
+    .json(
+      new ApiResponse(StatusCodes.OK, { users, total: users.length }, 'Users fetched successfully'),
+    );
 });
 
 export const findUserById: RequestHandler = asyncHandler(async (req, res) => {

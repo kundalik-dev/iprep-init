@@ -1,8 +1,8 @@
-import { Slot } from '@radix-ui/react-slot'
-import { cva, type VariantProps } from 'class-variance-authority'
-import type * as React from 'react'
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
+import type * as React from 'react';
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[10px] text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none',
@@ -13,8 +13,7 @@ const buttonVariants = cva(
           'bg-[linear-gradient(135deg,#8b5cf6_0%,#3b82f6_100%)] text-white shadow-[0_2px_12px_rgba(139,92,246,0.35)] hover:shadow-[0_4px_20px_rgba(139,92,246,0.5)]',
         secondary:
           'border border-[var(--bg-border)] bg-[var(--bg-elevated)] text-[var(--text-s)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-p)]',
-        ghost:
-          'text-[var(--text-s)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-p)]',
+        ghost: 'text-[var(--text-s)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-p)]',
         danger:
           'border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white',
       },
@@ -29,7 +28,7 @@ const buttonVariants = cva(
       size: 'default',
     },
   },
-)
+);
 
 function Button({
   className,
@@ -39,9 +38,9 @@ function Button({
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const Comp = asChild ? Slot : 'button'
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
@@ -49,7 +48,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button }
+export { Button };

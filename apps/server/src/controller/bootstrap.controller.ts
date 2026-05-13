@@ -21,7 +21,11 @@ function mapProviders(state: Awaited<ReturnType<typeof OnboardingQuery.getOnboar
       key: provider.provider.toLowerCase(),
       name: provider.provider.toLowerCase(),
       mode: provider.mode === 'API_KEY' ? 'api_key' : 'cli',
-      status: provider.isWorking ? 'configured' : provider.lastTestPassed === false ? 'failed' : 'pending',
+      status: provider.isWorking
+        ? 'configured'
+        : provider.lastTestPassed === false
+          ? 'failed'
+          : 'pending',
       hasKey: provider.hasApiKey,
       isDefault: provider.isSelected,
       isWorking: provider.isWorking,

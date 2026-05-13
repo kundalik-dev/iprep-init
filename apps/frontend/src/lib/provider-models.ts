@@ -1,22 +1,22 @@
-export type ProviderKey = 'claude' | 'codex' | 'gemini' | 'ollama' | 'openrouter'
+export type ProviderKey = 'claude' | 'codex' | 'gemini' | 'ollama' | 'openrouter';
 
-export type ProviderMode = 'CLI' | 'API_KEY'
+export type ProviderMode = 'CLI' | 'API_KEY';
 
 export type ProviderModelOption = {
-  id: string
-  label: string
-  description: string
-  recommended?: boolean
-}
+  id: string;
+  label: string;
+  description: string;
+  recommended?: boolean;
+};
 
 export type ProviderOption = {
-  key: ProviderKey
-  label: string
-  defaultMode: ProviderMode
-  supportedModes: ProviderMode[]
-  defaultModelId: string
-  models: ProviderModelOption[]
-}
+  key: ProviderKey;
+  label: string;
+  defaultMode: ProviderMode;
+  supportedModes: ProviderMode[];
+  defaultModelId: string;
+  models: ProviderModelOption[];
+};
 
 export const PROVIDER_OPTIONS: ProviderOption[] = [
   {
@@ -144,9 +144,9 @@ export const PROVIDER_OPTIONS: ProviderOption[] = [
       },
     ],
   },
-]
+];
 
-export const DEFAULT_PROVIDER_KEY: ProviderKey = 'claude'
+export const DEFAULT_PROVIDER_KEY: ProviderKey = 'claude';
 
 export const getProviderOption = (providerKey: ProviderKey) =>
-  PROVIDER_OPTIONS.find((provider) => provider.key === providerKey)
+  PROVIDER_OPTIONS.find((provider) => provider.key === providerKey);

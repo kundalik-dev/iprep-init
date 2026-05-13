@@ -80,4 +80,3 @@ export const updateLocalUserProfile: RequestHandler = asyncHandler(async (req, r
     ),
   );
 });
-

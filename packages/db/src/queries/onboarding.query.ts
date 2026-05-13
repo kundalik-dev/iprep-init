@@ -350,4 +350,3 @@ export const OnboardingQuery = {
 };
 
 export default OnboardingQuery;
-

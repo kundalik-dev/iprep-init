@@ -53,4 +53,3 @@ export function decryptProviderSecret(payload: EncryptedSecret): string {
 export async function hashProviderSecret(secretValue: string): Promise<string> {
   return bcrypt.hash(secretValue, BCRYPT_SALT_ROUNDS);
 }
-

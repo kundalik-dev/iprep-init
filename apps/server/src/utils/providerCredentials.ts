@@ -20,4 +20,3 @@ export async function getDecryptedProviderApiKey(
     authTag: payload.apiKeyAuthTag,
   });
 }
-

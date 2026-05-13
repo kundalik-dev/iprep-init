@@ -37,7 +37,7 @@ Early product thinking, rough workflows, and discussion notes before ideas becom
 | `01-iprep-onboarding-and-first-interview.md`   | Brainstorming document for the iPrep first-run onboarding journey, interview creation paths, and post-session analysis flow.                    |
 | `02-iprep-system-design-and-wrokflow.md`       | Brainstorming document for the iPrep system design, monorepo layers, local `.iprep` workspace, package responsibilities, and workflow pipeline. |
 | `03-onboarding-api-latest-changes.md`          | Summary of recent onboarding/profile/provider API implementation updates, schema changes, and behavior impact.                                  |
-| `04-frontend-first-visit-onboarding-plan.md`   | Frontend plan for first-visit onboarding detection, three-step setup UI, DB-backed persistence, and related API usage.                           |
+| `04-frontend-first-visit-onboarding-plan.md`   | Frontend plan for first-visit onboarding detection, three-step setup UI, DB-backed persistence, and related API usage.                          |
 | `api-requirements.md`                          | Future-facing API requirements for the local iPrep server, synthesized from brainstorming docs and demo app API requirements.                   |
 | `iprep-brainstorm-api.postman_collection.json` | Postman collection for the future local iPrep API routes defined in `api-requirements.md`.                                                      |
 
@@ -151,9 +151,9 @@ Task breakdowns and implementation tracking notes. This folder currently has no 
 
 Session handoff notes that summarize recent work, decisions, progress, and next steps.
 
-| File                                           | Description                                                                                                      |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `2026-05-13-frontend-onboarding-progress.md`   | Session handoff for frontend onboarding setup, server API support, decisions made, verification, and next steps. |
+| File                                         | Description                                                                                                      |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `2026-05-13-frontend-onboarding-progress.md` | Session handoff for frontend onboarding setup, server API support, decisions made, verification, and next steps. |
 
 ---
 

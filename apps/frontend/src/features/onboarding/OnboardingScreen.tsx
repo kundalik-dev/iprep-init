@@ -1,25 +1,11 @@
-import { useMemo, useState } from 'react'
-import {
-  Bot,
-  CheckCircle2,
-  FileUp,
-  KeyRound,
-  Loader2,
-  Terminal,
-  UserRound,
-} from 'lucide-react'
+import { useMemo, useState } from 'react';
+import { Bot, CheckCircle2, FileUp, KeyRound, Loader2, Terminal, UserRound } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { PROVIDER_OPTIONS, getProviderOption } from '@/lib/provider-models'
-import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { PROVIDER_OPTIONS, getProviderOption } from '@/lib/provider-models';
+import { cn } from '@/lib/utils';
 
 import {
   completeOnboarding,
@@ -28,19 +14,19 @@ import {
   saveProvider,
   testProvider,
   uploadResume,
-} from './api'
+} from './api';
 import type {
   GoalFormState,
   GoalType,
   OnboardingStep,
   ProfileFormState,
   ProviderFormState,
-} from './types'
+} from './types';
 
 const goalOptions: Array<{
-  value: GoalType
-  label: string
-  description: string
+  value: GoalType;
+  label: string;
+  description: string;
 }> = [
   {
     value: 'INTERVIEW_PRACTICE',
@@ -54,164 +40,159 @@ const goalOptions: Array<{
     description:
       'Improve client communication, English clarity, vocabulary, confidence, and pacing.',
   },
-]
+];
 
 type OnboardingScreenProps = {
-  initialStep: OnboardingStep
-  onComplete: () => void
-}
+  initialStep: OnboardingStep;
+  onComplete: () => void;
+};
 
-export function OnboardingScreen({
-  initialStep,
-  onComplete,
-}: OnboardingScreenProps) {
+export function OnboardingScreen({ initialStep, onComplete }: OnboardingScreenProps) {
   const [step, setStep] = useState<OnboardingStep>(
     initialStep === 'complete' ? 'profile' : initialStep,
-  )
+  );
   const [profile, setProfile] = useState<ProfileFormState>({
     name: '',
     email: '',
-  })
+  });
   const [goal, setGoal] = useState<GoalFormState>({
     goalTypes: ['INTERVIEW_PRACTICE'],
     description: '',
     resumeFile: null,
-  })
-  const defaultProvider = getProviderOption('claude') ?? PROVIDER_OPTIONS[0]
+  });
+  const defaultProvider = getProviderOption('claude') ?? PROVIDER_OPTIONS[0];
   const [provider, setProvider] = useState<ProviderFormState>({
     provider: defaultProvider.key,
     mode: defaultProvider.defaultMode,
     modelName: defaultProvider.defaultModelId,
     apiKey: '',
     testStatus: 'idle',
-  })
-  const [isSaving, setIsSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const activeStepIndex = stepOrder.indexOf(step)
+  const activeStepIndex = stepOrder.indexOf(step);
 
   async function handleProfileContinue() {
     if (!profile.name.trim()) {
-      setError('Name is required.')
-      return
+      setError('Name is required.');
+      return;
     }
 
     if (profile.email && !profile.email.includes('@')) {
-      setError('Enter a valid email or leave it empty.')
-      return
+      setError('Enter a valid email or leave it empty.');
+      return;
     }
 
-    setIsSaving(true)
-    setError(null)
+    setIsSaving(true);
+    setError(null);
 
     try {
       await saveProfile({
         name: profile.name.trim(),
         email: profile.email.trim() || undefined,
-      })
-      setStep('goal')
+      });
+      setStep('goal');
     } catch (err) {
-      setError(getErrorMessage(err))
+      setError(getErrorMessage(err));
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
   }
 
   async function handleGoalContinue() {
     if (goal.goalTypes.length === 0) {
-      setError('Select at least one goal.')
-      return
+      setError('Select at least one goal.');
+      return;
     }
 
     if (!goal.description.trim()) {
-      setError('Add a short goal description.')
-      return
+      setError('Add a short goal description.');
+      return;
     }
 
-    setIsSaving(true)
-    setError(null)
+    setIsSaving(true);
+    setError(null);
 
     try {
-      let resumeDocumentId = goal.resumeDocumentId
+      let resumeDocumentId = goal.resumeDocumentId;
 
       if (goal.resumeFile) {
-        resumeDocumentId = await uploadResume(goal.resumeFile)
-        setGoal((current) => ({ ...current, resumeDocumentId }))
+        resumeDocumentId = await uploadResume(goal.resumeFile);
+        setGoal((current) => ({ ...current, resumeDocumentId }));
       }
 
       await saveGoal({
         goalTypes: goal.goalTypes,
         goal: goal.description.trim(),
         resumeDocumentId,
-      })
-      setStep('provider')
+      });
+      setStep('provider');
     } catch (err) {
-      setError(getErrorMessage(err))
+      setError(getErrorMessage(err));
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
   }
 
   async function handleProviderTest() {
     if (provider.mode === 'API_KEY' && !provider.apiKey.trim()) {
-      setError('API key is required for API key mode.')
-      return
+      setError('API key is required for API key mode.');
+      return;
     }
 
-    setError(null)
+    setError(null);
     setProvider((current) => ({
       ...current,
       testStatus: 'testing',
       testMessage: undefined,
-    }))
+    }));
 
     try {
       const result = await testProvider({
         provider: provider.provider,
         mode: provider.mode,
         modelName: provider.modelName,
-        apiKey:
-          provider.mode === 'API_KEY' ? provider.apiKey.trim() : undefined,
-      })
+        apiKey: provider.mode === 'API_KEY' ? provider.apiKey.trim() : undefined,
+      });
 
       setProvider((current) => ({
         ...current,
         testStatus: result.passed ? 'passed' : 'failed',
         testMessage: result.message,
-      }))
+      }));
     } catch (err) {
       setProvider((current) => ({
         ...current,
         testStatus: 'failed',
         testMessage: getErrorMessage(err),
-      }))
+      }));
     }
   }
 
   async function handleFinish() {
     if (provider.testStatus !== 'passed') {
-      setError('Test connection before finishing setup.')
-      return
+      setError('Test connection before finishing setup.');
+      return;
     }
 
-    setIsSaving(true)
-    setError(null)
+    setIsSaving(true);
+    setError(null);
 
     try {
       await saveProvider({
         provider: provider.provider,
         mode: provider.mode,
         modelName: provider.modelName,
-        apiKey:
-          provider.mode === 'API_KEY' ? provider.apiKey.trim() : undefined,
+        apiKey: provider.mode === 'API_KEY' ? provider.apiKey.trim() : undefined,
         makeDefault: true,
-      })
-      await completeOnboarding()
-      onComplete()
+      });
+      await completeOnboarding();
+      onComplete();
     } catch (err) {
-      setError(getErrorMessage(err))
+      setError(getErrorMessage(err));
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
   }
 
@@ -230,8 +211,7 @@ export function OnboardingScreen({
           <Badge variant="muted">Step {activeStepIndex + 1} of 3</Badge>
           <CardTitle className="onboarding-title">Set up your local coach</CardTitle>
           <CardDescription>
-            This setup is saved through your local iPrep server and stored in
-            your local database.
+            This setup is saved through your local iPrep server and stored in your local database.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -270,15 +250,15 @@ export function OnboardingScreen({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 function Stepper({ activeStep }: { activeStep: OnboardingStep }) {
   return (
     <div className="stepper">
       {stepOrder.map((stepName, index) => {
-        const isActive = activeStep === stepName
-        const isDone = stepOrder.indexOf(activeStep) > index
+        const isActive = activeStep === stepName;
+        const isDone = stepOrder.indexOf(activeStep) > index;
 
         return (
           <div
@@ -288,10 +268,10 @@ function Stepper({ activeStep }: { activeStep: OnboardingStep }) {
             <span>{isDone ? <CheckCircle2 /> : index + 1}</span>
             <strong>{stepLabels[stepName]}</strong>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 function ProfileStep({
@@ -300,10 +280,10 @@ function ProfileStep({
   onChange,
   onContinue,
 }: {
-  profile: ProfileFormState
-  isSaving: boolean
-  onChange: (profile: ProfileFormState) => void
-  onContinue: () => void
+  profile: ProfileFormState;
+  isSaving: boolean;
+  onChange: (profile: ProfileFormState) => void;
+  onContinue: () => void;
 }) {
   return (
     <div className="form-stack">
@@ -319,9 +299,7 @@ function ProfileStep({
         <span>Name</span>
         <input
           value={profile.name}
-          onChange={(event) =>
-            onChange({ ...profile, name: event.target.value })
-          }
+          onChange={(event) => onChange({ ...profile, name: event.target.value })}
           placeholder="Your name"
         />
       </label>
@@ -330,9 +308,7 @@ function ProfileStep({
         <span>Email</span>
         <input
           value={profile.email}
-          onChange={(event) =>
-            onChange({ ...profile, email: event.target.value })
-          }
+          onChange={(event) => onChange({ ...profile, email: event.target.value })}
           placeholder="Optional"
           type="email"
         />
@@ -345,7 +321,7 @@ function ProfileStep({
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 function GoalStep({
@@ -355,18 +331,18 @@ function GoalStep({
   onChange,
   onContinue,
 }: {
-  goal: GoalFormState
-  isSaving: boolean
-  onBack: () => void
-  onChange: (goal: GoalFormState) => void
-  onContinue: () => void
+  goal: GoalFormState;
+  isSaving: boolean;
+  onBack: () => void;
+  onChange: (goal: GoalFormState) => void;
+  onContinue: () => void;
 }) {
   function toggleGoal(goalType: GoalType) {
     const goalTypes = goal.goalTypes.includes(goalType)
       ? goal.goalTypes.filter((current) => current !== goalType)
-      : [...goal.goalTypes, goalType]
+      : [...goal.goalTypes, goalType];
 
-    onChange({ ...goal, goalTypes })
+    onChange({ ...goal, goalTypes });
   }
 
   return (
@@ -382,10 +358,7 @@ function GoalStep({
       <div className="goal-card-grid">
         {goalOptions.map((option) => (
           <button
-            className={cn(
-              'choice-card',
-              goal.goalTypes.includes(option.value) && 'selected',
-            )}
+            className={cn('choice-card', goal.goalTypes.includes(option.value) && 'selected')}
             key={option.value}
             type="button"
             onClick={() => toggleGoal(option.value)}
@@ -403,9 +376,7 @@ function GoalStep({
         <span>Short description</span>
         <textarea
           value={goal.description}
-          onChange={(event) =>
-            onChange({ ...goal, description: event.target.value })
-          }
+          onChange={(event) => onChange({ ...goal, description: event.target.value })}
           placeholder="Example: I want to prepare for Java backend interviews and improve client-facing English communication."
           rows={5}
         />
@@ -436,7 +407,7 @@ function GoalStep({
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 function ProviderStep({
@@ -447,20 +418,20 @@ function ProviderStep({
   onFinish,
   onTest,
 }: {
-  provider: ProviderFormState
-  isSaving: boolean
-  onBack: () => void
-  onChange: (provider: ProviderFormState) => void
-  onFinish: () => void
-  onTest: () => void
+  provider: ProviderFormState;
+  isSaving: boolean;
+  onBack: () => void;
+  onChange: (provider: ProviderFormState) => void;
+  onFinish: () => void;
+  onTest: () => void;
 }) {
   const providerOption = useMemo(
     () => getProviderOption(provider.provider) ?? PROVIDER_OPTIONS[0],
     [provider.provider],
-  )
+  );
 
   function setProviderKey(providerKey: ProviderFormState['provider']) {
-    const nextProvider = getProviderOption(providerKey) ?? PROVIDER_OPTIONS[0]
+    const nextProvider = getProviderOption(providerKey) ?? PROVIDER_OPTIONS[0];
 
     onChange({
       ...provider,
@@ -470,7 +441,7 @@ function ProviderStep({
       apiKey: '',
       testStatus: 'idle',
       testMessage: undefined,
-    })
+    });
   }
 
   function setMode(mode: ProviderFormState['mode']) {
@@ -480,7 +451,7 @@ function ProviderStep({
       apiKey: mode === 'CLI' ? '' : provider.apiKey,
       testStatus: 'idle',
       testMessage: undefined,
-    })
+    });
   }
 
   return (
@@ -496,10 +467,7 @@ function ProviderStep({
       <div className="provider-grid">
         {PROVIDER_OPTIONS.map((option) => (
           <button
-            className={cn(
-              'provider-card',
-              provider.provider === option.key && 'selected',
-            )}
+            className={cn('provider-card', provider.provider === option.key && 'selected')}
             key={option.key}
             type="button"
             onClick={() => setProviderKey(option.key)}
@@ -564,50 +532,41 @@ function ProviderStep({
         </label>
       ) : (
         <div className="provider-note">
-          CLI mode will ask the local server to run the provider test command.
-          Claude CLI can complete onboarding after a successful test.
+          CLI mode will ask the local server to run the provider test command. Claude CLI can
+          complete onboarding after a successful test.
         </div>
       )}
 
       {provider.testMessage ? (
-        <div className={cn('test-message', provider.testStatus)}>
-          {provider.testMessage}
-        </div>
+        <div className={cn('test-message', provider.testStatus)}>{provider.testMessage}</div>
       ) : null}
 
       <div className="form-actions">
         <Button disabled={isSaving} variant="secondary" onClick={onBack}>
           Back
         </Button>
-        <Button
-          disabled={provider.testStatus === 'testing'}
-          variant="secondary"
-          onClick={onTest}
-        >
+        <Button disabled={provider.testStatus === 'testing'} variant="secondary" onClick={onTest}>
           {provider.testStatus === 'testing' ? <Loader2 className="spin" /> : null}
           Test Connection
         </Button>
-        <Button
-          disabled={isSaving || provider.testStatus !== 'passed'}
-          onClick={onFinish}
-        >
+        <Button disabled={isSaving || provider.testStatus !== 'passed'} onClick={onFinish}>
           {isSaving ? <Loader2 className="spin" /> : null}
           Finish Setup
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
-const stepOrder: OnboardingStep[] = ['profile', 'goal', 'provider']
+const stepOrder: OnboardingStep[] = ['profile', 'goal', 'provider'];
 
 const stepLabels: Record<OnboardingStep, string> = {
   profile: 'Profile',
   goal: 'Goal',
   provider: 'Provider',
   complete: 'Complete',
-}
+};
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Something went wrong.'
+  return error instanceof Error ? error.message : 'Something went wrong.';
 }
