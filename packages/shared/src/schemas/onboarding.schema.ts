@@ -2,7 +2,11 @@ import { z } from 'zod';
 
 export const CliProviderSchema = z.enum(['claude', 'codex', 'gemini']);
 export const ApiProviderSchema = z.enum(['claude', 'codex', 'gemini', 'ollama', 'openrouter']);
-export const ProviderModeSchema = z.enum(['cli', 'api_key']);
+export const GoalTypeSchema = z.enum(['INTERVIEW_PRACTICE', 'COMMUNICATION_IMPROVEMENT']);
+export const ProviderModeSchema = z.preprocess(
+  (value) => (typeof value === 'string' ? value.toLowerCase() : value),
+  z.enum(['cli', 'api_key']),
+);
 
 export const OnboardingProfileRequestSchema = z
   .object({
@@ -14,6 +18,7 @@ export const OnboardingProfileRequestSchema = z
 export const OnboardingGoalRequestSchema = z
   .object({
     goal: z.string().trim().min(1),
+    goalTypes: z.array(GoalTypeSchema).min(1).optional(),
     resumeDocumentId: z.string().trim().min(1).nullable().optional(),
   })
   .strict();
@@ -23,6 +28,7 @@ export const OnboardingProviderRequestSchema = z
     provider: ApiProviderSchema,
     mode: ProviderModeSchema,
     apiKey: z.string().trim().min(1).optional(),
+    modelName: z.string().trim().min(1).optional(),
     makeDefault: z.boolean().default(true),
   })
   .strict()
@@ -49,6 +55,7 @@ export const OnboardingProviderTestRequestSchema = z
     provider: ApiProviderSchema,
     mode: ProviderModeSchema,
     apiKey: z.string().trim().min(1).optional(),
+    modelName: z.string().trim().min(1).optional(),
   })
   .strict()
   .superRefine((value, ctx) => {
@@ -92,4 +99,3 @@ export type OnboardingProviderRequest = z.infer<typeof OnboardingProviderRequest
 export type OnboardingProviderTestRequest = z.infer<typeof OnboardingProviderTestRequestSchema>;
 export type OnboardingCompleteRequest = z.infer<typeof OnboardingCompleteRequestSchema>;
 export type LocalUserProfileUpdateRequest = z.infer<typeof LocalUserProfileUpdateRequestSchema>;
-

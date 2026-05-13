@@ -10,12 +10,14 @@ export interface SaveProfileInput {
 
 export interface SaveGoalInput {
   goal: string;
+  goalTypes?: string[] | null;
   resumeDocumentId?: string | null;
 }
 
 export interface UpsertProviderCredentialInput {
   provider: AIProvider;
   mode: ProviderMode;
+  modelName?: string | null;
   hasApiKey: boolean;
   isWorking: boolean;
   lastTestPassed: boolean;
@@ -123,6 +125,7 @@ export const OnboardingQuery = {
         where: { id: user.id },
         data: {
           goal: input.goal,
+          goalTypes: input.goalTypes ?? undefined,
           resumeDocumentId: input.resumeDocumentId ?? null,
           onboardingStep: 'PROVIDER',
           isOnboardingComplete: false,
@@ -162,6 +165,7 @@ export const OnboardingQuery = {
           },
         },
         update: {
+          modelName: input.modelName ?? null,
           hasApiKey: input.hasApiKey,
           apiKeyHash: input.apiKeyHash ?? null,
           apiKeyCiphertext: input.apiKeyCiphertext ?? null,
@@ -177,6 +181,7 @@ export const OnboardingQuery = {
           userId: user.id,
           provider: input.provider,
           mode: input.mode,
+          modelName: input.modelName ?? null,
           hasApiKey: input.hasApiKey,
           apiKeyHash: input.apiKeyHash ?? null,
           apiKeyCiphertext: input.apiKeyCiphertext ?? null,

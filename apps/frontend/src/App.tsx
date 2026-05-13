@@ -1,4 +1,4 @@
-import { useMemo, useState, type ComponentType } from 'react'
+import { useEffect, useMemo, useState, type ComponentType } from 'react'
 import {
   BarChart3,
   Bot,
@@ -24,6 +24,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { OnboardingScreen } from '@/features/onboarding/OnboardingScreen'
+import { checkHealth, getBootstrapOnboarding, getOnboardingProgress } from '@/features/onboarding/api'
+import type { OnboardingProgress, ServerStatus } from '@/features/onboarding/types'
 import { API_BASE_URL, LOCAL_SERVER_PORT } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
@@ -91,12 +94,63 @@ const interviewTemplates = [
 
 function App() {
   const [activeView, setActiveView] = useState<ViewId>('dashboard')
+  const [serverStatus, setServerStatus] = useState<ServerStatus>('checking')
+  const [onboardingProgress, setOnboardingProgress] =
+    useState<OnboardingProgress | null>(null)
 
   const activeTitle = useMemo(() => {
     return [...practiceNav, ...toolNav, { id: 'settings', label: 'Settings' }]
       .find((item) => item.id === activeView)
       ?.label
   }, [activeView])
+
+  useEffect(() => {
+    void loadStartupState()
+  }, [])
+
+  async function loadStartupState() {
+    setServerStatus('checking')
+
+    try {
+      await checkHealth()
+      setServerStatus('online')
+
+      try {
+        setOnboardingProgress(await getBootstrapOnboarding())
+      } catch {
+        setOnboardingProgress(await getOnboardingProgress())
+      }
+    } catch {
+      setServerStatus('offline')
+    }
+  }
+
+  if (serverStatus === 'checking') {
+    return <StartupScreen />
+  }
+
+  if (serverStatus === 'offline') {
+    return <ConnectLocalScreen onRetry={loadStartupState} />
+  }
+
+  if (!onboardingProgress) {
+    return <StartupScreen />
+  }
+
+  if (!onboardingProgress.isComplete) {
+    return (
+      <OnboardingScreen
+        initialStep={onboardingProgress.currentStep}
+        onComplete={() =>
+          setOnboardingProgress({
+            isComplete: true,
+            currentStep: 'complete',
+            missingSteps: [],
+          })
+        }
+      />
+    )
+  }
 
   return (
     <div className="app-shell">
@@ -161,6 +215,36 @@ function App() {
           {activeView === 'dashboard' ? <Dashboard /> : <Placeholder view={activeView} />}
         </section>
       </main>
+    </div>
+  )
+}
+
+function StartupScreen() {
+  return (
+    <div className="center-screen">
+      <div className="brand-mark">i</div>
+      <h1>Connecting to iPrep</h1>
+      <p>Checking the local server and onboarding status.</p>
+    </div>
+  )
+}
+
+function ConnectLocalScreen({ onRetry }: { onRetry: () => void }) {
+  return (
+    <div className="center-screen">
+      <Card className="connect-card">
+        <CardHeader>
+          <Badge variant="warning">Local server offline</Badge>
+          <CardTitle>Connect the hosted UI to your local iPrep server</CardTitle>
+          <CardDescription>
+            Start the local server on port {LOCAL_SERVER_PORT}, then retry.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="connect-actions">
+          <code>iprep start</code>
+          <Button onClick={onRetry}>Retry Connection</Button>
+        </CardContent>
+      </Card>
     </div>
   )
 }

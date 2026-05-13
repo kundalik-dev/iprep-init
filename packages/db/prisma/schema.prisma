@@ -30,6 +30,7 @@ model User {
   email            String? @unique
   phone            Int?    @unique
   goal             String?
+  goalTypes        Json?
   resumeDocumentId String?
   onboardingStep   OnboardingStep @default(PROFILE)
   isOnboardingComplete Boolean @default(false)
@@ -70,6 +71,7 @@ model ProviderCredential {
   userId           String
   provider         AIProvider
   mode             ProviderMode
+  modelName        String?
   hasApiKey        Boolean      @default(false)
   apiKeyHash       String?
   apiKeyCiphertext String?

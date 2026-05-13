@@ -168,6 +168,11 @@ export const getOnboarding: RequestHandler = asyncHandler(async (_req, res) => {
           lastSkippedAt: state.onboarding?.lastSkippedAt ?? null,
           completedAt: state.onboarding?.completedAt ?? null,
         },
+        isComplete: state.onboarding?.isComplete ?? false,
+        isOnboardingComplete: state.onboarding?.isComplete ?? false,
+        currentStep: (state.onboarding?.currentStep ?? 'PROFILE').toLowerCase(),
+        onboardingStep: (state.onboarding?.currentStep ?? 'PROFILE').toLowerCase(),
+        missingSteps,
       },
       'Onboarding state fetched successfully',
     ),
@@ -237,6 +242,8 @@ export const testOnboardingProviderConnection: RequestHandler = asyncHandler(asy
       {
         provider: result.data.provider,
         mode: result.data.mode,
+        ok: connection.success,
+        status: connection.success ? 'passed' : 'failed',
         testPassed: connection.success,
         message: connection.message,
       },
@@ -280,6 +287,7 @@ export const saveOnboardingProvider: RequestHandler = asyncHandler(async (req, r
   const state = await OnboardingQuery.upsertProviderCredential({
     provider: dbProvider,
     mode: dbMode,
+    modelName: result.data.modelName,
     hasApiKey: result.data.mode === 'api_key',
     apiKeyHash,
     apiKeyCiphertext,
