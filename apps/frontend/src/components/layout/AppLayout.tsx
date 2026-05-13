@@ -91,7 +91,7 @@ export function AppLayout({ activeView, setActiveView, theme, setTheme }: AppLay
           <button
             className="theme-btn"
             title="Toggle theme"
-            onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           >
             <span id="theme-icon">
               {theme === 'dark' ? (
