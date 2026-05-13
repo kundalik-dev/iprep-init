@@ -1,4 +1,11 @@
 export { checkDbHealth } from './queries/health.query.js';
+export { OnboardingQuery } from './queries/onboarding.query.js';
+export type { AIProvider, ProviderMode } from './generated/prisma/enums.js';
+export type {
+  SaveGoalInput,
+  SaveProfileInput,
+  UpsertProviderCredentialInput,
+} from './queries/onboarding.query.js';
 export { UserQuery } from './queries/user.query.js';
 export type { CreateUserInput, UpdateUserInput } from './queries/user.query.js';
 export { runDbMigrations } from './migrate.js';

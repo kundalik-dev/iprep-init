@@ -13,6 +13,7 @@ const DEFAULTS: EnvVars = {
   DATABASE_URL: IprepPaths.dbFile,
   CORS_ORIGIN: 'http://localhost:5173',
   API_BASE_URL: 'http://localhost:5545/api/v1',
+  PROVIDER_KEY_SECRET: 'iprep-local-provider-secret-change-me',
 };
 
 function resolveEnvPath(): string | null {
@@ -42,7 +43,7 @@ function loadEnv(): EnvVars {
     process.exit(1);
   }
 
-  return result.data;
+  return { ...DEFAULTS, ...result.data };
 }
 
 export const ENV_VARS: EnvVars = loadEnv();
