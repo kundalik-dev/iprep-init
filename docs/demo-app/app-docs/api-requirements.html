@@ -143,29 +143,21 @@
     <main>
       <h1>iPrep Current API Requirements</h1>
       <p>
-        This page matches the current <code>demo-app-2/app.js</code>. It
-        replaces the existing <code>MockAPI</code> methods and direct in-memory
-        edits with real endpoints. It does not include future auth, billing,
-        WebSocket, or real audio APIs.
+        This page matches the current <code>demo-app-2/app.js</code>. It replaces the existing
+        <code>MockAPI</code> methods and direct in-memory edits with real endpoints. It does not
+        include future auth, billing, WebSocket, or real audio APIs.
       </p>
 
       <div class="summary">
         <div class="card"><strong>Base URL</strong><code>/api</code></div>
-        <div class="card">
-          <strong>Source</strong><code>demo-app-2/app.js</code>
-        </div>
-        <div class="card">
-          <strong>Scores</strong>Current app uses <code>0-100</code>
-        </div>
-        <div class="card">
-          <strong>Persistence</strong>Replace memory mutations with APIs
-        </div>
+        <div class="card"><strong>Source</strong><code>demo-app-2/app.js</code></div>
+        <div class="card"><strong>Scores</strong>Current app uses <code>0-100</code></div>
+        <div class="card"><strong>Persistence</strong>Replace memory mutations with APIs</div>
       </div>
 
       <div class="note">
-        The current app boots from <code>mock-data.json</code>. The simplest
-        backend replacement is <code>GET /api/bootstrap</code>, returning the
-        same top-level data shape.
+        The current app boots from <code>mock-data.json</code>. The simplest backend replacement is
+        <code>GET /api/bootstrap</code>, returning the same top-level data shape.
       </div>
 
       <h2>Startup</h2>
@@ -179,9 +171,7 @@
         <tr>
           <td><span class="method get">GET</span></td>
           <td><code>/api/bootstrap</code></td>
-          <td>
-            <code>MockAPI.load()</code>, <code>fetch('mock-data.json')</code>
-          </td>
+          <td><code>MockAPI.load()</code>, <code>fetch('mock-data.json')</code></td>
           <td>App boot</td>
         </tr>
       </table>
@@ -312,9 +302,8 @@ POST /api/sessions/{sessionId}/end
         </tr>
       </table>
       <p>
-        The current app expects <code>communicationAnalysis</code> to be
-        included inside the analysis response when the Communication tab is
-        shown.
+        The current app expects <code>communicationAnalysis</code> to be included inside the
+        analysis response when the Communication tab is shown.
       </p>
 
       <h2>History</h2>
@@ -406,8 +395,8 @@ POST /api/sessions/{sessionId}/end
         </tr>
       </table>
       <p>
-        The backend response should include both the saved user message and
-        generated AI message. It replaces browser-side
+        The backend response should include both the saved user message and generated AI message. It
+        replaces browser-side
         <code>getAIResponse(userText)</code>.
       </p>
 
@@ -468,9 +457,7 @@ POST /api/sessions/{sessionId}/end
           <td><span class="method post">POST</span></td>
           <td><code>/api/uploads</code></td>
           <td><code>uploadFile()</code></td>
-          <td>
-            Upload <code>.md</code>, <code>.pdf</code>, <code>.docx</code>
-          </td>
+          <td>Upload <code>.md</code>, <code>.pdf</code>, <code>.docx</code></td>
         </tr>
         <tr>
           <td><span class="method get">GET</span></td>
@@ -586,10 +573,7 @@ PATCH  /api/settings/preferences</pre
       <ol>
         <li><code>GET /api/bootstrap</code></li>
         <li><code>GET /api/sessions</code> and <code>GET /api/stats</code></li>
-        <li>
-          <code>GET /api/packages</code>, <code>GET /api/tutors</code>, session
-          start/end
-        </li>
+        <li><code>GET /api/packages</code>, <code>GET /api/tutors</code>, session start/end</li>
         <li><code>GET /api/analysis/{id}</code></li>
         <li>Chat endpoints</li>
         <li>File-system endpoints</li>
@@ -599,9 +583,9 @@ PATCH  /api/settings/preferences</pre
 
       <h2>Not Needed By Current App</h2>
       <div class="note ok">
-        Login/logout, billing, pro subscription enforcement, real audio
-        streaming, WebSocket, real speech-to-text, separate analysis job status,
-        and separate tutor/package detail APIs are not required by the current
+        Login/logout, billing, pro subscription enforcement, real audio streaming, WebSocket, real
+        speech-to-text, separate analysis job status, and separate tutor/package detail APIs are not
+        required by the current
         <code>demo-app-2/app.js</code>.
       </div>
     </main>

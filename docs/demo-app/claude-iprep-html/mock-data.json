@@ -49,7 +49,13 @@
       "difficulty": "Medium",
       "duration": 30,
       "description": "Master STAR storytelling for leadership, conflict, teamwork, and impact questions used by top companies.",
-      "topics": ["Leadership", "Conflict Resolution", "Teamwork", "Failure & Growth", "Impact Stories"],
+      "topics": [
+        "Leadership",
+        "Conflict Resolution",
+        "Teamwork",
+        "Failure & Growth",
+        "Impact Stories"
+      ],
       "questionCount": 10,
       "isPro": false
     },
@@ -85,7 +91,13 @@
       "difficulty": "Easy",
       "duration": 20,
       "description": "Salary negotiation, culture fit, expectations alignment, and career goals discussion.",
-      "topics": ["Salary Negotiation", "Culture Fit", "Career Goals", "Notice Period", "Expectations"],
+      "topics": [
+        "Salary Negotiation",
+        "Culture Fit",
+        "Career Goals",
+        "Notice Period",
+        "Expectations"
+      ],
       "questionCount": 8,
       "isPro": false
     },
@@ -97,7 +109,13 @@
       "difficulty": "Hard",
       "duration": 50,
       "description": "Product sense, metrics definition, roadmap prioritization, and stakeholder management scenarios.",
-      "topics": ["Product Sense", "Metrics & KPIs", "Roadmap Planning", "Trade-offs", "User Research"],
+      "topics": [
+        "Product Sense",
+        "Metrics & KPIs",
+        "Roadmap Planning",
+        "Trade-offs",
+        "User Research"
+      ],
       "questionCount": 6,
       "isPro": true
     },
@@ -132,14 +150,46 @@
       "recordingUrl": "mock://recording/sess_001.wav",
       "recordingDurationSec": 1920,
       "transcript": [
-        { "speaker": "ai", "text": "Welcome! Let's start with a classic opener — tell me about a time you led a team through a challenging situation.", "timestampSec": 5 },
-        { "speaker": "user", "text": "Sure! At my previous role, um, we had a critical production outage. I basically had to coordinate like four different teams simultaneously.", "timestampSec": 18 },
-        { "speaker": "ai", "text": "Good scenario. Walk me through the specific steps you took to coordinate those teams.", "timestampSec": 42 },
-        { "speaker": "user", "text": "So first I set up a war room — virtual since we were remote — and assigned clear ownership to each team. I made sure everyone had, um, a single source of truth for the incident status.", "timestampSec": 55 },
-        { "speaker": "ai", "text": "Excellent use of structure. What was the measurable outcome of your coordination efforts?", "timestampSec": 95 },
-        { "speaker": "user", "text": "We reduced downtime from an estimated 4 hours to 47 minutes. Customer impact was minimal and we shipped a post-mortem within 48 hours with 12 action items.", "timestampSec": 108 },
-        { "speaker": "ai", "text": "Strong quantified result. What would you do differently in hindsight?", "timestampSec": 148 },
-        { "speaker": "user", "text": "I'd set up better runbooks ahead of time so the coordination wouldn't require as much real-time decision making. Basically reactive preparation rather than being reactive in the moment.", "timestampSec": 162 }
+        {
+          "speaker": "ai",
+          "text": "Welcome! Let's start with a classic opener — tell me about a time you led a team through a challenging situation.",
+          "timestampSec": 5
+        },
+        {
+          "speaker": "user",
+          "text": "Sure! At my previous role, um, we had a critical production outage. I basically had to coordinate like four different teams simultaneously.",
+          "timestampSec": 18
+        },
+        {
+          "speaker": "ai",
+          "text": "Good scenario. Walk me through the specific steps you took to coordinate those teams.",
+          "timestampSec": 42
+        },
+        {
+          "speaker": "user",
+          "text": "So first I set up a war room — virtual since we were remote — and assigned clear ownership to each team. I made sure everyone had, um, a single source of truth for the incident status.",
+          "timestampSec": 55
+        },
+        {
+          "speaker": "ai",
+          "text": "Excellent use of structure. What was the measurable outcome of your coordination efforts?",
+          "timestampSec": 95
+        },
+        {
+          "speaker": "user",
+          "text": "We reduced downtime from an estimated 4 hours to 47 minutes. Customer impact was minimal and we shipped a post-mortem within 48 hours with 12 action items.",
+          "timestampSec": 108
+        },
+        {
+          "speaker": "ai",
+          "text": "Strong quantified result. What would you do differently in hindsight?",
+          "timestampSec": 148
+        },
+        {
+          "speaker": "user",
+          "text": "I'd set up better runbooks ahead of time so the coordination wouldn't require as much real-time decision making. Basically reactive preparation rather than being reactive in the moment.",
+          "timestampSec": 162
+        }
       ]
     },
     {
@@ -159,14 +209,46 @@
       "recordingUrl": "mock://recording/sess_002.wav",
       "recordingDurationSec": 3900,
       "transcript": [
-        { "speaker": "ai", "text": "Given an unsorted array of integers, find two numbers that add up to a target sum. Return their indices. What's your approach?", "timestampSec": 5 },
-        { "speaker": "user", "text": "Classic two-sum. I'd use a hash map for O(n) time. For each element, check if target minus current exists in the map, otherwise store it.", "timestampSec": 20 },
-        { "speaker": "ai", "text": "Good. Now what if the array is sorted — can you do better in terms of space complexity?", "timestampSec": 45 },
-        { "speaker": "user", "text": "Yes — with sorted input I can use two pointers. O(n) time, O(1) space. Left pointer at start, right at end, move based on sum comparison.", "timestampSec": 60 },
-        { "speaker": "ai", "text": "Correct. Now extend this to three-sum. Constraints: find all unique triplets summing to zero.", "timestampSec": 90 },
-        { "speaker": "user", "text": "Sort first, then for each element use two-pointer on the rest. Total O(n²) time. I need to handle duplicates by skipping equal adjacent elements.", "timestampSec": 110 },
-        { "speaker": "ai", "text": "Good on duplicate handling — most candidates miss that. What about the maximum subarray problem?", "timestampSec": 150 },
-        { "speaker": "user", "text": "Kadane's algorithm. Track current sum and max seen. If current sum drops negative, reset to current element. O(n) time, O(1) space.", "timestampSec": 165 }
+        {
+          "speaker": "ai",
+          "text": "Given an unsorted array of integers, find two numbers that add up to a target sum. Return their indices. What's your approach?",
+          "timestampSec": 5
+        },
+        {
+          "speaker": "user",
+          "text": "Classic two-sum. I'd use a hash map for O(n) time. For each element, check if target minus current exists in the map, otherwise store it.",
+          "timestampSec": 20
+        },
+        {
+          "speaker": "ai",
+          "text": "Good. Now what if the array is sorted — can you do better in terms of space complexity?",
+          "timestampSec": 45
+        },
+        {
+          "speaker": "user",
+          "text": "Yes — with sorted input I can use two pointers. O(n) time, O(1) space. Left pointer at start, right at end, move based on sum comparison.",
+          "timestampSec": 60
+        },
+        {
+          "speaker": "ai",
+          "text": "Correct. Now extend this to three-sum. Constraints: find all unique triplets summing to zero.",
+          "timestampSec": 90
+        },
+        {
+          "speaker": "user",
+          "text": "Sort first, then for each element use two-pointer on the rest. Total O(n²) time. I need to handle duplicates by skipping equal adjacent elements.",
+          "timestampSec": 110
+        },
+        {
+          "speaker": "ai",
+          "text": "Good on duplicate handling — most candidates miss that. What about the maximum subarray problem?",
+          "timestampSec": 150
+        },
+        {
+          "speaker": "user",
+          "text": "Kadane's algorithm. Track current sum and max seen. If current sum drops negative, reset to current element. O(n) time, O(1) space.",
+          "timestampSec": 165
+        }
       ]
     },
     {
@@ -186,12 +268,36 @@
       "recordingUrl": "mock://recording/sess_003.wav",
       "recordingDurationSec": 3900,
       "transcript": [
-        { "speaker": "ai", "text": "Design a URL shortening service like bit.ly. Start with requirements clarification.", "timestampSec": 5 },
-        { "speaker": "user", "text": "Functional: create short URLs, redirect to original, track analytics. Non-functional: 100M URLs/day, sub-100ms redirect latency, 99.99% availability.", "timestampSec": 25 },
-        { "speaker": "ai", "text": "Good scope. How would you generate the short codes uniquely at scale across multiple servers?", "timestampSec": 60 },
-        { "speaker": "user", "text": "Base62 encoding of an auto-increment ID, or use a distributed ID generator like Snowflake for true horizontal scaling without coordination.", "timestampSec": 75 },
-        { "speaker": "ai", "text": "What about caching? Where would you apply it and what eviction policy makes sense here?", "timestampSec": 120 },
-        { "speaker": "user", "text": "CDN for the redirect layer globally, Redis in-memory cache for hot URLs close to the app servers. LRU eviction since access patterns are highly skewed — 20% of URLs get 80% of traffic.", "timestampSec": 140 }
+        {
+          "speaker": "ai",
+          "text": "Design a URL shortening service like bit.ly. Start with requirements clarification.",
+          "timestampSec": 5
+        },
+        {
+          "speaker": "user",
+          "text": "Functional: create short URLs, redirect to original, track analytics. Non-functional: 100M URLs/day, sub-100ms redirect latency, 99.99% availability.",
+          "timestampSec": 25
+        },
+        {
+          "speaker": "ai",
+          "text": "Good scope. How would you generate the short codes uniquely at scale across multiple servers?",
+          "timestampSec": 60
+        },
+        {
+          "speaker": "user",
+          "text": "Base62 encoding of an auto-increment ID, or use a distributed ID generator like Snowflake for true horizontal scaling without coordination.",
+          "timestampSec": 75
+        },
+        {
+          "speaker": "ai",
+          "text": "What about caching? Where would you apply it and what eviction policy makes sense here?",
+          "timestampSec": 120
+        },
+        {
+          "speaker": "user",
+          "text": "CDN for the redirect layer globally, Redis in-memory cache for hot URLs close to the app servers. LRU eviction since access patterns are highly skewed — 20% of URLs get 80% of traffic.",
+          "timestampSec": 140
+        }
       ]
     },
     {
@@ -211,10 +317,22 @@
       "recordingUrl": "mock://recording/sess_004.wav",
       "recordingDurationSec": 1440,
       "transcript": [
-        { "speaker": "ai", "text": "What are your salary expectations for this role?", "timestampSec": 5 },
-        { "speaker": "user", "text": "Based on my research and experience level, I'm targeting between $145,000 and $165,000 base, with flexibility depending on the total compensation package including equity.", "timestampSec": 18 },
+        {
+          "speaker": "ai",
+          "text": "What are your salary expectations for this role?",
+          "timestampSec": 5
+        },
+        {
+          "speaker": "user",
+          "text": "Based on my research and experience level, I'm targeting between $145,000 and $165,000 base, with flexibility depending on the total compensation package including equity.",
+          "timestampSec": 18
+        },
         { "speaker": "ai", "text": "What's your current notice period?", "timestampSec": 45 },
-        { "speaker": "user", "text": "I have a 30-day notice period, but I've successfully negotiated it to two weeks in the past when timing was critical for the new employer.", "timestampSec": 58 }
+        {
+          "speaker": "user",
+          "text": "I have a 30-day notice period, but I've successfully negotiated it to two weeks in the past when timing was critical for the new employer.",
+          "timestampSec": 58
+        }
       ]
     },
     {
@@ -234,10 +352,26 @@
       "recordingUrl": "mock://recording/sess_005.wav",
       "recordingDurationSec": 2880,
       "transcript": [
-        { "speaker": "ai", "text": "Explain the difference between REST and GraphQL. When would you choose one over the other?", "timestampSec": 5 },
-        { "speaker": "user", "text": "REST uses fixed endpoints and HTTP methods — predictable, cacheable. GraphQL gives clients a single endpoint where they specify exactly what data they need, avoiding over-fetching.", "timestampSec": 22 },
-        { "speaker": "ai", "text": "Good. What are the real-world trade-offs of GraphQL in production at scale?", "timestampSec": 55 },
-        { "speaker": "user", "text": "N+1 query problem if not handled with DataLoader, complexity in caching since queries are dynamic, potentially more tooling overhead and schema management at scale.", "timestampSec": 70 }
+        {
+          "speaker": "ai",
+          "text": "Explain the difference between REST and GraphQL. When would you choose one over the other?",
+          "timestampSec": 5
+        },
+        {
+          "speaker": "user",
+          "text": "REST uses fixed endpoints and HTTP methods — predictable, cacheable. GraphQL gives clients a single endpoint where they specify exactly what data they need, avoiding over-fetching.",
+          "timestampSec": 22
+        },
+        {
+          "speaker": "ai",
+          "text": "Good. What are the real-world trade-offs of GraphQL in production at scale?",
+          "timestampSec": 55
+        },
+        {
+          "speaker": "user",
+          "text": "N+1 query problem if not handled with DataLoader, complexity in caching since queries are dynamic, potentially more tooling overhead and schema management at scale.",
+          "timestampSec": 70
+        }
       ]
     },
     {
@@ -275,8 +409,16 @@
       "recordingUrl": "mock://recording/sess_007.wav",
       "recordingDurationSec": 2100,
       "transcript": [
-        { "speaker": "ai", "text": "Tell me about a time you had to make a difficult decision without all the information you needed.", "timestampSec": 5 },
-        { "speaker": "user", "text": "We had to decide whether to delay a product launch by two weeks. Data was incomplete — early signals suggested stability issues. We made the call to launch on schedule with enhanced monitoring.", "timestampSec": 22 }
+        {
+          "speaker": "ai",
+          "text": "Tell me about a time you had to make a difficult decision without all the information you needed.",
+          "timestampSec": 5
+        },
+        {
+          "speaker": "user",
+          "text": "We had to decide whether to delay a product launch by two weeks. Data was incomplete — early signals suggested stability issues. We made the call to launch on schedule with enhanced monitoring.",
+          "timestampSec": 22
+        }
       ]
     },
     {
@@ -296,8 +438,16 @@
       "recordingUrl": "mock://recording/sess_008.wav",
       "recordingDurationSec": 4200,
       "transcript": [
-        { "speaker": "ai", "text": "Implement a binary search tree with insert, search, and in-order traversal.", "timestampSec": 5 },
-        { "speaker": "user", "text": "I'll define a Node class with left/right pointers and a value. Insert recursively comparing values. In-order: left subtree, root, right subtree — gives sorted output.", "timestampSec": 25 }
+        {
+          "speaker": "ai",
+          "text": "Implement a binary search tree with insert, search, and in-order traversal.",
+          "timestampSec": 5
+        },
+        {
+          "speaker": "user",
+          "text": "I'll define a Node class with left/right pointers and a value. Insert recursively comparing values. In-order: left subtree, root, right subtree — gives sorted output.",
+          "timestampSec": 25
+        }
       ]
     }
   ],
@@ -365,7 +515,12 @@
           },
           {
             "original": "basically",
-            "betterAlternatives": ["essentially", "in summary", "the core idea was", "specifically"],
+            "betterAlternatives": [
+              "essentially",
+              "in summary",
+              "the core idea was",
+              "specifically"
+            ],
             "exampleInContext": "Instead of 'I basically set up a war room' say 'I established a dedicated incident war room'"
           },
           {
@@ -574,13 +729,41 @@
     }
   },
   "transcript_demo": [
-    { "speaker": "ai", "text": "Welcome to your mock interview. I'm ready when you are. Let's start — tell me about yourself and why you're excited about this opportunity.", "timestampSec": 2 },
-    { "speaker": "user", "text": "I'm a software engineer with 5 years of experience in backend systems and distributed architectures. I've led teams at growth-stage startups and worked on systems serving millions of daily active users.", "timestampSec": 16 },
-    { "speaker": "ai", "text": "Solid background. What specifically draws you to this type of role over others you might be exploring right now?", "timestampSec": 40 },
-    { "speaker": "user", "text": "The technical depth here is compelling. The scale problems your team is solving — particularly in real-time data processing — align well with where I've focused the last two years of my career.", "timestampSec": 56 },
-    { "speaker": "ai", "text": "Good. Let's dig into that real-time work. Walk me through the most complex system you've designed or significantly contributed to.", "timestampSec": 83 },
-    { "speaker": "user", "text": "I designed an event-driven notification system processing 40 million events per day across 12 microservices. Used Kafka for message queuing, Redis for deduplication state, and built a custom retry mechanism with exponential backoff.", "timestampSec": 100 },
-    { "speaker": "ai", "text": "What was the hardest technical challenge you faced in that system, and how did you resolve it?", "timestampSec": 138 }
+    {
+      "speaker": "ai",
+      "text": "Welcome to your mock interview. I'm ready when you are. Let's start — tell me about yourself and why you're excited about this opportunity.",
+      "timestampSec": 2
+    },
+    {
+      "speaker": "user",
+      "text": "I'm a software engineer with 5 years of experience in backend systems and distributed architectures. I've led teams at growth-stage startups and worked on systems serving millions of daily active users.",
+      "timestampSec": 16
+    },
+    {
+      "speaker": "ai",
+      "text": "Solid background. What specifically draws you to this type of role over others you might be exploring right now?",
+      "timestampSec": 40
+    },
+    {
+      "speaker": "user",
+      "text": "The technical depth here is compelling. The scale problems your team is solving — particularly in real-time data processing — align well with where I've focused the last two years of my career.",
+      "timestampSec": 56
+    },
+    {
+      "speaker": "ai",
+      "text": "Good. Let's dig into that real-time work. Walk me through the most complex system you've designed or significantly contributed to.",
+      "timestampSec": 83
+    },
+    {
+      "speaker": "user",
+      "text": "I designed an event-driven notification system processing 40 million events per day across 12 microservices. Used Kafka for message queuing, Redis for deduplication state, and built a custom retry mechanism with exponential backoff.",
+      "timestampSec": 100
+    },
+    {
+      "speaker": "ai",
+      "text": "What was the hardest technical challenge you faced in that system, and how did you resolve it?",
+      "timestampSec": 138
+    }
   ],
   "conversations": [
     {
@@ -648,7 +831,10 @@
           "text": "**Two-pointer technique** — uses two indices moving through a data structure to reduce O(n²) brute force down to O(n).\n\n**When to reach for it:**\n- Sorted array problems\n- Finding pairs/triplets with a target sum\n- Palindrome / string matching\n- Removing duplicates in-place\n\n**Classic pattern — Two Sum (sorted input):**\n```\nleft = 0, right = n - 1\nwhile left < right:\n  total = arr[left] + arr[right]\n  if total == target:  return [left, right]\n  elif total < target: left++\n  else:                right--\n```\nTime: **O(n)**, Space: **O(1)**\n\n**Key interview tip:** Always state your constraints assumption (\"assuming sorted input\") before applying this pattern — it signals that you understand when it applies.",
           "ts": "2026-05-04T15:23:00Z",
           "actions": [
-            { "label": "Practice Two Sum", "trigger": "Give me a two sum problem to practice right now" }
+            {
+              "label": "Practice Two Sum",
+              "trigger": "Give me a two sum problem to practice right now"
+            }
           ]
         }
       ]

@@ -51,7 +51,7 @@ const IC = {
    MOCK API
    ============================================================ */
 const MockAPI = {
-  _delay: (ms = 300) => new Promise(r => setTimeout(r, ms + Math.random() * 200)),
+  _delay: (ms = 300) => new Promise((r) => setTimeout(r, ms + Math.random() * 200)),
 
   async load() {
     const res = await fetch('mock-data.json');
@@ -59,12 +59,30 @@ const MockAPI = {
     return State.data;
   },
 
-  async getTutors()   { await this._delay(200); return State.data.tutors; },
-  async getPackages() { await this._delay(200); return State.data.packages; },
-  async getSessions() { await this._delay(300); return State.data.sessions; },
-  async getAnalysis(id) { await this._delay(400); return State.data.analysis[id] || null; },
-  async getProviders()  { await this._delay(200); return State.data.providers; },
-  async getStats()      { await this._delay(200); return State.data.stats; },
+  async getTutors() {
+    await this._delay(200);
+    return State.data.tutors;
+  },
+  async getPackages() {
+    await this._delay(200);
+    return State.data.packages;
+  },
+  async getSessions() {
+    await this._delay(300);
+    return State.data.sessions;
+  },
+  async getAnalysis(id) {
+    await this._delay(400);
+    return State.data.analysis[id] || null;
+  },
+  async getProviders() {
+    await this._delay(200);
+    return State.data.providers;
+  },
+  async getStats() {
+    await this._delay(200);
+    return State.data.stats;
+  },
 
   async startSession(pkgSlug, tutorSlug) {
     await this._delay(500);
@@ -78,26 +96,32 @@ const MockAPI = {
     return { analysisId: 'anal_001' };
   },
 
-  async getConversations() { await this._delay(250); return [...State.data.conversations]; },
+  async getConversations() {
+    await this._delay(250);
+    return [...State.data.conversations];
+  },
 
   async createConversation(title) {
     await this._delay(300);
     const id = 'conv_' + Date.now();
     const conv = {
-      id, title,
+      id,
+      title,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      messages: [{
-        id: 'msg_' + Date.now(),
-        role: 'ai',
-        text: "Hey! I'm your AI interview coach. I have access to your prep notes and session history to give you personalized guidance.\n\nWhat would you like to work on today?",
-        ts: new Date().toISOString(),
-        actions: [
-          { label: 'Review Last Session', trigger: 'How did I do in my last session?' },
-          { label: 'What to Improve', trigger: 'What should I focus on to improve?' },
-          { label: 'Start Practice', view: 'new-interview' },
-        ]
-      }]
+      messages: [
+        {
+          id: 'msg_' + Date.now(),
+          role: 'ai',
+          text: "Hey! I'm your AI interview coach. I have access to your prep notes and session history to give you personalized guidance.\n\nWhat would you like to work on today?",
+          ts: new Date().toISOString(),
+          actions: [
+            { label: 'Review Last Session', trigger: 'How did I do in my last session?' },
+            { label: 'What to Improve', trigger: 'What should I focus on to improve?' },
+            { label: 'Start Practice', view: 'new-interview' },
+          ],
+        },
+      ],
     };
     State.data.conversations.unshift(conv);
     return conv;
@@ -105,7 +129,7 @@ const MockAPI = {
 
   async addMessage(convId, role, text) {
     await this._delay(100);
-    const conv = State.data.conversations.find(c => c.id === convId);
+    const conv = State.data.conversations.find((c) => c.id === convId);
     if (!conv) return null;
     const msg = { id: 'msg_' + Date.now(), role, text, ts: new Date().toISOString(), actions: [] };
     conv.messages.push(msg);
@@ -139,7 +163,10 @@ function formatDuration(sec) {
   if (!sec) return '—';
   const m = Math.floor(sec / 60);
   const s = sec % 60;
-  if (m >= 60) { const h = Math.floor(m / 60); return `${h}h ${m % 60}m`; }
+  if (m >= 60) {
+    const h = Math.floor(m / 60);
+    return `${h}h ${m % 60}m`;
+  }
   return s > 0 ? `${m}m ${s}s` : `${m}m`;
 }
 
@@ -172,28 +199,35 @@ function scoreLabel(score) {
 }
 
 function difficultyColor(d) {
-  const map = { Easy: 'var(--success)', Medium: 'var(--warning)', Hard: 'var(--error)', Expert: 'var(--accent-v)' };
+  const map = {
+    Easy: 'var(--success)',
+    Medium: 'var(--warning)',
+    Hard: 'var(--error)',
+    Expert: 'var(--accent-v)',
+  };
   return map[d] || 'var(--text-m)';
 }
 
 function tutorColor(slug) {
-  const t = (State.data?.tutors || []).find(t => t.slug === slug);
+  const t = (State.data?.tutors || []).find((t) => t.slug === slug);
   return t ? t.color : '#8B5CF6';
 }
 
 function tutorInitials(slug) {
-  const t = (State.data?.tutors || []).find(t => t.slug === slug);
+  const t = (State.data?.tutors || []).find((t) => t.slug === slug);
   return t ? t.initials : '??';
 }
 
 function getLatestCompletedSession() {
-  return (State.data?.sessions || [])
-    .filter(s => s.status === 'COMPLETED')
-    .sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt))[0] || null;
+  return (
+    (State.data?.sessions || [])
+      .filter((s) => s.status === 'COMPLETED')
+      .sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt))[0] || null
+  );
 }
 
 function getAnalysisForSession(sessionId) {
-  const s = (State.data?.sessions || []).find(s => s.id === sessionId);
+  const s = (State.data?.sessions || []).find((s) => s.id === sessionId);
   if (!s?.analysisId) return null;
   return State.data.analysis[s.analysisId] || null;
 }
@@ -202,36 +236,53 @@ function getAllFiles() {
   const fs = State.data?.fileSystem;
   if (!fs) return [];
   const files = [...(fs.rootFiles || [])];
-  (fs.folders || []).forEach(f => files.push(...(f.files || [])));
+  (fs.folders || []).forEach((f) => files.push(...(f.files || [])));
   return files;
 }
 
 function findFile(id) {
-  return getAllFiles().find(f => f.id === id) || null;
+  return getAllFiles().find((f) => f.id === id) || null;
 }
 
 function renderMarkdown(text) {
   if (!text) return '';
   let html = text
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/```[\s\S]*?```/g, m => {
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/```[\s\S]*?```/g, (m) => {
       const code = m.slice(3, -3).replace(/^[a-z]*\n/, '');
       return `<pre style="background:var(--bg-elevated);padding:12px 14px;border-radius:8px;overflow-x:auto;margin:10px 0;font-size:12px;line-height:1.6;font-family:'JetBrains Mono',monospace;border:1px solid var(--bg-border)"><code>${code}</code></pre>`;
     })
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1 style="font-size:20px;font-weight:800;color:var(--text-p);margin:16px 0 10px;letter-spacing:-0.5px">$1</h1>')
+    .replace(
+      /^# (.+)$/gm,
+      '<h1 style="font-size:20px;font-weight:800;color:var(--text-p);margin:16px 0 10px;letter-spacing:-0.5px">$1</h1>',
+    )
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
     .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
     .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
     .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-    .replace(/\|(.+)\|/g, m => {
-      const cells = m.split('|').filter(c => c.trim() && !c.match(/^[-\s|]+$/));
-      return cells.length ? '<tr>' + cells.map(c => `<td style="padding:6px 12px;border:1px solid var(--bg-border)">${c.trim()}</td>`).join('') + '</tr>' : '';
+    .replace(/\|(.+)\|/g, (m) => {
+      const cells = m.split('|').filter((c) => c.trim() && !c.match(/^[-\s|]+$/));
+      return cells.length
+        ? '<tr>' +
+            cells
+              .map(
+                (c) =>
+                  `<td style="padding:6px 12px;border:1px solid var(--bg-border)">${c.trim()}</td>`,
+              )
+              .join('') +
+            '</tr>'
+        : '';
     })
-    .replace(/(<tr>.*<\/tr>)/gs, '<table style="border-collapse:collapse;width:100%;margin:12px 0;font-size:12px">$1</table>')
+    .replace(
+      /(<tr>.*<\/tr>)/gs,
+      '<table style="border-collapse:collapse;width:100%;margin:12px 0;font-size:12px">$1</table>',
+    )
     .replace(/\n\n/g, '</p><p>')
     .replace(/\n/g, '<br>');
   return `<p>${html}</p>`;
@@ -240,8 +291,14 @@ function renderMarkdown(text) {
 function formatAIChatText(text) {
   if (!text) return '';
   return text
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/```([\s\S]*?)```/g, (_, code) => `<pre style="background:rgba(0,0,0,0.3);padding:10px 12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;margin:8px 0;overflow-x:auto">${code.replace(/^\w+\n/, '')}</pre>`)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(
+      /```([\s\S]*?)```/g,
+      (_, code) =>
+        `<pre style="background:rgba(0,0,0,0.3);padding:10px 12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;margin:8px 0;overflow-x:auto">${code.replace(/^\w+\n/, '')}</pre>`,
+    )
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
@@ -259,7 +316,12 @@ let _toastId = 0;
 function showToast(title, msg = '', type = 'info', duration = 4000) {
   const id = ++_toastId;
   const iconMap = { success: IC.check, error: IC.x, warning: IC.warn, info: IC.info };
-  const colorMap = { success: 'var(--success)', error: 'var(--error)', warning: 'var(--warning)', info: 'var(--accent-v)' };
+  const colorMap = {
+    success: 'var(--success)',
+    error: 'var(--error)',
+    warning: 'var(--warning)',
+    info: 'var(--accent-v)',
+  };
   const el = document.createElement('div');
   el.className = 'toast';
   el.id = 'toast-' + id;
@@ -287,9 +349,18 @@ function removeToast(id) {
    ROUTER
    ============================================================ */
 function clearSessionTimers() {
-  if (State.sessionTimer) { clearInterval(State.sessionTimer); State.sessionTimer = null; }
-  if (State.transcriptInterval) { clearInterval(State.transcriptInterval); State.transcriptInterval = null; }
-  if (State.filesAutoSaveTimer) { clearTimeout(State.filesAutoSaveTimer); State.filesAutoSaveTimer = null; }
+  if (State.sessionTimer) {
+    clearInterval(State.sessionTimer);
+    State.sessionTimer = null;
+  }
+  if (State.transcriptInterval) {
+    clearInterval(State.transcriptInterval);
+    State.transcriptInterval = null;
+  }
+  if (State.filesAutoSaveTimer) {
+    clearTimeout(State.filesAutoSaveTimer);
+    State.filesAutoSaveTimer = null;
+  }
 }
 
 function navigate(view, params = {}) {
@@ -298,7 +369,7 @@ function navigate(view, params = {}) {
   State._navParams = params;
   window.location.hash = view;
   renderView(params);
-  document.querySelectorAll('.nav-item').forEach(el => {
+  document.querySelectorAll('.nav-item').forEach((el) => {
     el.classList.toggle('active', el.dataset.route === view);
   });
 }
@@ -311,22 +382,25 @@ async function renderView(params = {}) {
   const view = State.currentView;
 
   try {
-    if      (view === 'dashboard')     await renderDashboard();
+    if (view === 'dashboard') await renderDashboard();
     else if (view === 'new-interview') await renderNewInterview();
-    else if (view === 'session')       await renderSession(p);
-    else if (view === 'analysis')      await renderAnalysis(p);
-    else if (view === 'history')       await renderHistory();
-    else if (view === 'chat')          await renderChat();
-    else if (view === 'files')         await renderFiles();
+    else if (view === 'session') await renderSession(p);
+    else if (view === 'analysis') await renderAnalysis(p);
+    else if (view === 'history') await renderHistory();
+    else if (view === 'chat') await renderChat();
+    else if (view === 'files') await renderFiles();
     else if (view === 'communication') await renderCommunication();
-    else if (view === 'settings')      await renderSettings();
-    else                               await renderDashboard();
+    else if (view === 'settings') await renderSettings();
+    else await renderDashboard();
   } catch (e) {
     console.error('Render error:', e);
     root.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Something went wrong</div><div class="empty-text">${e.message}</div></div>`;
   }
 
-  setTimeout(() => { const c = root.firstElementChild; if (c) c.classList.add('view-enter'); }, 10);
+  setTimeout(() => {
+    const c = root.firstElementChild;
+    if (c) c.classList.add('view-enter');
+  }, 10);
 }
 
 /* ============================================================
@@ -340,13 +414,13 @@ function scoreRing(score, size = 100, stroke = 7) {
   return `
     <div class="score-ring-wrap" style="width:${size}px;height:${size}px">
       <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(-90deg)">
-        <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--bg-border)" stroke-width="${stroke}"/>
-        <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--bg-border)" stroke-width="${stroke}"/>
+        <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
           stroke-dasharray="${circ}" stroke-dashoffset="${circ}" stroke-linecap="round"
           class="score-ring-progress" data-target="${offset}" style="stroke-dashoffset:${circ}"/>
       </svg>
       <div class="score-ring-label">
-        <span class="score-ring-num" style="font-size:${Math.round(size*0.22)}px;color:${color}">${score || '—'}</span>
+        <span class="score-ring-num" style="font-size:${Math.round(size * 0.22)}px;color:${color}">${score || '—'}</span>
         <span class="score-ring-unit">/100</span>
       </div>
     </div>`;
@@ -364,18 +438,18 @@ function scoreBar(label, value) {
 }
 
 function tutorAv(slug, size = 34) {
-  return `<div class="sr-avatar" style="background:${tutorColor(slug)};width:${size}px;height:${size}px;font-size:${Math.round(size*0.33)}px">${tutorInitials(slug)}</div>`;
+  return `<div class="sr-avatar" style="background:${tutorColor(slug)};width:${size}px;height:${size}px;font-size:${Math.round(size * 0.33)}px">${tutorInitials(slug)}</div>`;
 }
 
 function animateScores() {
   setTimeout(() => {
-    document.querySelectorAll('.score-ring-progress').forEach(el => {
+    document.querySelectorAll('.score-ring-progress').forEach((el) => {
       el.style.strokeDashoffset = el.dataset.target;
     });
-    document.querySelectorAll('.score-bar-fill').forEach(el => {
+    document.querySelectorAll('.score-bar-fill').forEach((el) => {
       el.style.width = el.dataset.width + '%';
     });
-    document.querySelectorAll('.trend-bar').forEach(el => {
+    document.querySelectorAll('.trend-bar').forEach((el) => {
       el.style.height = el.dataset.height;
     });
   }, 80);
@@ -386,7 +460,7 @@ function animateScores() {
    ============================================================ */
 async function renderDashboard() {
   const [sessions, stats] = await Promise.all([MockAPI.getSessions(), MockAPI.getStats()]);
-  const recent = sessions.filter(s => s.status === 'COMPLETED').slice(0, 4);
+  const recent = sessions.filter((s) => s.status === 'COMPLETED').slice(0, 4);
   const hour = new Date().getHours();
   const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
 
@@ -458,7 +532,9 @@ async function renderDashboard() {
               <span class="section-title">Recent Sessions</span>
               <button class="btn btn-ghost btn-sm" onclick="navigate('history')">View all →</button>
             </div>
-            ${recent.map(s => `
+            ${recent
+              .map(
+                (s) => `
               <div class="recent-session-item" onclick="${s.analysisId ? `navigate('analysis',{id:'${s.analysisId}'})` : `navigate('history')`}">
                 ${tutorAv(s.tutorSlug, 38)}
                 <div class="rsi-body">
@@ -470,7 +546,9 @@ async function renderDashboard() {
                   <div style="font-size:10px;color:var(--text-m);text-align:right">${scoreLabel(s.score)}</div>
                 </div>
               </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
           </div>
 
           <div style="display:flex;flex-direction:column;gap:14px">
@@ -507,13 +585,15 @@ async function renderDashboard() {
                 <span style="font-size:11px;color:var(--success)">${stats.lifetimeCommunication.improvementTrend}</span>
               </div>
               <div class="trend-chart">
-                ${stats.lifetimeCommunication.recentSessionScores.map((rs, i) => {
-                  const pct = rs.score;
-                  return `<div class="trend-bar-wrap">
+                ${stats.lifetimeCommunication.recentSessionScores
+                  .map((rs, i) => {
+                    const pct = rs.score;
+                    return `<div class="trend-bar-wrap">
                     <div class="trend-bar" data-height="${pct * 0.7}px" style="height:4px" title="Score: ${pct}"></div>
                     <span class="trend-bar-label">${rs.date.slice(5)}</span>
                   </div>`;
-                }).join('')}
+                  })
+                  .join('')}
               </div>
             </div>
           </div>
@@ -540,7 +620,9 @@ async function renderNewInterview() {
     { n: 3, name: 'Review & Start' },
   ];
 
-  const stepHTML = steps.map((s, i) => `
+  const stepHTML = steps
+    .map(
+      (s, i) => `
     <div class="step-item">
       <div class="step-dot ${State.wizardStep > s.n ? 'done' : State.wizardStep === s.n ? 'active' : ''}">
         ${State.wizardStep > s.n ? IC.check : s.n}
@@ -551,7 +633,9 @@ async function renderNewInterview() {
       </div>
       ${i < steps.length - 1 ? `<div class="step-line ${State.wizardStep > s.n ? 'done' : ''}"></div>` : ''}
     </div>
-  `).join('');
+  `,
+    )
+    .join('');
 
   let bodyHTML = '';
 
@@ -559,7 +643,9 @@ async function renderNewInterview() {
     bodyHTML = `
       <div class="section-title mb-4">Select an interview package</div>
       <div class="pkg-grid">
-        ${packages.map(p => `
+        ${packages
+          .map(
+            (p) => `
           <div class="pkg-card ${State.selectedPackage?.slug === p.slug ? 'selected' : ''}" onclick="selectPackage('${p.slug}')">
             ${p.isPro ? '<span class="badge badge-pro" style="position:absolute;top:10px;right:10px;font-size:9px">PRO</span>' : ''}
             <span class="pkg-icon">${p.icon}</span>
@@ -571,30 +657,37 @@ async function renderNewInterview() {
               <span class="badge badge-muted">${p.questionCount}Q</span>
             </div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
       </div>`;
   } else if (State.wizardStep === 2) {
     bodyHTML = `
       <div class="section-title mb-4">Choose your AI tutor</div>
       <div class="tutor-grid">
-        ${tutors.map(t => `
+        ${tutors
+          .map(
+            (t) => `
           <div class="tutor-card ${State.selectedTutor?.slug === t.slug ? 'selected' : ''}" onclick="selectTutor('${t.slug}')">
             ${t.isPro ? '<span class="badge badge-pro" style="position:absolute;top:10px;right:10px;font-size:9px">PRO</span>' : ''}
             <div class="tutor-avatar" style="background:${t.color}">${t.initials}</div>
             <div class="tutor-name">${t.name}</div>
             <div class="tutor-spec">${t.specialty}</div>
-            <div class="tutor-tags">${t.personality.map(p => `<span class="tutor-tag">${p}</span>`).join('')}</div>
+            <div class="tutor-tags">${t.personality.map((p) => `<span class="tutor-tag">${p}</span>`).join('')}</div>
             <div style="font-size:11px;color:var(--text-m);margin-bottom:12px;padding:0 4px;line-height:1.5">${t.description}</div>
             <div class="tutor-stats">
               <div style="text-align:center"><div class="tutor-stat-val">${t.avgScore}</div><div class="tutor-stat-label">Avg Score</div></div>
               <div style="text-align:center"><div class="tutor-stat-val">${t.sessionCount}</div><div class="tutor-stat-label">Sessions</div></div>
             </div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
       </div>`;
   } else {
-    const pkg = packages.find(p => p.slug === State.selectedPackage?.slug) || State.selectedPackage;
-    const tutor = tutors.find(t => t.slug === State.selectedTutor?.slug) || State.selectedTutor;
+    const pkg =
+      packages.find((p) => p.slug === State.selectedPackage?.slug) || State.selectedPackage;
+    const tutor = tutors.find((t) => t.slug === State.selectedTutor?.slug) || State.selectedTutor;
     bodyHTML = `
       <div class="section-title mb-4">Review your selection</div>
       <div class="review-card">
@@ -639,7 +732,7 @@ async function renderNewInterview() {
         </div>
       </div>
       <div style="margin-top:16px;padding:14px 16px;background:var(--accent-soft);border:1px solid rgba(139,92,246,0.2);border-radius:10px;font-size:12px;color:var(--text-s)">
-        <strong style="color:var(--accent-v)">📁 Your notes are ready:</strong> ${getAllFiles().filter(f=>f.type==='md').length} markdown notes will be used as context to personalize this interview to your background.
+        <strong style="color:var(--accent-v)">📁 Your notes are ready:</strong> ${getAllFiles().filter((f) => f.type === 'md').length} markdown notes will be used as context to personalize this interview to your background.
       </div>`;
   }
 
@@ -659,11 +752,12 @@ async function renderNewInterview() {
             <button class="btn btn-secondary" onclick="${State.wizardStep > 1 ? `goToStep(${State.wizardStep - 1})` : `navigate('dashboard')`}">
               ${State.wizardStep > 1 ? '← Back' : 'Cancel'}
             </button>
-            ${State.wizardStep < 3
-              ? `<button class="btn btn-primary" onclick="goToStep(${State.wizardStep + 1})" ${(State.wizardStep === 1 && !State.selectedPackage) || (State.wizardStep === 2 && !State.selectedTutor) ? 'disabled' : ''}>
+            ${
+              State.wizardStep < 3
+                ? `<button class="btn btn-primary" onclick="goToStep(${State.wizardStep + 1})" ${(State.wizardStep === 1 && !State.selectedPackage) || (State.wizardStep === 2 && !State.selectedTutor) ? 'disabled' : ''}>
                   Continue →
                 </button>`
-              : `<button class="btn btn-primary btn-lg" onclick="startInterview()">🚀 Start Interview</button>`
+                : `<button class="btn btn-primary btn-lg" onclick="startInterview()">🚀 Start Interview</button>`
             }
           </div>
         </div>
@@ -672,24 +766,30 @@ async function renderNewInterview() {
 }
 
 window.selectPackage = (slug) => {
-  const pkg = State.data.packages.find(p => p.slug === slug);
+  const pkg = State.data.packages.find((p) => p.slug === slug);
   State.selectedPackage = pkg;
-  document.querySelectorAll('.pkg-card').forEach(el => el.classList.remove('selected'));
-  document.querySelectorAll('.pkg-card').forEach(el => {
+  document.querySelectorAll('.pkg-card').forEach((el) => el.classList.remove('selected'));
+  document.querySelectorAll('.pkg-card').forEach((el) => {
     if (el.onclick?.toString().includes(slug)) el.classList.add('selected');
   });
   renderNewInterview();
 };
 
 window.selectTutor = (slug) => {
-  const tutor = State.data.tutors.find(t => t.slug === slug);
+  const tutor = State.data.tutors.find((t) => t.slug === slug);
   State.selectedTutor = tutor;
   renderNewInterview();
 };
 
 window.goToStep = (step) => {
-  if (step === 2 && !State.selectedPackage) { showToast('Select a package first', '', 'warning'); return; }
-  if (step === 3 && !State.selectedTutor)  { showToast('Select a tutor first', '', 'warning'); return; }
+  if (step === 2 && !State.selectedPackage) {
+    showToast('Select a package first', '', 'warning');
+    return;
+  }
+  if (step === 3 && !State.selectedTutor) {
+    showToast('Select a tutor first', '', 'warning');
+    return;
+  }
   State.wizardStep = step;
   renderNewInterview();
 };
@@ -730,7 +830,7 @@ async function renderSession() {
       <div class="session-body">
         <div class="session-stage">
           <div class="waveform active" id="waveform">
-            ${Array.from({length: 12}, () => '<div class="wf-bar"></div>').join('')}
+            ${Array.from({ length: 12 }, () => '<div class="wf-bar"></div>').join('')}
           </div>
           <div class="session-status-text" id="session-status">
             <strong>${tutor?.name || 'AI'}</strong> is speaking…
@@ -764,16 +864,22 @@ async function renderSession() {
 
   State.transcriptInterval = setInterval(() => {
     const turn = transcript[State.transcriptIndex];
-    if (!turn) { clearInterval(State.transcriptInterval); return; }
+    if (!turn) {
+      clearInterval(State.transcriptInterval);
+      return;
+    }
     const scroll = document.getElementById('transcript-scroll');
-    if (!scroll) { clearInterval(State.transcriptInterval); return; }
+    if (!scroll) {
+      clearInterval(State.transcriptInterval);
+      return;
+    }
     const status = document.getElementById('session-status');
     const waveform = document.getElementById('waveform');
 
     const div = document.createElement('div');
     div.className = 'transcript-turn';
     div.innerHTML = `
-      <span class="tt-speaker ${turn.speaker}">${turn.speaker === 'ai' ? (tutor?.name || 'AI') : 'You'}</span>
+      <span class="tt-speaker ${turn.speaker}">${turn.speaker === 'ai' ? tutor?.name || 'AI' : 'You'}</span>
       <div class="tt-text ${turn.speaker}">${turn.text}</div>`;
     scroll.appendChild(div);
     scroll.scrollTop = scroll.scrollHeight;
@@ -785,7 +891,9 @@ async function renderSession() {
       } else {
         status.innerHTML = `<strong>You</strong> are responding…`;
         if (waveform) waveform.classList.remove('active');
-        setTimeout(() => { if (waveform) waveform.classList.add('active'); }, 4000);
+        setTimeout(() => {
+          if (waveform) waveform.classList.add('active');
+        }, 4000);
       }
     }
 
@@ -800,13 +908,20 @@ window.toggleMic = () => {
     btn.className = `mic-btn ${State.sessionMicOn ? 'active' : 'muted'}`;
     btn.innerHTML = State.sessionMicOn ? IC.mic : IC.micOff;
   }
-  showToast(State.sessionMicOn ? 'Microphone on' : 'Microphone muted', '', State.sessionMicOn ? 'success' : 'warning');
+  showToast(
+    State.sessionMicOn ? 'Microphone on' : 'Microphone muted',
+    '',
+    State.sessionMicOn ? 'success' : 'warning',
+  );
 };
 
 window.endSession = async () => {
   clearSessionTimers();
   showToast('Session complete!', 'Processing your responses…', 'success');
-  setTimeout(() => showToast('Generating analysis…', 'Scoring your performance', 'info', 3000), 1500);
+  setTimeout(
+    () => showToast('Generating analysis…', 'Scoring your performance', 'info', 3000),
+    1500,
+  );
 
   const result = await MockAPI.endSession(State.activeSessionId);
   State.wizardStep = 1;
@@ -815,8 +930,26 @@ window.endSession = async () => {
 
   navigate('analysis', { id: result.analysisId });
 
-  setTimeout(() => showToast('Analyzing communication patterns…', 'Detecting filler words & phrasing', 'info', 4000), 1500);
-  setTimeout(() => showToast('Communication analysis ready!', 'View detailed breakdown in Analysis', 'success', 5000), 6000);
+  setTimeout(
+    () =>
+      showToast(
+        'Analyzing communication patterns…',
+        'Detecting filler words & phrasing',
+        'info',
+        4000,
+      ),
+    1500,
+  );
+  setTimeout(
+    () =>
+      showToast(
+        'Communication analysis ready!',
+        'View detailed breakdown in Analysis',
+        'success',
+        5000,
+      ),
+    6000,
+  );
 };
 
 /* ============================================================
@@ -825,10 +958,20 @@ window.endSession = async () => {
 async function renderAnalysis(params = {}) {
   const id = params.id || 'anal_001';
   const analysis = await MockAPI.getAnalysis(id);
-  if (!analysis) { document.getElementById('view-root').innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">Analysis not found</div></div>`; return; }
+  if (!analysis) {
+    document.getElementById('view-root').innerHTML =
+      `<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">Analysis not found</div></div>`;
+    return;
+  }
 
-  const session = State.data.sessions.find(s => s.id === analysis.sessionId);
-  const tabs = ['Overview', 'Scores', 'Feedback', 'Report', ...(analysis.communicationAnalysis ? ['Communication'] : [])];
+  const session = State.data.sessions.find((s) => s.id === analysis.sessionId);
+  const tabs = [
+    'Overview',
+    'Scores',
+    'Feedback',
+    'Report',
+    ...(analysis.communicationAnalysis ? ['Communication'] : []),
+  ];
 
   document.getElementById('view-root').innerHTML = `
     <div>
@@ -864,7 +1007,7 @@ async function renderAnalysis(params = {}) {
         </div>
 
         <div class="analysis-tabs">
-          ${tabs.map(t => `<button class="analysis-tab ${State.currentAnalysisTab === t.toLowerCase() ? 'active' : ''}" onclick="switchAnalysisTab('${t.toLowerCase()}')">${t}</button>`).join('')}
+          ${tabs.map((t) => `<button class="analysis-tab ${State.currentAnalysisTab === t.toLowerCase() ? 'active' : ''}" onclick="switchAnalysisTab('${t.toLowerCase()}')">${t}</button>`).join('')}
         </div>
 
         <div id="analysis-tab-content">
@@ -882,11 +1025,11 @@ function renderAnalysisTabContent(analysis, tab) {
       <div class="two-col">
         <div>
           <div class="section-title">Strengths</div>
-          ${analysis.strengths.map(s => `<div class="strength-item"><div class="strength-dot"></div>${s}</div>`).join('')}
+          ${analysis.strengths.map((s) => `<div class="strength-item"><div class="strength-dot"></div>${s}</div>`).join('')}
         </div>
         <div>
           <div class="section-title">Areas to Improve</div>
-          ${analysis.improvements.map(s => `<div class="improvement-item"><div class="improvement-dot"></div>${s}</div>`).join('')}
+          ${analysis.improvements.map((s) => `<div class="improvement-item"><div class="improvement-dot"></div>${s}</div>`).join('')}
         </div>
       </div>`;
   }
@@ -894,22 +1037,34 @@ function renderAnalysisTabContent(analysis, tab) {
     const s = analysis.scores;
     return `
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px">
-        ${[['Communication',s.communication],['Technical',s.technical],['Problem Solving',s.problemSolving],['Confidence',s.confidence],['Overall',s.overall]].map(([label,val]) => `
+        ${[
+          ['Communication', s.communication],
+          ['Technical', s.technical],
+          ['Problem Solving', s.problemSolving],
+          ['Confidence', s.confidence],
+          ['Overall', s.overall],
+        ]
+          .map(
+            ([label, val]) => `
           <div class="card" style="text-align:center;padding:20px 14px">
             ${scoreRing(val, 80, 6)}
             <div style="font-size:12px;color:var(--text-m);margin-top:10px;font-weight:500">${label}</div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
       </div>`;
   }
   if (tab === 'feedback') {
     return `
       <div>
         <div class="section-title mb-4">Per-Question Feedback</div>
-        ${analysis.answerFeedback.map((f, i) => `
+        ${analysis.answerFeedback
+          .map(
+            (f, i) => `
           <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)">
-              <span class="accordion-question">Q${i+1}: ${f.question}</span>
+              <span class="accordion-question">Q${i + 1}: ${f.question}</span>
               <span class="accordion-score" style="color:${scoreColor(f.score)}">${f.score}</span>
               <span class="accordion-chevron">${IC.chevDown}</span>
             </div>
@@ -918,7 +1073,9 @@ function renderAnalysisTabContent(analysis, tab) {
               <div class="accordion-feedback">${f.feedback}</div>
             </div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
       </div>`;
   }
   if (tab === 'report') {
@@ -932,45 +1089,57 @@ function renderAnalysisTabContent(analysis, tab) {
           <div class="comm-stat"><div class="comm-stat-val" style="color:${scoreColor(ca.overallCommunicationScore)}">${ca.overallCommunicationScore}</div><div class="comm-stat-label">Comm. Score</div></div>
           <div class="comm-stat"><div class="comm-stat-val">${ca.totalUserWords}</div><div class="comm-stat-label">Words Spoken</div></div>
           <div class="comm-stat"><div class="comm-stat-val">${ca.totalUserTurns}</div><div class="comm-stat-label">Turns Taken</div></div>
-          <div class="comm-stat"><div class="comm-stat-val">${ca.fillerWordStats.reduce((a,f) => a+f.count,0)}</div><div class="comm-stat-label">Filler Words</div></div>
+          <div class="comm-stat"><div class="comm-stat-val">${ca.fillerWordStats.reduce((a, f) => a + f.count, 0)}</div><div class="comm-stat-label">Filler Words</div></div>
         </div>
 
         <div class="two-col">
           <div>
             <div class="section-title mb-4">Filler Word Analysis</div>
-            ${ca.fillerWordStats.map(f => `
+            ${ca.fillerWordStats
+              .map(
+                (f) => `
               <div class="filler-item">
                 <span class="filler-word">"${f.word}"</span>
                 <div class="filler-bar-wrap">
-                  <div class="score-bar-track"><div class="score-bar-fill" data-width="${Math.min(f.count*8,100)}" style="width:0%;background:${f.severity==='high'?'var(--error)':f.severity==='medium'?'var(--warning)':'var(--info)'}"></div></div>
+                  <div class="score-bar-track"><div class="score-bar-fill" data-width="${Math.min(f.count * 8, 100)}" style="width:0%;background:${f.severity === 'high' ? 'var(--error)' : f.severity === 'medium' ? 'var(--warning)' : 'var(--info)'}"></div></div>
                 </div>
                 <span class="filler-count">${f.count}×</span>
-                <span class="badge ${f.severity==='high'?'badge-error':f.severity==='medium'?'badge-warning':'badge-info'}">${f.severity}</span>
+                <span class="badge ${f.severity === 'high' ? 'badge-error' : f.severity === 'medium' ? 'badge-warning' : 'badge-info'}">${f.severity}</span>
               </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
 
             <div class="section-title mt-4 mb-4">Strengths</div>
-            ${ca.strengthsInCommunication.map(s => `<div class="strength-item"><div class="strength-dot"></div>${s}</div>`).join('')}
+            ${ca.strengthsInCommunication.map((s) => `<div class="strength-item"><div class="strength-dot"></div>${s}</div>`).join('')}
           </div>
 
           <div>
             <div class="section-title mb-4">Better Alternatives</div>
-            ${ca.topReplacements.map(r => `
+            ${ca.topReplacements
+              .map(
+                (r) => `
               <div class="replacement-item" style="margin-bottom:12px">
                 <div class="replacement-word">"${r.original}"</div>
-                <div class="replacement-alts">${r.betterAlternatives.map(a => `<span class="alt-chip">${a}</span>`).join('')}</div>
+                <div class="replacement-alts">${r.betterAlternatives.map((a) => `<span class="alt-chip">${a}</span>`).join('')}</div>
                 <div class="replacement-example">${r.exampleInContext}</div>
               </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
 
             <div class="section-title mt-4 mb-4">Sentence Rewrites</div>
-            ${ca.sentenceRewrites.map(rw => `
+            ${ca.sentenceRewrites
+              .map(
+                (rw) => `
               <div class="rewrite-item">
                 <div class="rewrite-original">❌ ${rw.original}</div>
                 <div class="rewrite-arrow">↓ ${rw.improvement}</div>
                 <div class="rewrite-new">✓ ${rw.rewritten}</div>
               </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
           </div>
         </div>
       </div>`;
@@ -980,10 +1149,17 @@ function renderAnalysisTabContent(analysis, tab) {
 
 window.switchAnalysisTab = (tab) => {
   State.currentAnalysisTab = tab;
-  document.querySelectorAll('.analysis-tab').forEach(el => el.classList.toggle('active', el.onclick?.toString().includes(`'${tab}'`)));
-  const analysis = Object.values(State.data.analysis).find(a => a.id === (State._navParams?.id || 'anal_001'));
+  document
+    .querySelectorAll('.analysis-tab')
+    .forEach((el) => el.classList.toggle('active', el.onclick?.toString().includes(`'${tab}'`)));
+  const analysis = Object.values(State.data.analysis).find(
+    (a) => a.id === (State._navParams?.id || 'anal_001'),
+  );
   if (analysis) {
-    document.getElementById('analysis-tab-content').innerHTML = renderAnalysisTabContent(analysis, tab);
+    document.getElementById('analysis-tab-content').innerHTML = renderAnalysisTabContent(
+      analysis,
+      tab,
+    );
     animateScores();
   }
 };
@@ -991,11 +1167,14 @@ window.switchAnalysisTab = (tab) => {
 window.toggleAccordion = (header) => {
   const body = header.nextElementSibling;
   const isOpen = header.classList.contains('open');
-  document.querySelectorAll('.accordion-header.open').forEach(h => {
+  document.querySelectorAll('.accordion-header.open').forEach((h) => {
     h.classList.remove('open');
     h.nextElementSibling.classList.remove('open');
   });
-  if (!isOpen) { header.classList.add('open'); body.classList.add('open'); }
+  if (!isOpen) {
+    header.classList.add('open');
+    body.classList.add('open');
+  }
 };
 
 /* ============================================================
@@ -1003,27 +1182,39 @@ window.toggleAccordion = (header) => {
    ============================================================ */
 async function renderHistory() {
   const sessions = await MockAPI.getSessions();
-  const filtered = State.historyFilter === 'all' ? sessions : sessions.filter(s => s.status === State.historyFilter.toUpperCase());
+  const filtered =
+    State.historyFilter === 'all'
+      ? sessions
+      : sessions.filter((s) => s.status === State.historyFilter.toUpperCase());
 
   document.getElementById('view-root').innerHTML = `
     <div>
       <div class="page-header">
         <div class="page-header-left">
           <div class="page-title">Session History</div>
-          <div class="page-subtitle">${sessions.length} total sessions · ${sessions.filter(s=>s.status==='COMPLETED').length} completed</div>
+          <div class="page-subtitle">${sessions.length} total sessions · ${sessions.filter((s) => s.status === 'COMPLETED').length} completed</div>
         </div>
       </div>
       <div class="page-body">
         <div class="history-filters">
-          ${[['all','All Sessions'],['completed','Completed'],['abandoned','Abandoned']].map(([val,label]) => `
-            <button class="chip ${State.historyFilter===val?'active':''}" onclick="filterHistory('${val}')">${label}</button>
-          `).join('')}
+          ${[
+            ['all', 'All Sessions'],
+            ['completed', 'Completed'],
+            ['abandoned', 'Abandoned'],
+          ]
+            .map(
+              ([val, label]) => `
+            <button class="chip ${State.historyFilter === val ? 'active' : ''}" onclick="filterHistory('${val}')">${label}</button>
+          `,
+            )
+            .join('')}
         </div>
 
         <div class="session-table" id="session-table">
-          ${filtered.length === 0
-            ? `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No sessions found</div></div>`
-            : filtered.map(s => renderSessionRow(s)).join('')
+          ${
+            filtered.length === 0
+              ? `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No sessions found</div></div>`
+              : filtered.map((s) => renderSessionRow(s)).join('')
           }
         </div>
       </div>
@@ -1050,7 +1241,7 @@ function renderSessionRow(s) {
           <div class="sr-title">${s.packageName}</div>
           <div class="sr-meta">${s.tutorName} · ${formatDate(s.startedAt)} · ${formatDuration(s.durationSec)}</div>
         </div>
-        <span class="badge sr-status ${s.status==='COMPLETED'?'badge-success':s.status==='ACTIVE'?'badge-info':'badge-muted'}">${s.status}</span>
+        <span class="badge sr-status ${s.status === 'COMPLETED' ? 'badge-success' : s.status === 'ACTIVE' ? 'badge-info' : 'badge-muted'}">${s.status}</span>
         <div class="sr-score" style="color:${scoreColor(s.score)}">${s.score || '—'}</div>
         <div class="sr-actions" onclick="event.stopPropagation()">
           ${analysisAction}
@@ -1059,18 +1250,22 @@ function renderSessionRow(s) {
         </div>
         <span class="sr-chevron">${IC.chevDown}</span>
       </div>
-      ${isExpanded ? `
+      ${
+        isExpanded
+          ? `
         <div class="session-panel">
           <div class="panel-tabs">
-            ${s.hasRecording ? `<button class="panel-tab ${panel==='recording'?'active':''}" onclick="openHistoryPanel('${s.id}','recording')">🎧 Recording</button>` : ''}
-            ${s.transcript?.length ? `<button class="panel-tab ${panel==='transcript'?'active':''}" onclick="openHistoryPanel('${s.id}','transcript')">📝 Transcript</button>` : ''}
+            ${s.hasRecording ? `<button class="panel-tab ${panel === 'recording' ? 'active' : ''}" onclick="openHistoryPanel('${s.id}','recording')">🎧 Recording</button>` : ''}
+            ${s.transcript?.length ? `<button class="panel-tab ${panel === 'transcript' ? 'active' : ''}" onclick="openHistoryPanel('${s.id}','transcript')">📝 Transcript</button>` : ''}
           </div>
           <div class="panel-content">
             ${panel === 'recording' && s.hasRecording ? renderRecordingPlayer(s) : ''}
             ${panel === 'transcript' && s.transcript?.length ? renderTranscriptPanel(s) : ''}
           </div>
         </div>
-      ` : ''}
+      `
+          : ''
+      }
     </div>`;
 }
 
@@ -1089,7 +1284,7 @@ function renderRecordingPlayer(s) {
         <button class="player-btn" onclick="playerAction('${s.id}','forward')" title="Ahead 10s">⏭</button>
       </div>
       <div class="player-speeds">
-        ${['0.5x','1x','1.5x','2x'].map(sp => `<button class="speed-chip ${sp==='1x'?'active':''}" onclick="setPlaybackSpeed('${s.id}','${sp}')">${sp}</button>`).join('')}
+        ${['0.5x', '1x', '1.5x', '2x'].map((sp) => `<button class="speed-chip ${sp === '1x' ? 'active' : ''}" onclick="setPlaybackSpeed('${s.id}','${sp}')">${sp}</button>`).join('')}
       </div>
       <div style="display:flex;justify-content:flex-end">
         <button class="btn btn-secondary btn-sm" onclick="exportRecording('${s.id}')">${IC.download} Export Recording</button>
@@ -1106,7 +1301,9 @@ function renderTranscriptPanel(s) {
         <button class="btn btn-secondary btn-sm" onclick="exportTranscript('${s.id}')">${IC.download} Export</button>
       </div>
       <div class="transcript-list" id="transcript-list-${s.id}">
-        ${turns.map(t => `
+        ${turns
+          .map(
+            (t) => `
           <div class="transcript-turn-item" data-text="${t.text.toLowerCase()}">
             <span class="tt-ts">${formatTimestamp(t.timestampSec)}</span>
             <div class="tt-body">
@@ -1114,12 +1311,17 @@ function renderTranscriptPanel(s) {
               <div class="tt-content">${t.text}</div>
             </div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
       </div>
     </div>`;
 }
 
-window.filterHistory = (filter) => { State.historyFilter = filter; renderHistory(); };
+window.filterHistory = (filter) => {
+  State.historyFilter = filter;
+  renderHistory();
+};
 
 window.expandHistoryRow = (id) => {
   State.expandedHistoryRow = State.expandedHistoryRow === id ? null : id;
@@ -1134,13 +1336,22 @@ window.openHistoryPanel = (id, panel) => {
 };
 
 window.playerAction = (id, action) => {
-  const msgMap = { play: 'Playback is simulated — no real audio file', rewind: 'Rewound 10 seconds (simulated)', forward: 'Advanced 10 seconds (simulated)' };
-  showToast(action === 'play' ? 'Simulated Playback' : action === 'rewind' ? 'Rewind' : 'Fast Forward', msgMap[action], 'info');
+  const msgMap = {
+    play: 'Playback is simulated — no real audio file',
+    rewind: 'Rewound 10 seconds (simulated)',
+    forward: 'Advanced 10 seconds (simulated)',
+  };
+  showToast(
+    action === 'play' ? 'Simulated Playback' : action === 'rewind' ? 'Rewind' : 'Fast Forward',
+    msgMap[action],
+    'info',
+  );
 };
 
 window.setPlaybackSpeed = (id, speed) => {
-  document.querySelectorAll(`[onclick*="${id}"]`).forEach(btn => {
-    if (btn.classList.contains('speed-chip')) btn.classList.toggle('active', btn.textContent === speed);
+  document.querySelectorAll(`[onclick*="${id}"]`).forEach((btn) => {
+    if (btn.classList.contains('speed-chip'))
+      btn.classList.toggle('active', btn.textContent === speed);
   });
   showToast(`Speed set to ${speed}`, 'Playback speed changed (simulated)', 'info');
 };
@@ -1157,7 +1368,7 @@ window.handleTranscriptSearch = (id, query) => {
   const list = document.getElementById(`transcript-list-${id}`);
   if (!list) return;
   const q = query.toLowerCase().trim();
-  list.querySelectorAll('.transcript-turn-item').forEach(item => {
+  list.querySelectorAll('.transcript-turn-item').forEach((item) => {
     const text = item.dataset.text || '';
     const match = !q || text.includes(q);
     item.style.display = match ? '' : 'none';
@@ -1165,7 +1376,12 @@ window.handleTranscriptSearch = (id, query) => {
     if (content && q) {
       const orig = item.querySelector('.tt-body .tt-content');
       content.innerHTML = text.includes(q)
-        ? item.querySelector('.tt-body').children[1].textContent.replace(new RegExp(`(${q})`, 'gi'), '<mark class="highlight">$1</mark>')
+        ? item
+            .querySelector('.tt-body')
+            .children[1].textContent.replace(
+              new RegExp(`(${q})`, 'gi'),
+              '<mark class="highlight">$1</mark>',
+            )
         : content.textContent;
     }
   });
@@ -1177,7 +1393,7 @@ window.handleTranscriptSearch = (id, query) => {
 async function renderChat() {
   const convs = await MockAPI.getConversations();
   if (!State.currentConvId && convs.length) State.currentConvId = convs[0].id;
-  const activeConv = convs.find(c => c.id === State.currentConvId);
+  const activeConv = convs.find((c) => c.id === State.currentConvId);
 
   document.getElementById('view-root').innerHTML = `
     <div class="chat-layout">
@@ -1187,28 +1403,34 @@ async function renderChat() {
           <button class="btn btn-primary btn-sm w-full" onclick="createConversation()">${IC.plus} New Chat</button>
         </div>
         <div class="conv-list">
-          ${convs.map(c => `
+          ${convs
+            .map(
+              (c) => `
             <div class="conv-item ${c.id === State.currentConvId ? 'active' : ''}" onclick="selectConversation('${c.id}')">
               <div class="conv-item-title">${c.title}</div>
               <div class="conv-item-meta">${formatRelativeDate(c.updatedAt)} · ${c.messages.length} messages</div>
             </div>
-          `).join('')}
+          `,
+            )
+            .join('')}
         </div>
       </div>
 
       <div class="chat-main">
-        ${activeConv ? `
+        ${
+          activeConv
+            ? `
           <div class="chat-header">
             <div>
               <div class="chat-title">${activeConv.title}</div>
               <div class="chat-meta">${activeConv.messages.length} messages · Updated ${formatRelativeDate(activeConv.updatedAt)}</div>
             </div>
             <div class="files-context-banner" style="font-size:11px;padding:7px 10px;margin:0">
-              📁 <strong>${getAllFiles().filter(f=>f.type==='md').length} notes loaded</strong> as AI context
+              📁 <strong>${getAllFiles().filter((f) => f.type === 'md').length} notes loaded</strong> as AI context
             </div>
           </div>
           <div class="chat-messages" id="chat-messages">
-            ${activeConv.messages.map(m => renderMessage(m)).join('')}
+            ${activeConv.messages.map((m) => renderMessage(m)).join('')}
           </div>
           <div class="chat-input-area">
             <div class="chat-input-row">
@@ -1217,7 +1439,9 @@ async function renderChat() {
               <button class="btn btn-primary btn-icon" onclick="sendChatMessage()">${IC.send}</button>
             </div>
           </div>
-        ` : `<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">No conversation selected</div><button class="btn btn-primary" onclick="createConversation()">Start a Chat</button></div>`}
+        `
+            : `<div class="empty-state"><div class="empty-icon">💬</div><div class="empty-title">No conversation selected</div><button class="btn btn-primary" onclick="createConversation()">Start a Chat</button></div>`
+        }
       </div>
     </div>`;
 
@@ -1226,12 +1450,14 @@ async function renderChat() {
 }
 
 function renderMessage(m) {
-  const _chatActionsRegistry = window._chatActions = window._chatActions || {};
-  const actionBtns = (m.actions || []).map(a => {
-    const rid = 'ca_' + Math.random().toString(36).slice(2);
-    _chatActionsRegistry[rid] = a;
-    return `<button class="msg-action-btn" onclick="chatAction('${rid}')">${a.label}</button>`;
-  }).join('');
+  const _chatActionsRegistry = (window._chatActions = window._chatActions || {});
+  const actionBtns = (m.actions || [])
+    .map((a) => {
+      const rid = 'ca_' + Math.random().toString(36).slice(2);
+      _chatActionsRegistry[rid] = a;
+      return `<button class="msg-action-btn" onclick="chatAction('${rid}')">${a.label}</button>`;
+    })
+    .join('');
 
   return `
     <div class="message ${m.role}">
@@ -1244,17 +1470,24 @@ function renderMessage(m) {
     </div>`;
 }
 
-window.selectConversation = (id) => { State.currentConvId = id; renderChat(); };
+window.selectConversation = (id) => {
+  State.currentConvId = id;
+  renderChat();
+};
 
 window.createConversation = async () => {
-  const title = 'New Chat — ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const title =
+    'New Chat — ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   const conv = await MockAPI.createConversation(title);
   State.currentConvId = conv.id;
   renderChat();
 };
 
 window.chatKeydown = (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
 };
 
 window.sendChatMessage = async () => {
@@ -1268,9 +1501,9 @@ window.sendChatMessage = async () => {
   await MockAPI.addMessage(State.currentConvId, 'user', text);
 
   const msgs = document.getElementById('chat-messages');
-  const conv = State.data.conversations.find(c => c.id === State.currentConvId);
+  const conv = State.data.conversations.find((c) => c.id === State.currentConvId);
   if (msgs && conv) {
-    msgs.innerHTML = conv.messages.map(m => renderMessage(m)).join('');
+    msgs.innerHTML = conv.messages.map((m) => renderMessage(m)).join('');
     const typingEl = document.createElement('div');
     typingEl.className = 'typing-indicator';
     typingEl.id = 'typing';
@@ -1288,9 +1521,9 @@ window.sendChatMessage = async () => {
     if (aiMsg) aiMsg.actions = aiText.actions || [];
     const typing = document.getElementById('typing');
     if (typing) typing.remove();
-    const updatedConv = State.data.conversations.find(c => c.id === State.currentConvId);
+    const updatedConv = State.data.conversations.find((c) => c.id === State.currentConvId);
     if (msgs && updatedConv) {
-      msgs.innerHTML = updatedConv.messages.map(m => renderMessage(m)).join('');
+      msgs.innerHTML = updatedConv.messages.map((m) => renderMessage(m)).join('');
       msgs.scrollTop = msgs.scrollHeight;
     }
   }, delay);
@@ -1302,7 +1535,10 @@ window.chatAction = (rid) => {
   if (a.view) navigate(a.view, a.params || {});
   else if (a.trigger) {
     const input = document.getElementById('chat-input');
-    if (input) { input.value = a.trigger; sendChatMessage(); }
+    if (input) {
+      input.value = a.trigger;
+      sendChatMessage();
+    }
   }
 };
 
@@ -1311,83 +1547,137 @@ window.chatAction = (rid) => {
    ============================================================ */
 function getAIResponse(userText) {
   const t = userText.toLowerCase();
-  const sessions = (State.data?.sessions || []).filter(s => s.status === 'COMPLETED').sort((a,b) => new Date(b.startedAt)-new Date(a.startedAt));
+  const sessions = (State.data?.sessions || [])
+    .filter((s) => s.status === 'COMPLETED')
+    .sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt));
   const latest = sessions[0];
   const latestA = latest?.analysisId ? State.data.analysis[latest.analysisId] : null;
   const stats = State.data?.stats;
   const comm = stats?.lifetimeCommunication;
-  const notes = getAllFiles().filter(f => f.type === 'md');
+  const notes = getAllFiles().filter((f) => f.type === 'md');
 
   if (/last session|recent|how did i do|my score|results/.test(t)) {
-    if (!latest) return { text: "I don't see any completed sessions yet. Let's start one!", actions: [{ label: 'Start Interview', view: 'new-interview' }] };
+    if (!latest)
+      return {
+        text: "I don't see any completed sessions yet. Let's start one!",
+        actions: [{ label: 'Start Interview', view: 'new-interview' }],
+      };
     return {
-      text: `Your most recent session was **${latest.packageName}** with ${latest.tutorName} on ${formatDate(latest.startedAt)}.\n\n**Score: ${latest.score}/100** — ${scoreLabel(latest.score)}\n\n${latestA ? `**Key Strengths:**\n${latestA.strengths.slice(0,2).map(s=>`- ${s}`).join('\n')}\n\n**Top Improvement:**\n- ${latestA.improvements[0]}` : 'Full analysis is available in the History view.'}`,
-      actions: latestA ? [{ label: 'View Full Analysis', view: 'analysis', params: { id: latestA.id } }, { label: 'Practice Again', view: 'new-interview' }] : [{ label: 'View History', view: 'history' }]
+      text: `Your most recent session was **${latest.packageName}** with ${latest.tutorName} on ${formatDate(latest.startedAt)}.\n\n**Score: ${latest.score}/100** — ${scoreLabel(latest.score)}\n\n${
+        latestA
+          ? `**Key Strengths:**\n${latestA.strengths
+              .slice(0, 2)
+              .map((s) => `- ${s}`)
+              .join('\n')}\n\n**Top Improvement:**\n- ${latestA.improvements[0]}`
+          : 'Full analysis is available in the History view.'
+      }`,
+      actions: latestA
+        ? [
+            { label: 'View Full Analysis', view: 'analysis', params: { id: latestA.id } },
+            { label: 'Practice Again', view: 'new-interview' },
+          ]
+        : [{ label: 'View History', view: 'history' }],
     };
   }
 
   if (/improve|weakness|focus|practice next|what should|prioriti|next step/.test(t)) {
     const improvements = [];
-    sessions.slice(0,3).forEach(s => { const a = s.analysisId ? State.data.analysis[s.analysisId] : null; if (a) improvements.push(...a.improvements); });
-    const unique = [...new Set(improvements)].slice(0,4);
+    sessions.slice(0, 3).forEach((s) => {
+      const a = s.analysisId ? State.data.analysis[s.analysisId] : null;
+      if (a) improvements.push(...a.improvements);
+    });
+    const unique = [...new Set(improvements)].slice(0, 4);
     return {
-      text: `Based on your last ${Math.min(sessions.length,3)} sessions, here are your **top improvement areas** ranked by impact:\n\n${unique.map((u,i) => `${i+1}. ${u}`).join('\n')}\n\nFocus on #1 first — it'll have the highest impact on your overall score.`,
-      actions: [{ label: 'Start Targeted Practice', view: 'new-interview' }, { label: 'See Communication Stats', view: 'communication' }]
+      text: `Based on your last ${Math.min(sessions.length, 3)} sessions, here are your **top improvement areas** ranked by impact:\n\n${unique.map((u, i) => `${i + 1}. ${u}`).join('\n')}\n\nFocus on #1 first — it'll have the highest impact on your overall score.`,
+      actions: [
+        { label: 'Start Targeted Practice', view: 'new-interview' },
+        { label: 'See Communication Stats', view: 'communication' },
+      ],
     };
   }
 
   if (/stats|progress|streak|total time|how many|overview/.test(t)) {
     return {
       text: `Here's your **progress overview:**\n\n- **Sessions Completed:** ${stats.completedSessions}\n- **Average Score:** ${stats.avgScore}/100\n- **Best Category:** ${stats.bestCategory} (${stats.bestScore})\n- **Study Streak:** ${stats.studyStreakDays} days\n- **Total Practice:** ${stats.totalMinutes} minutes\n- **Communication Score:** ${comm.avgCommunicationScore}/100\n\n${comm.improvementTrend} on communication. Keep it up!`,
-      actions: [{ label: 'View History', view: 'history' }, { label: 'Communication Stats', view: 'communication' }]
+      actions: [
+        { label: 'View History', view: 'history' },
+        { label: 'Communication Stats', view: 'communication' },
+      ],
     };
   }
 
-  if (/dsa|algorithm|leetcode|array|tree|graph|sort|dynamic programming|dp|two pointer|sliding window/.test(t)) {
+  if (
+    /dsa|algorithm|leetcode|array|tree|graph|sort|dynamic programming|dp|two pointer|sliding window/.test(
+      t,
+    )
+  ) {
     return {
       text: `Your DSA sessions show **strong pattern recognition** — you identify optimal approaches quickly. Here's where to focus:\n\n**Current gaps from Alex's analysis:**\n1. **Think out loud** — your final solutions are correct but reasoning is invisible to interviewers\n2. **Clarifying questions** — always ask constraints before coding (sorted? duplicates? negatives?)\n3. **Edge cases** — build a checklist: empty, single, all-same, no-solution\n\n**7-day sprint plan:**\n- Days 1–2: Arrays & Hash Maps (Two Sum, Group Anagrams)\n- Days 3–4: Trees & Graphs (BFS/DFS, LCA)\n- Days 5–6: Dynamic Programming (Coin Change, LCS)\n- Day 7: Full mock + review`,
-      actions: [{ label: 'Start DSA Session', view: 'new-interview' }, { label: 'View DSA Analysis', view: 'analysis', params: { id: 'anal_002' } }]
+      actions: [
+        { label: 'Start DSA Session', view: 'new-interview' },
+        { label: 'View DSA Analysis', view: 'analysis', params: { id: 'anal_002' } },
+      ],
     };
   }
 
   if (/behavioral|star method|leadership|conflict|teamwork|tell me about/.test(t)) {
     return {
       text: `Your behavioral sessions with Priya show **solid STAR structure** and strong quantification. Your outage story (47min vs 4h) is genuinely compelling.\n\n**Where to push harder:**\n- **Reflection depth** — add what you *personally learned* (the "R" in STAR-AR)\n- **Story variety** — you've used the outage story twice. Build 5–6 distinct scenarios\n- **Filler words** — 14 instances in your last session. Practice recording yourself\n\n**Quick drill:** Answer "Tell me about a time you failed" and time yourself. Aim for 2 minutes with a clear reflection section.`,
-      actions: [{ label: 'Practice Behavioral', view: 'new-interview' }, { label: 'View Analysis', view: 'analysis', params: { id: 'anal_001' } }]
+      actions: [
+        { label: 'Practice Behavioral', view: 'new-interview' },
+        { label: 'View Analysis', view: 'analysis', params: { id: 'anal_001' } },
+      ],
     };
   }
 
-  if (/system design|architecture|distributed|microservice|scale|design a|url|feed|messaging/.test(t)) {
+  if (
+    /system design|architecture|distributed|microservice|scale|design a|url|feed|messaging/.test(t)
+  ) {
     return {
       text: `Your system design work shows solid fundamentals. Morgan flagged **3 critical gaps** that FAANG interviewers always probe:\n\n1. **Rate limiting** — always discuss token bucket or sliding window for public APIs\n2. **Observability** — mention Prometheus, distributed tracing (Jaeger), and alerting thresholds\n3. **Failure modes** — what happens when the cache is cold? When primary DB fails?\n\n**Practice order:** Pastebin → TinyURL → Instagram Feed (increasing complexity)\n\nAdding these three sections alone could move your score from 72 → 88+.`,
-      actions: [{ label: 'Practice System Design', view: 'new-interview' }, { label: 'View Design Analysis', view: 'analysis', params: { id: 'anal_003' } }]
+      actions: [
+        { label: 'Practice System Design', view: 'new-interview' },
+        { label: 'View Design Analysis', view: 'analysis', params: { id: 'anal_003' } },
+      ],
     };
   }
 
   if (/hr|salary|culture fit|notice period|compensation|expectations/.test(t)) {
     return {
       text: `Your HR Round score was **91/100** — excellent! You handled salary framing well and showed flexibility.\n\n**Key HR tips to keep sharp:**\n- Always anchor salary with research context ("Based on market data for this role and location…")\n- Frame notice period as negotiable flexibility rather than a hard constraint\n- Align culture questions with company values *specifically* — generic answers lose points\n\nYour confidence in the HR round transfers well — the challenge is maintaining that in technical pressure.`,
-      actions: [{ label: 'Practice HR Round', view: 'new-interview' }]
+      actions: [{ label: 'Practice HR Round', view: 'new-interview' }],
     };
   }
 
   if (/\balex\b/.test(t)) {
-    return { text: `**Alex Chen** specializes in Technical & DSA interviews. Direct, analytical, and challenge-driven — Alex won't let you skip edge cases or vague complexity analysis.\n\n**Your sessions with Alex:** Avg score ~${Math.round((79+83+74)/3)}/100. Strongest area: pattern recognition. Weakest: verbalized reasoning.\n\nAlex is ideal for: LeetCode practice, technical screens, and anyone who needs to sharpen their "think out loud" habit.`, actions: [{ label: 'Practice with Alex', view: 'new-interview' }] };
+    return {
+      text: `**Alex Chen** specializes in Technical & DSA interviews. Direct, analytical, and challenge-driven — Alex won't let you skip edge cases or vague complexity analysis.\n\n**Your sessions with Alex:** Avg score ~${Math.round((79 + 83 + 74) / 3)}/100. Strongest area: pattern recognition. Weakest: verbalized reasoning.\n\nAlex is ideal for: LeetCode practice, technical screens, and anyone who needs to sharpen their "think out loud" habit.`,
+      actions: [{ label: 'Practice with Alex', view: 'new-interview' }],
+    };
   }
 
   if (/\bpriya\b/.test(t)) {
-    return { text: `**Priya Sharma** specializes in Behavioral & HR interviews. Supportive and empathetic, she helps you structure authentic stories using the STAR method.\n\n**Your sessions with Priya:** Your strongest area. She's helped you develop the production outage story into a compelling leadership narrative.\n\nPriya is ideal for: FAANG behavioral prep, culture fit questions, and anyone who struggles with structure in storytelling.`, actions: [{ label: 'Practice with Priya', view: 'new-interview' }] };
+    return {
+      text: `**Priya Sharma** specializes in Behavioral & HR interviews. Supportive and empathetic, she helps you structure authentic stories using the STAR method.\n\n**Your sessions with Priya:** Your strongest area. She's helped you develop the production outage story into a compelling leadership narrative.\n\nPriya is ideal for: FAANG behavioral prep, culture fit questions, and anyone who struggles with structure in storytelling.`,
+      actions: [{ label: 'Practice with Priya', view: 'new-interview' }],
+    };
   }
 
   if (/\bmorgan\b/.test(t)) {
-    return { text: `**Morgan Blake** (Pro) specializes in System Design & Product. Strategic, big-picture thinker who brings FAANG-level expectations.\n\n**Your sessions with Morgan:** Score 72/100 — room to grow. Morgan's identified rate limiting, observability, and failure modes as your key gaps.\n\nMorgan is ideal for: Staff/Principal-level prep, system design rounds, and product manager interviews.`, actions: [{ label: 'Practice with Morgan', view: 'new-interview' }] };
+    return {
+      text: `**Morgan Blake** (Pro) specializes in System Design & Product. Strategic, big-picture thinker who brings FAANG-level expectations.\n\n**Your sessions with Morgan:** Score 72/100 — room to grow. Morgan's identified rate limiting, observability, and failure modes as your key gaps.\n\nMorgan is ideal for: Staff/Principal-level prep, system design rounds, and product manager interviews.`,
+      actions: [{ label: 'Practice with Morgan', view: 'new-interview' }],
+    };
   }
 
   if (/communication|filler|word choice|\bum\b|\blike\b|basically|phrasing/.test(t)) {
     const top = comm?.allTimeFillerStats[0];
     return {
       text: `Your **communication analysis** across all sessions:\n\n- **Avg Communication Score:** ${comm.avgCommunicationScore}/100\n- **Total Filler Words:** ${comm.totalFillerWordsAllTime} across all sessions\n- **Most Common Filler:** "${comm.topFillerAllTime}" (${top?.count} times)\n- **Trend:** ${comm.improvementTrend}\n- **Most Improved:** ${comm.mostImprovedArea}\n\n**Focus this week:** ${comm.nextFocusArea}\n\nThe fastest fix: record yourself answering one question and count your fillers. Awareness alone reduces them by ~40%.`,
-      actions: [{ label: 'Full Communication Stats', view: 'communication' }, { label: 'Practice Session', view: 'new-interview' }]
+      actions: [
+        { label: 'Full Communication Stats', view: 'communication' },
+        { label: 'Practice Session', view: 'new-interview' },
+      ],
     };
   }
 
@@ -1397,30 +1687,41 @@ function getAIResponse(userText) {
       const rw = latestCA.sentenceRewrites[0];
       return {
         text: `Here's a rewrite from your latest session:\n\n❌ **Original:**\n"${rw.original}"\n\n✅ **Rewritten:**\n"${rw.rewritten}"\n\n**Why it's better:** ${rw.improvement}\n\nWant more rewrites? Check the full communication analysis.`,
-        actions: [{ label: 'View Communication Analysis', view: 'analysis', params: { id: latestA.id } }]
+        actions: [
+          { label: 'View Communication Analysis', view: 'analysis', params: { id: latestA.id } },
+        ],
       };
     }
-    return { text: "Complete a voice session first and I'll have real sentence rewrites from your actual responses ready for you.", actions: [{ label: 'Start Session', view: 'new-interview' }] };
+    return {
+      text: "Complete a voice session first and I'll have real sentence rewrites from your actual responses ready for you.",
+      actions: [{ label: 'Start Session', view: 'new-interview' }],
+    };
   }
 
   if (/notes|files|my notes|resume|context|study material|cheatsheet|prep material/.test(t)) {
     const noteFiles = notes;
     return {
-      text: `I have access to **${noteFiles.length} of your notes** as context:\n\n${noteFiles.map(f => `- 📄 ${f.name}`).join('\n')}\n\nThese notes are used to personalize your mock interviews — when you start a session, the AI tutor uses your background, study patterns, and focus areas from these notes to generate more relevant questions.\n\nWant to add more notes? Go to Notes & Files to create or upload.`,
-      actions: [{ label: 'Manage Notes', view: 'files' }, { label: 'Start Customized Interview', view: 'new-interview' }]
+      text: `I have access to **${noteFiles.length} of your notes** as context:\n\n${noteFiles.map((f) => `- 📄 ${f.name}`).join('\n')}\n\nThese notes are used to personalize your mock interviews — when you start a session, the AI tutor uses your background, study patterns, and focus areas from these notes to generate more relevant questions.\n\nWant to add more notes? Go to Notes & Files to create or upload.`,
+      actions: [
+        { label: 'Manage Notes', view: 'files' },
+        { label: 'Start Customized Interview', view: 'new-interview' },
+      ],
     };
   }
 
   if (/give me a|practice|quiz me|test me|question/.test(t)) {
     const questions = [
       "Tell me about the most technically complex project you've worked on. What made it hard and how did you overcome it?",
-      "Given a sorted array, find if there exist two elements whose sum equals a target. Explain your approach and complexity.",
-      "Design a notification system that handles 50 million events per day. Start with your requirements.",
-      "Describe a time you had to influence stakeholders without direct authority. What was your strategy?",
+      'Given a sorted array, find if there exist two elements whose sum equals a target. Explain your approach and complexity.',
+      'Design a notification system that handles 50 million events per day. Start with your requirements.',
+      'Describe a time you had to influence stakeholders without direct authority. What was your strategy?',
       "What's your current expected compensation range, and how did you arrive at it?",
     ];
     const q = questions[Math.floor(Math.random() * questions.length)];
-    return { text: `Here's a practice question:\n\n**"${q}"**\n\nTake 30 seconds to structure your thoughts, then respond. I'll give you feedback based on your answer.`, actions: [{ label: 'Start Full Session', view: 'new-interview' }] };
+    return {
+      text: `Here's a practice question:\n\n**"${q}"**\n\nTake 30 seconds to structure your thoughts, then respond. I'll give you feedback based on your answer.`,
+      actions: [{ label: 'Start Full Session', view: 'new-interview' }],
+    };
   }
 
   return {
@@ -1429,7 +1730,7 @@ function getAIResponse(userText) {
       { label: 'Last Session Review', trigger: 'How did I do in my last session?' },
       { label: 'What to Improve', trigger: 'What should I focus on to improve?' },
       { label: 'Start Practice', view: 'new-interview' },
-    ]
+    ],
   };
 }
 
@@ -1451,22 +1752,30 @@ async function renderFiles() {
           </div>
         </div>
         <div class="file-tree-body">
-          ${fs.folders.map(f => renderFolderNode(f)).join('')}
-          ${fs.rootFiles.length ? `
+          ${fs.folders.map((f) => renderFolderNode(f)).join('')}
+          ${
+            fs.rootFiles.length
+              ? `
             <div style="padding:6px 8px;font-size:10px;color:var(--text-m);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-top:8px">Root Files</div>
-            ${fs.rootFiles.map(f => renderFileNode(f)).join('')}
-          ` : ''}
+            ${fs.rootFiles.map((f) => renderFileNode(f)).join('')}
+          `
+              : ''
+          }
         </div>
         <div class="tree-storage-info">📁 ${fs.storageRoot} · ${getAllFiles().length} files</div>
       </div>
 
       <div class="editor-area" id="editor-area">
-        ${State.selectedFileId ? renderEditorContent() : `
+        ${
+          State.selectedFileId
+            ? renderEditorContent()
+            : `
           <div class="no-file-selected">
             <div class="no-file-icon">📝</div>
             <div class="no-file-text">Select a file to view or edit</div>
             <button class="btn btn-primary btn-sm" onclick="createFile()" style="margin-top:8px">+ New Note</button>
-          </div>`}
+          </div>`
+        }
       </div>
     </div>`;
 }
@@ -1482,7 +1791,7 @@ function renderFolderNode(folder) {
         <span class="tree-folder-count">${folder.files.length}</span>
       </div>
       <div class="tree-files" style="${isOpen ? 'display:block' : 'display:none'}">
-        ${folder.files.map(f => renderFileNode(f)).join('')}
+        ${folder.files.map((f) => renderFileNode(f)).join('')}
         ${folder.files.length === 0 ? `<div style="padding:5px 8px;font-size:11px;color:var(--text-m)">Empty folder</div>` : ''}
       </div>
     </div>`;
@@ -1501,7 +1810,8 @@ function renderFileNode(file) {
 
 function renderEditorContent() {
   const file = findFile(State.selectedFileId);
-  if (!file) return `<div class="no-file-selected"><div class="no-file-icon">🔍</div><div class="no-file-text">File not found</div></div>`;
+  if (!file)
+    return `<div class="no-file-selected"><div class="no-file-icon">🔍</div><div class="no-file-text">File not found</div></div>`;
 
   if (file.type !== 'md') {
     return `
@@ -1523,16 +1833,17 @@ function renderEditorContent() {
     <div class="editor-toolbar">
       <span class="editor-filename">${file.name}</span>
       <div class="editor-mode-tabs">
-        <button class="editor-mode-btn ${State.editorMode==='edit'?'active':''}" onclick="switchEditorMode('edit')">Edit</button>
-        <button class="editor-mode-btn ${State.editorMode==='preview'?'active':''}" onclick="switchEditorMode('preview')">Preview</button>
+        <button class="editor-mode-btn ${State.editorMode === 'edit' ? 'active' : ''}" onclick="switchEditorMode('edit')">Edit</button>
+        <button class="editor-mode-btn ${State.editorMode === 'preview' ? 'active' : ''}" onclick="switchEditorMode('preview')">Preview</button>
       </div>
       <button class="btn btn-secondary btn-sm" onclick="saveFile('${file.id}')">${IC.save} Save</button>
       <button class="btn btn-danger btn-sm" onclick="deleteFile('${file.id}')">${IC.trash}</button>
     </div>
     <div class="editor-body">
-      ${State.editorMode === 'edit'
-        ? `<textarea class="editor-textarea" id="editor-textarea" oninput="fileEditorChange('${file.id}',this.value)">${file.content || ''}</textarea>`
-        : `<div class="editor-preview report-content">${renderMarkdown(file.content || '')}</div>`
+      ${
+        State.editorMode === 'edit'
+          ? `<textarea class="editor-textarea" id="editor-textarea" oninput="fileEditorChange('${file.id}',this.value)">${file.content || ''}</textarea>`
+          : `<div class="editor-preview report-content">${renderMarkdown(file.content || '')}</div>`
       }
     </div>`;
 }
@@ -1543,21 +1854,34 @@ window.toggleFolder = (id) => {
   renderFiles();
 };
 
-window.selectFile = (id) => { State.selectedFileId = id; State.editorMode = 'edit'; renderFiles(); };
+window.selectFile = (id) => {
+  State.selectedFileId = id;
+  State.editorMode = 'edit';
+  renderFiles();
+};
 
-window.switchEditorMode = (mode) => { State.editorMode = mode; document.getElementById('editor-area').innerHTML = renderEditorContent(); };
+window.switchEditorMode = (mode) => {
+  State.editorMode = mode;
+  document.getElementById('editor-area').innerHTML = renderEditorContent();
+};
 
 window.fileEditorChange = (id, val) => {
   const file = findFile(id);
   if (file) file.content = val;
   clearTimeout(State.filesAutoSaveTimer);
-  State.filesAutoSaveTimer = setTimeout(() => showToast('Auto-saved', file?.name, 'success', 2000), 2000);
+  State.filesAutoSaveTimer = setTimeout(
+    () => showToast('Auto-saved', file?.name, 'success', 2000),
+    2000,
+  );
 };
 
 window.saveFile = (id) => {
   const ta = document.getElementById('editor-textarea');
   const file = findFile(id);
-  if (file && ta) { file.content = ta.value; file.updatedAt = new Date().toISOString(); }
+  if (file && ta) {
+    file.content = ta.value;
+    file.updatedAt = new Date().toISOString();
+  }
   showToast('Saved', findFile(id)?.name, 'success');
 };
 
@@ -1565,8 +1889,10 @@ window.deleteFile = (id) => {
   const file = findFile(id);
   if (!file) return;
   const fs = State.data.fileSystem;
-  fs.rootFiles = fs.rootFiles.filter(f => f.id !== id);
-  fs.folders.forEach(folder => { folder.files = folder.files.filter(f => f.id !== id); });
+  fs.rootFiles = fs.rootFiles.filter((f) => f.id !== id);
+  fs.folders.forEach((folder) => {
+    folder.files = folder.files.filter((f) => f.id !== id);
+  });
   if (State.selectedFileId === id) State.selectedFileId = null;
   showToast('Deleted', file.name, 'warning');
   renderFiles();
@@ -1574,7 +1900,7 @@ window.deleteFile = (id) => {
 
 window.deleteFolder = (id) => {
   const fs = State.data.fileSystem;
-  fs.folders = fs.folders.filter(f => f.id !== id);
+  fs.folders = fs.folders.filter((f) => f.id !== id);
   State.expandedFolders.delete(id);
   showToast('Folder deleted', '', 'warning');
   renderFiles();
@@ -1584,7 +1910,16 @@ window.createFile = () => {
   const name = prompt('File name (without .md):');
   if (!name) return;
   const fs = State.data.fileSystem;
-  const file = { id: 'file_' + Date.now(), name: name + '.md', type: 'md', sizeKB: 0, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), folderId: null, content: `# ${name}\n\n` };
+  const file = {
+    id: 'file_' + Date.now(),
+    name: name + '.md',
+    type: 'md',
+    sizeKB: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    folderId: null,
+    content: `# ${name}\n\n`,
+  };
   fs.rootFiles.push(file);
   State.selectedFileId = file.id;
   State.editorMode = 'edit';
@@ -1595,7 +1930,12 @@ window.createFile = () => {
 window.createFolder = () => {
   const name = prompt('Folder name:');
   if (!name) return;
-  State.data.fileSystem.folders.push({ id: 'folder_' + Date.now(), name, createdAt: new Date().toISOString(), files: [] });
+  State.data.fileSystem.folders.push({
+    id: 'folder_' + Date.now(),
+    name,
+    createdAt: new Date().toISOString(),
+    files: [],
+  });
   showToast('Folder created', name, 'success');
   renderFiles();
 };
@@ -1608,7 +1948,16 @@ window.uploadFile = () => {
     const f = e.target.files[0];
     if (!f) return;
     const ext = f.name.split('.').pop().toLowerCase();
-    const file = { id: 'file_' + Date.now(), name: f.name, type: ext, sizeKB: Math.round(f.size / 1024 * 10) / 10, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), folderId: null, content: ext === 'md' ? '' : null };
+    const file = {
+      id: 'file_' + Date.now(),
+      name: f.name,
+      type: ext,
+      sizeKB: Math.round((f.size / 1024) * 10) / 10,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      folderId: null,
+      content: ext === 'md' ? '' : null,
+    };
     State.data.fileSystem.rootFiles.push(file);
     State.selectedFileId = file.id;
     showToast('Uploaded', f.name + ' added to your notes', 'success');
@@ -1623,7 +1972,7 @@ window.uploadFile = () => {
 async function renderCommunication() {
   const stats = await MockAPI.getStats();
   const comm = stats.lifetimeCommunication;
-  const maxBar = Math.max(...comm.recentSessionScores.map(s => s.score));
+  const maxBar = Math.max(...comm.recentSessionScores.map((s) => s.score));
 
   document.getElementById('view-root').innerHTML = `
     <div>
@@ -1665,14 +2014,16 @@ async function renderCommunication() {
           <div class="card">
             <div class="section-title mb-4">Score Trend — Recent Sessions</div>
             <div class="trend-chart" style="height:100px">
-              ${comm.recentSessionScores.map(rs => {
-                const h = Math.round((rs.score / 100) * 90);
-                const session = State.data.sessions.find(s => s.id === rs.sessionId);
-                return `<div class="trend-bar-wrap" onclick="${session?.analysisId ? `navigate('analysis',{id:'${session.analysisId}'})` : ''}" style="${session?.analysisId ? 'cursor:pointer' : ''}">
+              ${comm.recentSessionScores
+                .map((rs) => {
+                  const h = Math.round((rs.score / 100) * 90);
+                  const session = State.data.sessions.find((s) => s.id === rs.sessionId);
+                  return `<div class="trend-bar-wrap" onclick="${session?.analysisId ? `navigate('analysis',{id:'${session.analysisId}'})` : ''}" style="${session?.analysisId ? 'cursor:pointer' : ''}">
                   <div class="trend-bar" data-height="${h}px" style="height:4px" title="${rs.score}/100 — ${rs.date}"></div>
                   <span class="trend-bar-label">${rs.date.slice(5)}</span>
                 </div>`;
-              }).join('')}
+                })
+                .join('')}
             </div>
           </div>
 
@@ -1689,24 +2040,31 @@ async function renderCommunication() {
         <div class="two-col">
           <div>
             <div class="section-title mb-4">All-Time Filler Words</div>
-            ${comm.allTimeFillerStats.map(f => `
+            ${comm.allTimeFillerStats
+              .map(
+                (f) => `
               <div class="filler-item">
                 <span class="filler-word">"${f.word}"</span>
                 <div class="filler-bar-wrap">
                   <div class="score-bar-track">
-                    <div class="score-bar-fill" data-width="${Math.round((f.count/comm.allTimeFillerStats[0].count)*100)}" style="width:0%;background:${f.severity==='high'?'var(--error)':f.severity==='medium'?'var(--warning)':'var(--info)'}"></div>
+                    <div class="score-bar-fill" data-width="${Math.round((f.count / comm.allTimeFillerStats[0].count) * 100)}" style="width:0%;background:${f.severity === 'high' ? 'var(--error)' : f.severity === 'medium' ? 'var(--warning)' : 'var(--info)'}"></div>
                   </div>
                 </div>
                 <span class="filler-count">${f.count}×</span>
                 <span style="font-size:11px;color:var(--text-m)">${f.percentOfTotal}%</span>
-                <span class="badge ${f.severity==='high'?'badge-error':f.severity==='medium'?'badge-warning':'badge-info'}">${f.severity}</span>
+                <span class="badge ${f.severity === 'high' ? 'badge-error' : f.severity === 'medium' ? 'badge-warning' : 'badge-info'}">${f.severity}</span>
               </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
 
             <div class="section-title mt-4 mb-4">Recent Session Scores</div>
-            ${comm.recentSessionScores.slice().reverse().map(rs => {
-              const session = State.data.sessions.find(s => s.id === rs.sessionId);
-              return `<div class="recent-session-item" ${session?.analysisId ? `onclick="navigate('analysis',{id:'${session.analysisId}'})"` : ''} style="${session?.analysisId ? 'cursor:pointer' : ''}">
+            ${comm.recentSessionScores
+              .slice()
+              .reverse()
+              .map((rs) => {
+                const session = State.data.sessions.find((s) => s.id === rs.sessionId);
+                return `<div class="recent-session-item" ${session?.analysisId ? `onclick="navigate('analysis',{id:'${session.analysisId}'})"` : ''} style="${session?.analysisId ? 'cursor:pointer' : ''}">
                 ${session ? tutorAv(session.tutorSlug, 34) : '<div style="width:34px;height:34px;border-radius:8px;background:var(--bg-border)"></div>'}
                 <div class="rsi-body">
                   <div class="rsi-name">${session?.packageName || rs.sessionId}</div>
@@ -1714,27 +2072,36 @@ async function renderCommunication() {
                 </div>
                 <div class="rsi-score" style="color:${scoreColor(rs.score)}">${rs.score}</div>
               </div>`;
-            }).join('')}
+              })
+              .join('')}
           </div>
 
           <div>
             <div class="section-title mb-4">Professional Replacements</div>
-            ${(State.data.analysis.anal_001?.communicationAnalysis?.topReplacements || []).map(r => `
+            ${(State.data.analysis.anal_001?.communicationAnalysis?.topReplacements || [])
+              .map(
+                (r) => `
               <div class="replacement-item">
                 <div class="replacement-word">"${r.original}"</div>
-                <div class="replacement-alts">${r.betterAlternatives.map(a => `<span class="alt-chip">${a}</span>`).join('')}</div>
+                <div class="replacement-alts">${r.betterAlternatives.map((a) => `<span class="alt-chip">${a}</span>`).join('')}</div>
                 <div class="replacement-example">${r.exampleInContext}</div>
               </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
 
             <div class="section-title mt-4 mb-4">Sentence Rewrites</div>
-            ${(State.data.analysis.anal_001?.communicationAnalysis?.sentenceRewrites || []).map(rw => `
+            ${(State.data.analysis.anal_001?.communicationAnalysis?.sentenceRewrites || [])
+              .map(
+                (rw) => `
               <div class="rewrite-item">
                 <div class="rewrite-original">❌ ${rw.original}</div>
                 <div class="rewrite-arrow">↓ ${rw.improvement}</div>
                 <div class="rewrite-new">✓ ${rw.rewritten}</div>
               </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
           </div>
         </div>
 
@@ -1755,26 +2122,37 @@ async function renderSettings() {
     providers: `
       <div class="settings-section-title">AI Providers</div>
       <div class="settings-section-sub">Configured providers for speech, analysis, and coaching. Fallback chain runs top to bottom.</div>
-      ${providers.map(p => `
+      ${providers
+        .map(
+          (p) => `
         <div class="provider-card">
           <div class="provider-icon">${providerIcons[p.type] || '⚙'}</div>
           <div class="provider-body">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:2px">
               <div class="provider-name">${p.name}</div>
-              <span class="status-dot ${p.status.replace('-','-')}">${p.status.replace(/-/g,' ')}</span>
+              <span class="status-dot ${p.status.replace('-', '-')}">${p.status.replace(/-/g, ' ')}</span>
             </div>
             <div class="provider-type">${p.type}${p.version ? ` · ${p.version}` : ''}</div>
             <div class="provider-note">${p.note}</div>
             ${p.installHint ? `<div class="provider-hint">${p.installHint}</div>` : ''}
           </div>
         </div>
-      `).join('')}`,
+      `,
+        )
+        .join('')}`,
 
     apikeys: `
       <div class="settings-section-title">API Keys</div>
       <div class="settings-section-sub">Keys are stored locally and never sent to iPrep servers. Used only for direct provider calls.</div>
       <div class="api-key-form">
-        ${[['Deepgram','deepgram','STT provider for live transcription'],['Anthropic / Claude','anthropic','Primary AI analysis engine'],['Google Gemini','gemini','Fallback AI provider'],['OpenAI','openai','Secondary fallback AI']].map(([label,key,hint]) => `
+        ${[
+          ['Deepgram', 'deepgram', 'STT provider for live transcription'],
+          ['Anthropic / Claude', 'anthropic', 'Primary AI analysis engine'],
+          ['Google Gemini', 'gemini', 'Fallback AI provider'],
+          ['OpenAI', 'openai', 'Secondary fallback AI'],
+        ]
+          .map(
+            ([label, key, hint]) => `
           <div class="api-key-row">
             <div class="input-label">${label}</div>
             <div class="input-with-action">
@@ -1782,7 +2160,9 @@ async function renderSettings() {
               <button class="input-action-btn" onclick="toggleKeyVisibility('key-${key}',this)">${IC.eye}</button>
             </div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
         <button class="btn btn-primary" onclick="saveAPIKeys()" style="width:fit-content">Save Keys</button>
       </div>`,
 
@@ -1793,13 +2173,13 @@ async function renderSettings() {
         <div class="input-group">
           <div class="input-label">Default Tutor</div>
           <select class="input" id="pref-tutor">
-            ${(State.data?.tutors||[]).map(t => `<option value="${t.slug}">${t.name}</option>`).join('')}
+            ${(State.data?.tutors || []).map((t) => `<option value="${t.slug}">${t.name}</option>`).join('')}
           </select>
         </div>
         <div class="input-group">
           <div class="input-label">Default Package</div>
           <select class="input" id="pref-pkg">
-            ${(State.data?.packages||[]).map(p => `<option value="${p.slug}">${p.name}</option>`).join('')}
+            ${(State.data?.packages || []).map((p) => `<option value="${p.slug}">${p.name}</option>`).join('')}
           </select>
         </div>
         <div class="settings-divider"></div>
@@ -1829,7 +2209,7 @@ async function renderSettings() {
         </div>
         <div class="settings-divider"></div>
         <button class="btn btn-primary" onclick="savePreferences()" style="width:fit-content">Save Preferences</button>
-      </div>`
+      </div>`,
   };
 
   document.getElementById('view-root').innerHTML = `
@@ -1843,9 +2223,17 @@ async function renderSettings() {
       <div class="page-body">
         <div class="settings-layout">
           <div class="settings-nav">
-            ${[['providers','⚡ Providers'],['apikeys','🔑 API Keys'],['preferences','⚙ Preferences']].map(([key,label]) => `
-              <button class="settings-nav-item ${State.settingsTab===key?'active':''}" onclick="switchSettingsTab('${key}')">${label}</button>
-            `).join('')}
+            ${[
+              ['providers', '⚡ Providers'],
+              ['apikeys', '🔑 API Keys'],
+              ['preferences', '⚙ Preferences'],
+            ]
+              .map(
+                ([key, label]) => `
+              <button class="settings-nav-item ${State.settingsTab === key ? 'active' : ''}" onclick="switchSettingsTab('${key}')">${label}</button>
+            `,
+              )
+              .join('')}
           </div>
           <div id="settings-content">
             ${tabContent[State.settingsTab] || tabContent.providers}
@@ -1860,8 +2248,10 @@ window.switchSettingsTab = (tab) => {
   renderSettings();
 };
 
-window.saveAPIKeys = () => showToast('API Keys Saved', 'Keys stored locally in this session', 'success');
-window.savePreferences = () => showToast('Preferences Saved', 'Your settings have been updated', 'success');
+window.saveAPIKeys = () =>
+  showToast('API Keys Saved', 'Keys stored locally in this session', 'success');
+window.savePreferences = () =>
+  showToast('Preferences Saved', 'Your settings have been updated', 'success');
 
 window.toggleKeyVisibility = (id, btn) => {
   const input = document.getElementById(id);
@@ -1881,9 +2271,10 @@ window.toggleTheme = () => {
   localStorage.setItem('iprep-theme', root.dataset.theme);
   const icon = document.getElementById('theme-icon');
   if (icon) {
-    icon.innerHTML = root.dataset.theme === 'light'
-      ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`
-      : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+    icon.innerHTML =
+      root.dataset.theme === 'light'
+        ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`
+        : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
   }
 };
 
@@ -1900,17 +2291,29 @@ async function init() {
     }
   }
 
-  document.getElementById('view-root').innerHTML = `<div class="loading-screen"><div class="spinner"></div><div style="font-size:13px;color:var(--text-m)">Loading iPrep…</div></div>`;
+  document.getElementById('view-root').innerHTML =
+    `<div class="loading-screen"><div class="spinner"></div><div style="font-size:13px;color:var(--text-m)">Loading iPrep…</div></div>`;
 
   try {
     await MockAPI.load();
   } catch (e) {
-    document.getElementById('view-root').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load data</div><div class="empty-text">Make sure mock-data.json is served from the same directory.<br>${e.message}</div></div>`;
+    document.getElementById('view-root').innerHTML =
+      `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load data</div><div class="empty-text">Make sure mock-data.json is served from the same directory.<br>${e.message}</div></div>`;
     return;
   }
 
   const hash = window.location.hash.replace('#', '') || 'dashboard';
-  const validRoutes = ['dashboard','new-interview','session','analysis','history','chat','files','communication','settings'];
+  const validRoutes = [
+    'dashboard',
+    'new-interview',
+    'session',
+    'analysis',
+    'history',
+    'chat',
+    'files',
+    'communication',
+    'settings',
+  ];
   const route = validRoutes.includes(hash) ? hash : 'dashboard';
 
   navigate(route);
@@ -1920,7 +2323,7 @@ async function init() {
     if (validRoutes.includes(h) && h !== State.currentView) {
       State.currentView = h;
       renderView();
-      document.querySelectorAll('.nav-item').forEach(el => {
+      document.querySelectorAll('.nav-item').forEach((el) => {
         el.classList.toggle('active', el.dataset.route === h);
       });
     }

@@ -58,12 +58,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/health",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "health"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
             },
             "description": "Server health endpoint from the backend architecture docs."
           },
@@ -81,13 +77,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/packages",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "packages"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "packages"]
             },
             "description": "Maps to MockAPI.getPackages()."
           },
@@ -100,14 +91,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/packages/{{packageId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "packages",
-                "{{packageId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "packages", "{{packageId}}"]
             },
             "description": "Package detail route documented in ARCHITECTURE.md."
           },
@@ -125,13 +110,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/tutors",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "tutors"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "tutors"]
             },
             "description": "Maps to MockAPI.getTutors()."
           },
@@ -144,14 +124,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/tutors/{{tutorId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "tutors",
-                "{{tutorId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "tutors", "{{tutorId}}"]
             },
             "description": "Tutor detail route documented in ARCHITECTURE.md."
           },
@@ -170,13 +144,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/interview",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "interview"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interview"]
             },
             "description": "Inferred from MockAPI.getSessions() for the demo history/dashboard views."
           },
@@ -198,13 +167,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/interview",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "interview"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interview"]
             },
             "description": "RESTful v1 equivalent of MockAPI.startSession(pkg, tutor). The older architecture docs also mention POST /api/interview/start."
           },
@@ -226,14 +190,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/interview/start",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "interview",
-                "start"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interview", "start"]
             },
             "description": "Included because backend-architecture.md documents POST /api/interview/start."
           },
@@ -246,14 +204,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/interview/{{sessionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "interview",
-                "{{sessionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interview", "{{sessionId}}"]
             },
             "description": "Matches http://localhost:3000/api/v1/interview/:id."
           },
@@ -275,15 +227,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/interview/{{sessionId}}/end",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "interview",
-                "{{sessionId}}",
-                "end"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interview", "{{sessionId}}", "end"]
             },
             "description": "Maps to MockAPI.endSession(id)."
           },
@@ -296,15 +241,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/interview/{{sessionId}}/transcript",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "interview",
-                "{{sessionId}}",
-                "transcript"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interview", "{{sessionId}}", "transcript"]
             },
             "description": "Fetches the full transcript for a session."
           },
@@ -317,14 +255,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/interview/{{sessionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "interview",
-                "{{sessionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "interview", "{{sessionId}}"]
             },
             "description": "Deletes a local session."
           },
@@ -351,14 +283,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/analysis/{{sessionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "analysis",
-                "{{sessionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "analysis", "{{sessionId}}"]
             },
             "description": "Triggers analysis for a completed interview session."
           },
@@ -371,14 +297,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/analysis/{{sessionId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "analysis",
-                "{{sessionId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "analysis", "{{sessionId}}"]
             },
             "description": "Backend route documented as /analysis/:sessionId."
           },
@@ -391,15 +311,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/analysis/by-id/{{analysisId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "analysis",
-                "by-id",
-                "{{analysisId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "analysis", "by-id", "{{analysisId}}"]
             },
             "description": "Demo alias inferred from MockAPI.getAnalysis(id), because app.js stores analysis records by IDs like anal_001."
           },
@@ -417,13 +330,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/stats",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "stats"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "stats"]
             },
             "description": "Inferred from MockAPI.getStats() for dashboard totals, average score, and streak."
           },
@@ -441,14 +349,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/providers/status",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "providers",
-                "status"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "providers", "status"]
             },
             "description": "Maps to MockAPI.getProviders() and the backend provider status route."
           },
@@ -470,14 +372,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/providers/validate",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "providers",
-                "validate"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "providers", "validate"]
             },
             "description": "Validates an API key or local provider configuration."
           },
@@ -495,13 +391,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/settings",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "settings"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "settings"]
             },
             "description": "Reads local user settings."
           },
@@ -523,13 +414,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/settings",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "settings"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "settings"]
             },
             "description": "Updates preferences used by the demo settings view."
           },
@@ -551,14 +437,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/settings/keys",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "settings",
-                "keys"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "settings", "keys"]
             },
             "description": "Stores BYOK provider key metadata."
           },
@@ -571,15 +451,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/settings/keys/{{provider}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "settings",
-                "keys",
-                "{{provider}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "settings", "keys", "{{provider}}"]
             },
             "description": "Removes a saved provider key."
           },
@@ -598,14 +471,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/chat/conversations",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "chat",
-                "conversations"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "chat", "conversations"]
             },
             "description": "Maps to MockAPI.getConversations()."
           },
@@ -627,14 +494,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/chat/conversations",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "chat",
-                "conversations"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "chat", "conversations"]
             },
             "description": "Maps to MockAPI.createConversation(title, firstAiMsg)."
           },
@@ -647,15 +508,8 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/chat/conversations/{{conversationId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "chat",
-                "conversations",
-                "{{conversationId}}"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "chat", "conversations", "{{conversationId}}"]
             },
             "description": "Maps to MockAPI.getConversation(id)."
           },
@@ -677,16 +531,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/{{apiPrefix}}/chat/conversations/{{conversationId}}/messages",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "{{apiPrefix}}",
-                "chat",
-                "conversations",
-                "{{conversationId}}",
-                "messages"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["{{apiPrefix}}", "chat", "conversations", "{{conversationId}}", "messages"]
             },
             "description": "Maps to MockAPI.addMessage(convId, role, text, actions)."
           },

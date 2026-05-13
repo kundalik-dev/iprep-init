@@ -151,11 +151,11 @@ Add extra files only when users need them at runtime or for npm package document
 
 Use semantic versioning:
 
-| Change Type | Version Bump | Example |
-| ----------- | ------------ | ------- |
-| Bug fix | Patch | `1.2.1` -> `1.2.2` |
-| New backward-compatible feature | Minor | `1.2.1` -> `1.3.0` |
-| Breaking change | Major | `1.2.1` -> `2.0.0` |
+| Change Type                     | Version Bump | Example            |
+| ------------------------------- | ------------ | ------------------ |
+| Bug fix                         | Patch        | `1.2.1` -> `1.2.2` |
+| New backward-compatible feature | Minor        | `1.2.1` -> `1.3.0` |
+| Breaking change                 | Major        | `1.2.1` -> `2.0.0` |
 
 Update the version in:
 
@@ -212,4 +212,3 @@ Never publish if:
 - The package version already exists on npm.
 
 Do not use `--force` with npm publish. npm versions are immutable; fix the issue and publish a new version.
-

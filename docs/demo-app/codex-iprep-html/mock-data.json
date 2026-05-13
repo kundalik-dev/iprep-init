@@ -132,12 +132,36 @@
       "recordingUrl": "mock://recordings/sess_001.mp3",
       "recordingDurationSec": 1920,
       "transcript": [
-        { "speaker": "ai", "text": "Welcome, Kundalik! Let's start with a classic behavioral question. Tell me about a time you led a team through a difficult project.", "timestampSec": 8 },
-        { "speaker": "user", "text": "Yeah so basically I was the lead on this project, and um, we had like five teams involved in a 48-hour hackathon. Three members dropped out suddenly and I kind of had to just figure it out.", "timestampSec": 22 },
-        { "speaker": "ai", "text": "Good context. What specific actions did you take as the leader to keep things on track?", "timestampSec": 52 },
-        { "speaker": "user", "text": "So I kind of just redistributed the tasks you know, basically matched people to what they were strongest at. And honestly I stayed up the last night debugging. We placed 2nd out of 80 teams.", "timestampSec": 66 },
-        { "speaker": "ai", "text": "Excellent result! Now, describe a conflict you had with a teammate and how you resolved it.", "timestampSec": 96 },
-        { "speaker": "user", "text": "Honestly, a teammate and I disagreed on the tech stack. I like scheduled a 1:1 and um, listened to his reasoning, then proposed we prototype both options for like 2 days. We went with his choice — the data supported it.", "timestampSec": 112 }
+        {
+          "speaker": "ai",
+          "text": "Welcome, Kundalik! Let's start with a classic behavioral question. Tell me about a time you led a team through a difficult project.",
+          "timestampSec": 8
+        },
+        {
+          "speaker": "user",
+          "text": "Yeah so basically I was the lead on this project, and um, we had like five teams involved in a 48-hour hackathon. Three members dropped out suddenly and I kind of had to just figure it out.",
+          "timestampSec": 22
+        },
+        {
+          "speaker": "ai",
+          "text": "Good context. What specific actions did you take as the leader to keep things on track?",
+          "timestampSec": 52
+        },
+        {
+          "speaker": "user",
+          "text": "So I kind of just redistributed the tasks you know, basically matched people to what they were strongest at. And honestly I stayed up the last night debugging. We placed 2nd out of 80 teams.",
+          "timestampSec": 66
+        },
+        {
+          "speaker": "ai",
+          "text": "Excellent result! Now, describe a conflict you had with a teammate and how you resolved it.",
+          "timestampSec": 96
+        },
+        {
+          "speaker": "user",
+          "text": "Honestly, a teammate and I disagreed on the tech stack. I like scheduled a 1:1 and um, listened to his reasoning, then proposed we prototype both options for like 2 days. We went with his choice — the data supported it.",
+          "timestampSec": 112
+        }
       ]
     },
     {
@@ -157,12 +181,36 @@
       "recordingUrl": "mock://recordings/sess_002.mp3",
       "recordingDurationSec": 3900,
       "transcript": [
-        { "speaker": "ai", "text": "Let's start with a classic. Find the longest substring without repeating characters. What's your approach?", "timestampSec": 10 },
-        { "speaker": "user", "text": "So um, I'll basically use two nested loops to check all substrings and track the max length. It's like O(n squared) time.", "timestampSec": 24 },
-        { "speaker": "ai", "text": "That's correct but not optimal. Can you bring it down to O(n)?", "timestampSec": 48 },
-        { "speaker": "user", "text": "Hmm, yeah I think I can kind of use a hash set and two pointers? Basically like move the right pointer forward, and if we find a repeat, move the left pointer until the window is valid again.", "timestampSec": 62 },
-        { "speaker": "ai", "text": "Exactly — that's the sliding window pattern. Now, maximum path sum in a binary tree.", "timestampSec": 98 },
-        { "speaker": "user", "text": "Okay so I'll use DFS recursion. Basically at each node I consider the left and right paths. Um, if a child returns a negative value, I just ignore it by taking the max of 0 and the child result.", "timestampSec": 115 }
+        {
+          "speaker": "ai",
+          "text": "Let's start with a classic. Find the longest substring without repeating characters. What's your approach?",
+          "timestampSec": 10
+        },
+        {
+          "speaker": "user",
+          "text": "So um, I'll basically use two nested loops to check all substrings and track the max length. It's like O(n squared) time.",
+          "timestampSec": 24
+        },
+        {
+          "speaker": "ai",
+          "text": "That's correct but not optimal. Can you bring it down to O(n)?",
+          "timestampSec": 48
+        },
+        {
+          "speaker": "user",
+          "text": "Hmm, yeah I think I can kind of use a hash set and two pointers? Basically like move the right pointer forward, and if we find a repeat, move the left pointer until the window is valid again.",
+          "timestampSec": 62
+        },
+        {
+          "speaker": "ai",
+          "text": "Exactly — that's the sliding window pattern. Now, maximum path sum in a binary tree.",
+          "timestampSec": 98
+        },
+        {
+          "speaker": "user",
+          "text": "Okay so I'll use DFS recursion. Basically at each node I consider the left and right paths. Um, if a child returns a negative value, I just ignore it by taking the max of 0 and the child result.",
+          "timestampSec": 115
+        }
       ]
     },
     {
@@ -182,12 +230,36 @@
       "recordingUrl": "mock://recordings/sess_003.mp3",
       "recordingDurationSec": 3480,
       "transcript": [
-        { "speaker": "ai", "text": "Design a URL shortener like bit.ly that handles 100 million URLs per day. Walk me through your approach.", "timestampSec": 12 },
-        { "speaker": "user", "text": "Sure. So basically first I'd clarify requirements — do we need custom short codes, analytics, expiration? Assuming a standard read-heavy workload with eventual consistency.", "timestampSec": 28 },
-        { "speaker": "ai", "text": "Good clarification habit. Proceed with the core design.", "timestampSec": 60 },
-        { "speaker": "user", "text": "So like I'd use a distributed key-value store — DynamoDB for example. A hashing service to generate like 7-character IDs. Then a load balancer in front and CDN for caching popular URLs.", "timestampSec": 74 },
-        { "speaker": "ai", "text": "Solid core. What about failure modes and operational concerns?", "timestampSec": 118 },
-        { "speaker": "user", "text": "Hmm, yeah I kind of didn't fully think about that. Um, I guess we'd need monitoring? And basically some kind of rate limiting too — hadn't considered that angle.", "timestampSec": 132 }
+        {
+          "speaker": "ai",
+          "text": "Design a URL shortener like bit.ly that handles 100 million URLs per day. Walk me through your approach.",
+          "timestampSec": 12
+        },
+        {
+          "speaker": "user",
+          "text": "Sure. So basically first I'd clarify requirements — do we need custom short codes, analytics, expiration? Assuming a standard read-heavy workload with eventual consistency.",
+          "timestampSec": 28
+        },
+        {
+          "speaker": "ai",
+          "text": "Good clarification habit. Proceed with the core design.",
+          "timestampSec": 60
+        },
+        {
+          "speaker": "user",
+          "text": "So like I'd use a distributed key-value store — DynamoDB for example. A hashing service to generate like 7-character IDs. Then a load balancer in front and CDN for caching popular URLs.",
+          "timestampSec": 74
+        },
+        {
+          "speaker": "ai",
+          "text": "Solid core. What about failure modes and operational concerns?",
+          "timestampSec": 118
+        },
+        {
+          "speaker": "user",
+          "text": "Hmm, yeah I kind of didn't fully think about that. Um, I guess we'd need monitoring? And basically some kind of rate limiting too — hadn't considered that angle.",
+          "timestampSec": 132
+        }
       ]
     },
     {
@@ -207,12 +279,32 @@
       "recordingUrl": "mock://recordings/sess_004.mp3",
       "recordingDurationSec": 1320,
       "transcript": [
-        { "speaker": "ai", "text": "Tell me about yourself and why you're interested in this role.", "timestampSec": 8 },
-        { "speaker": "user", "text": "I'm a final-year CS student with two internships in backend development. I'm genuinely excited about this role because of the technical challenges and the product's real impact on users.", "timestampSec": 22 },
-        { "speaker": "ai", "text": "What is your expected salary range for this position?", "timestampSec": 55 },
-        { "speaker": "user", "text": "Based on my research and the market for this role in Bangalore, I'm looking at 12 to 15 LPA. I'm open to discussion depending on the full compensation package.", "timestampSec": 68 },
+        {
+          "speaker": "ai",
+          "text": "Tell me about yourself and why you're interested in this role.",
+          "timestampSec": 8
+        },
+        {
+          "speaker": "user",
+          "text": "I'm a final-year CS student with two internships in backend development. I'm genuinely excited about this role because of the technical challenges and the product's real impact on users.",
+          "timestampSec": 22
+        },
+        {
+          "speaker": "ai",
+          "text": "What is your expected salary range for this position?",
+          "timestampSec": 55
+        },
+        {
+          "speaker": "user",
+          "text": "Based on my research and the market for this role in Bangalore, I'm looking at 12 to 15 LPA. I'm open to discussion depending on the full compensation package.",
+          "timestampSec": 68
+        },
         { "speaker": "ai", "text": "Where do you see yourself in 5 years?", "timestampSec": 100 },
-        { "speaker": "user", "text": "I want to grow into a senior engineering role with strong system design skills, and eventually move toward technical leadership. This company's growth trajectory aligns well with that path.", "timestampSec": 114 }
+        {
+          "speaker": "user",
+          "text": "I want to grow into a senior engineering role with strong system design skills, and eventually move toward technical leadership. This company's growth trajectory aligns well with that path.",
+          "timestampSec": 114
+        }
       ]
     },
     {
@@ -232,12 +324,36 @@
       "recordingUrl": "mock://recordings/sess_005.mp3",
       "recordingDurationSec": 2880,
       "transcript": [
-        { "speaker": "ai", "text": "Explain the difference between a process and a thread, and when you'd use each.", "timestampSec": 10 },
-        { "speaker": "user", "text": "So basically a process is um, like an independent program with its own memory space. A thread is kind of a lightweight unit within a process that shares memory. I'd use threads for concurrent I/O and processes for isolation.", "timestampSec": 24 },
-        { "speaker": "ai", "text": "Good. What's a closure in JavaScript? Give me a practical example.", "timestampSec": 60 },
-        { "speaker": "user", "text": "A closure is basically when a function kind of retains access to its outer scope variables even after the outer function has returned. Like, you know, the counter pattern — you create a function that returns an increment function.", "timestampSec": 75 },
-        { "speaker": "ai", "text": "Correct. Now explain the Node.js event loop.", "timestampSec": 112 },
-        { "speaker": "user", "text": "Node is single-threaded and basically uses an event loop. It handles async operations like I/O through callbacks. Um, when an async operation completes, its callback is pushed to the event queue and processed when the call stack is empty.", "timestampSec": 126 }
+        {
+          "speaker": "ai",
+          "text": "Explain the difference between a process and a thread, and when you'd use each.",
+          "timestampSec": 10
+        },
+        {
+          "speaker": "user",
+          "text": "So basically a process is um, like an independent program with its own memory space. A thread is kind of a lightweight unit within a process that shares memory. I'd use threads for concurrent I/O and processes for isolation.",
+          "timestampSec": 24
+        },
+        {
+          "speaker": "ai",
+          "text": "Good. What's a closure in JavaScript? Give me a practical example.",
+          "timestampSec": 60
+        },
+        {
+          "speaker": "user",
+          "text": "A closure is basically when a function kind of retains access to its outer scope variables even after the outer function has returned. Like, you know, the counter pattern — you create a function that returns an increment function.",
+          "timestampSec": 75
+        },
+        {
+          "speaker": "ai",
+          "text": "Correct. Now explain the Node.js event loop.",
+          "timestampSec": 112
+        },
+        {
+          "speaker": "user",
+          "text": "Node is single-threaded and basically uses an event loop. It handles async operations like I/O through callbacks. Um, when an async operation completes, its callback is pushed to the event queue and processed when the call stack is empty.",
+          "timestampSec": 126
+        }
       ]
     },
     {
@@ -275,12 +391,36 @@
       "recordingUrl": "mock://recordings/sess_007.mp3",
       "recordingDurationSec": 2820,
       "transcript": [
-        { "speaker": "ai", "text": "How would you decide whether to build a new feature or fix an existing bug?", "timestampSec": 12 },
-        { "speaker": "user", "text": "I'd basically look at impact versus effort. For bugs, I'd consider severity and user impact — like a checkout flow bug is critical. For features, I'd use a framework like RICE to prioritize.", "timestampSec": 28 },
-        { "speaker": "ai", "text": "Define the key success metrics for a food delivery app.", "timestampSec": 72 },
-        { "speaker": "user", "text": "The core metric would be um, order completion rate. Then like key supporting metrics — delivery time, customer satisfaction score, restaurant partner retention. And basically I'd also track revenue per order as a financial health indicator.", "timestampSec": 88 },
-        { "speaker": "ai", "text": "Engineering says a feature takes 3 months. CEO wants it in 4 weeks. How do you handle this?", "timestampSec": 142 },
-        { "speaker": "user", "text": "I'd start by kind of understanding the full scope — what's the absolute minimum viable version for 4 weeks. Then basically negotiate a phased delivery, ship the core in 4 weeks and iterate. I'd make the trade-offs fully transparent to the CEO.", "timestampSec": 158 }
+        {
+          "speaker": "ai",
+          "text": "How would you decide whether to build a new feature or fix an existing bug?",
+          "timestampSec": 12
+        },
+        {
+          "speaker": "user",
+          "text": "I'd basically look at impact versus effort. For bugs, I'd consider severity and user impact — like a checkout flow bug is critical. For features, I'd use a framework like RICE to prioritize.",
+          "timestampSec": 28
+        },
+        {
+          "speaker": "ai",
+          "text": "Define the key success metrics for a food delivery app.",
+          "timestampSec": 72
+        },
+        {
+          "speaker": "user",
+          "text": "The core metric would be um, order completion rate. Then like key supporting metrics — delivery time, customer satisfaction score, restaurant partner retention. And basically I'd also track revenue per order as a financial health indicator.",
+          "timestampSec": 88
+        },
+        {
+          "speaker": "ai",
+          "text": "Engineering says a feature takes 3 months. CEO wants it in 4 weeks. How do you handle this?",
+          "timestampSec": 142
+        },
+        {
+          "speaker": "user",
+          "text": "I'd start by kind of understanding the full scope — what's the absolute minimum viable version for 4 weeks. Then basically negotiate a phased delivery, ship the core in 4 weeks and iterate. I'd make the trade-offs fully transparent to the CEO.",
+          "timestampSec": 158
+        }
       ]
     },
     {
@@ -300,12 +440,36 @@
       "recordingUrl": "mock://recordings/sess_008.mp3",
       "recordingDurationSec": 3720,
       "transcript": [
-        { "speaker": "ai", "text": "Classic: Two Sum. Given an array and a target, find two indices whose values sum to the target.", "timestampSec": 10 },
-        { "speaker": "user", "text": "Um, so basically I'd just do two nested loops. Like for each element, check all other elements. It's O(n squared) time, O(1) space.", "timestampSec": 24 },
-        { "speaker": "ai", "text": "Correct. Can you do better? Aim for O(n).", "timestampSec": 52 },
-        { "speaker": "user", "text": "Yeah I think so. Like I can kind of use a hash map. Basically for each number, I check if the complement is already in the map. If not, I add the current number with its index to the map.", "timestampSec": 66 },
-        { "speaker": "ai", "text": "Exactly. Now merge two sorted linked lists into one sorted list.", "timestampSec": 108 },
-        { "speaker": "user", "text": "Um, I'll create a dummy head node. Then basically like compare the values at each list's current node, um attach the smaller one, and move that list's pointer forward. Continue until one list is exhausted.", "timestampSec": 124 }
+        {
+          "speaker": "ai",
+          "text": "Classic: Two Sum. Given an array and a target, find two indices whose values sum to the target.",
+          "timestampSec": 10
+        },
+        {
+          "speaker": "user",
+          "text": "Um, so basically I'd just do two nested loops. Like for each element, check all other elements. It's O(n squared) time, O(1) space.",
+          "timestampSec": 24
+        },
+        {
+          "speaker": "ai",
+          "text": "Correct. Can you do better? Aim for O(n).",
+          "timestampSec": 52
+        },
+        {
+          "speaker": "user",
+          "text": "Yeah I think so. Like I can kind of use a hash map. Basically for each number, I check if the complement is already in the map. If not, I add the current number with its index to the map.",
+          "timestampSec": 66
+        },
+        {
+          "speaker": "ai",
+          "text": "Exactly. Now merge two sorted linked lists into one sorted list.",
+          "timestampSec": 108
+        },
+        {
+          "speaker": "user",
+          "text": "Um, I'll create a dummy head node. Then basically like compare the values at each list's current node, um attach the smaller one, and move that list's pointer forward. Continue until one list is exhausted.",
+          "timestampSec": 124
+        }
       ]
     }
   ],
@@ -658,21 +822,73 @@
         { "word": "honestly", "count": 16, "severity": "low" }
       ],
       "recentSessionScores": [
-        { "sessionId": "sess_001", "packageName": "Behavioral", "tutorName": "Priya", "date": "2026-05-06", "score": 6.8 },
-        { "sessionId": "sess_002", "packageName": "DSA", "tutorName": "Alex", "date": "2026-05-05", "score": 6.1 },
-        { "sessionId": "sess_003", "packageName": "System Design", "tutorName": "Morgan", "date": "2026-05-04", "score": 6.5 },
-        { "sessionId": "sess_005", "packageName": "Technical", "tutorName": "Alex", "date": "2026-05-02", "score": 6.1 }
+        {
+          "sessionId": "sess_001",
+          "packageName": "Behavioral",
+          "tutorName": "Priya",
+          "date": "2026-05-06",
+          "score": 6.8
+        },
+        {
+          "sessionId": "sess_002",
+          "packageName": "DSA",
+          "tutorName": "Alex",
+          "date": "2026-05-05",
+          "score": 6.1
+        },
+        {
+          "sessionId": "sess_003",
+          "packageName": "System Design",
+          "tutorName": "Morgan",
+          "date": "2026-05-04",
+          "score": 6.5
+        },
+        {
+          "sessionId": "sess_005",
+          "packageName": "Technical",
+          "tutorName": "Alex",
+          "date": "2026-05-02",
+          "score": 6.1
+        }
       ]
     }
   },
   "transcript_demo": [
-    { "role": "tutor", "text": "Welcome! Let's start with a quick intro — tell me about your background.", "ts": 0 },
-    { "role": "user", "text": "I'm a final-year CS student with 2 internships in backend development, mostly Node.js and Python.", "ts": 8 },
-    { "role": "tutor", "text": "Great. Tell me about a time you faced a tough technical challenge and how you resolved it.", "ts": 16 },
-    { "role": "user", "text": "During my second internship, we had a memory leak in our Express app that only appeared under load. I used clinic.js to profile it and traced it to a closure holding references to large buffers.", "ts": 28 },
-    { "role": "tutor", "text": "Good. What was the impact before and after you fixed it?", "ts": 45 },
-    { "role": "user", "text": "Before: the server would crash every 6 hours. After the fix, it ran stable for 3 weeks in prod with no restarts.", "ts": 52 },
-    { "role": "tutor", "text": "Nice. Now let's talk about system design briefly — how would you scale that Express app to handle 10x traffic?", "ts": 64 }
+    {
+      "role": "tutor",
+      "text": "Welcome! Let's start with a quick intro — tell me about your background.",
+      "ts": 0
+    },
+    {
+      "role": "user",
+      "text": "I'm a final-year CS student with 2 internships in backend development, mostly Node.js and Python.",
+      "ts": 8
+    },
+    {
+      "role": "tutor",
+      "text": "Great. Tell me about a time you faced a tough technical challenge and how you resolved it.",
+      "ts": 16
+    },
+    {
+      "role": "user",
+      "text": "During my second internship, we had a memory leak in our Express app that only appeared under load. I used clinic.js to profile it and traced it to a closure holding references to large buffers.",
+      "ts": 28
+    },
+    {
+      "role": "tutor",
+      "text": "Good. What was the impact before and after you fixed it?",
+      "ts": 45
+    },
+    {
+      "role": "user",
+      "text": "Before: the server would crash every 6 hours. After the fix, it ran stable for 3 weeks in prod with no restarts.",
+      "ts": 52
+    },
+    {
+      "role": "tutor",
+      "text": "Nice. Now let's talk about system design briefly — how would you scale that Express app to handle 10x traffic?",
+      "ts": 64
+    }
   ],
   "conversations": [
     {
@@ -694,7 +910,11 @@
           "text": "Your most recent session was **Behavioral** with **Priya** on 6 May 2026.\n\n**Overall Score: 8.2/10**\n\n**Score breakdown:**\n- Communication: 9/10\n- Technical: 6/10\n- Problem Solving: 8/10\n- Confidence: 8/10\n\n**Top strength:** Excellent use of STAR method throughout all answers\n\n**Key improvement:** Quantify impact more — 'increased efficiency' needs a number\n\nWant the full analysis or tips on what to practice next?",
           "ts": "2026-05-06T11:00:08Z",
           "actions": [
-            { "label": "View Full Analysis", "view": "analysis", "params": { "analysisId": "anal_001" } },
+            {
+              "label": "View Full Analysis",
+              "view": "analysis",
+              "params": { "analysisId": "anal_001" }
+            },
             { "label": "What to Practice Next", "trigger": "What should I focus on improving?" }
           ]
         },
@@ -737,7 +957,11 @@
           "ts": "2026-05-05T16:00:12Z",
           "actions": [
             { "label": "Start DSA Session", "view": "new-interview" },
-            { "label": "View DSA Analysis", "view": "analysis", "params": { "analysisId": "anal_002" } }
+            {
+              "label": "View DSA Analysis",
+              "view": "analysis",
+              "params": { "analysisId": "anal_002" }
+            }
           ]
         }
       ]

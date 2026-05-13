@@ -81,31 +81,31 @@ apps/cli/
 
 ## Command Files
 
-| File                          | Command                     | Status      | What It Achieves                                                                                                                       |
-| ----------------------------- | --------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `commands/onboard.command.ts` | `iprep onboard`             | ✓ Done      | 7-step first-time setup: creates `~/.iprep/` dirs, writes `~/.iprep/.env`, runs DB migrations, verifies setup, prints summary.        |
-| `commands/start.command.ts`   | `iprep start`               | ✓ Done      | Shows banner, verifies all prerequisites (dirs, DB, env), guards port, spawns server, waits for health check, shows running summary.   |
-| `commands/status.command.ts`  | `iprep status`              | ✓ Done      | Shows current server status, configured providers, installed CLIs, DB status, and recent readiness summary.                            |
-| `commands/doctor.ts`          | `iprep doctor`              | Planned     | Checks Node, pnpm/npm environment, iPrep home, database readiness, server availability, provider keys, and local CLIs.                 |
-| `commands/setup.ts`           | `iprep setup`               | Planned     | Interactive setup wizard for API keys, default provider, tutor, mode, and local preferences.                                           |
-| `commands/sessions.ts`        | `iprep sessions`            | Planned     | Lists recent local interview sessions with status, tutor, package, duration, and analysis state.                                       |
-| `commands/analyze.ts`         | `iprep analyze <sessionId>` | Planned     | Triggers or reruns analysis for a completed session from the terminal.                                                                 |
-| `commands/export.ts`          | `iprep export <sessionId>`  | Planned     | Exports transcript and analysis to Markdown first, with PDF later.                                                                     |
-| `commands/keys.ts`            | `iprep keys`                | Planned     | Manages BYOK provider keys or key metadata through local config/settings.                                                              |
+| File                          | Command                     | Status  | What It Achieves                                                                                                                     |
+| ----------------------------- | --------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `commands/onboard.command.ts` | `iprep onboard`             | ✓ Done  | 7-step first-time setup: creates `~/.iprep/` dirs, writes `~/.iprep/.env`, runs DB migrations, verifies setup, prints summary.       |
+| `commands/start.command.ts`   | `iprep start`               | ✓ Done  | Shows banner, verifies all prerequisites (dirs, DB, env), guards port, spawns server, waits for health check, shows running summary. |
+| `commands/status.command.ts`  | `iprep status`              | ✓ Done  | Shows current server status, configured providers, installed CLIs, DB status, and recent readiness summary.                          |
+| `commands/doctor.ts`          | `iprep doctor`              | Planned | Checks Node, pnpm/npm environment, iPrep home, database readiness, server availability, provider keys, and local CLIs.               |
+| `commands/setup.ts`           | `iprep setup`               | Planned | Interactive setup wizard for API keys, default provider, tutor, mode, and local preferences.                                         |
+| `commands/sessions.ts`        | `iprep sessions`            | Planned | Lists recent local interview sessions with status, tutor, package, duration, and analysis state.                                     |
+| `commands/analyze.ts`         | `iprep analyze <sessionId>` | Planned | Triggers or reruns analysis for a completed session from the terminal.                                                               |
+| `commands/export.ts`          | `iprep export <sessionId>`  | Planned | Exports transcript and analysis to Markdown first, with PDF later.                                                                   |
+| `commands/keys.ts`            | `iprep keys`                | Planned | Manages BYOK provider keys or key metadata through local config/settings.                                                            |
 
 ## Utility Files
 
-| File                    | Responsibility                                                                                                                              | Status      | Used By                                             |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | --------------------------------------------------- |
-| `utils/chalk-helper.ts` | `log.{success,error,info,warn,bold,dim,highlight}`, `printBanner()` (ANSI Shadow + gradient), `printSeparator`, `printCommandBadge`, `printMeta`, `printStep` | ✓ Done | All commands                               |
-| `utils/fs.utils.ts`     | `dirExists(path)` — checks a path exists and is a directory.                                                                                | ✓ Done      | `onboard.handler`, `start.handler`                  |
-| `utils/display.ts`      | Terminal output helpers such as `success`, `error`, `warn`, `info`, section headers, and tables.                                            | Planned     | All commands                                        |
-| `utils/spinner.ts`      | Small wrapper around `ora` for consistent loading states.                                                                                   | Planned     | `doctor`, `start`, `setup`, `analyze`, `export`     |
-| `utils/prompts.ts`      | Reusable `inquirer` prompts for provider keys, default tutor, default mode, confirmation, and choices.                                      | Planned     | `onboard`, `setup`, `keys`                          |
-| `utils/home-dir.ts`     | Creates and reads local iPrep directories and config files under the iPrep home path.                                                       | Planned     | `onboard`, `doctor`, `setup`, `keys`, `export`      |
-| `utils/api.ts`          | Planned helper for local server HTTP requests.                                                                                              | Planned     | `status`, `sessions`, `analyze`, `export`, `keys`   |
-| `utils/process.ts`      | Planned helper for spawning/checking server and provider CLIs.                                                                              | Planned     | `doctor`, `start`, `status`                         |
-| `utils/table.ts`        | Planned helper for clean table rendering without duplicating formatting logic.                                                              | Planned     | `doctor`, `status`, `sessions`                      |
+| File                    | Responsibility                                                                                                                                                | Status  | Used By                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------- |
+| `utils/chalk-helper.ts` | `log.{success,error,info,warn,bold,dim,highlight}`, `printBanner()` (ANSI Shadow + gradient), `printSeparator`, `printCommandBadge`, `printMeta`, `printStep` | ✓ Done  | All commands                                      |
+| `utils/fs.utils.ts`     | `dirExists(path)` — checks a path exists and is a directory.                                                                                                  | ✓ Done  | `onboard.handler`, `start.handler`                |
+| `utils/display.ts`      | Terminal output helpers such as `success`, `error`, `warn`, `info`, section headers, and tables.                                                              | Planned | All commands                                      |
+| `utils/spinner.ts`      | Small wrapper around `ora` for consistent loading states.                                                                                                     | Planned | `doctor`, `start`, `setup`, `analyze`, `export`   |
+| `utils/prompts.ts`      | Reusable `inquirer` prompts for provider keys, default tutor, default mode, confirmation, and choices.                                                        | Planned | `onboard`, `setup`, `keys`                        |
+| `utils/home-dir.ts`     | Creates and reads local iPrep directories and config files under the iPrep home path.                                                                         | Planned | `onboard`, `doctor`, `setup`, `keys`, `export`    |
+| `utils/api.ts`          | Planned helper for local server HTTP requests.                                                                                                                | Planned | `status`, `sessions`, `analyze`, `export`, `keys` |
+| `utils/process.ts`      | Planned helper for spawning/checking server and provider CLIs.                                                                                                | Planned | `doctor`, `start`, `status`                       |
+| `utils/table.ts`        | Planned helper for clean table rendering without duplicating formatting logic.                                                                                | Planned | `doctor`, `status`, `sessions`                    |
 
 ## Local iPrep Home Structure
 
@@ -165,16 +165,16 @@ apps/cli/
 
 ## Implementation Phases
 
-| Phase | Focus               | Files                                                              | Done When                                                                     |
-| ----- | ------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
-| 1     | CLI shell           | `src/index.ts`, all command files                                  | `iprep --help` shows all planned commands.                                    |
-| 2     | Display utilities   | `utils/chalk-helper.ts`, `utils/spinner.ts`, `utils/table.ts`      | Commands share consistent output formatting.                                  |
-| 3     | Local home setup    | `commands/onboard.command.ts`, `handlers/onboard.handler.ts`       | `iprep onboard` creates the full local folder/config structure safely. ✓ Done |
-| 4     | Server control      | `commands/start.command.ts`, `handlers/start.handler.ts`           | `iprep start` verifies setup, launches backend, server health passes. ✓ Done  |
-| 5     | Readiness checks    | `commands/doctor.ts`, `utils/process.ts`                           | `iprep doctor` reports Node, iPrep home, DB, server, keys, and provider CLIs. |
-| 6     | Interactive setup   | `commands/setup.ts`, `commands/keys.ts`, `utils/prompts.ts`        | User can configure provider keys and defaults from terminal prompts.          |
-| 7     | Session commands    | `commands/status.ts`, `commands/sessions.ts`                       | CLI can read server/session status from the local API.                        |
-| 8     | Analysis and export | `commands/analyze.ts`, `commands/export.ts`                        | CLI can trigger analysis and export results.                                  |
+| Phase | Focus               | Files                                                         | Done When                                                                     |
+| ----- | ------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| 1     | CLI shell           | `src/index.ts`, all command files                             | `iprep --help` shows all planned commands.                                    |
+| 2     | Display utilities   | `utils/chalk-helper.ts`, `utils/spinner.ts`, `utils/table.ts` | Commands share consistent output formatting.                                  |
+| 3     | Local home setup    | `commands/onboard.command.ts`, `handlers/onboard.handler.ts`  | `iprep onboard` creates the full local folder/config structure safely. ✓ Done |
+| 4     | Server control      | `commands/start.command.ts`, `handlers/start.handler.ts`      | `iprep start` verifies setup, launches backend, server health passes. ✓ Done  |
+| 5     | Readiness checks    | `commands/doctor.ts`, `utils/process.ts`                      | `iprep doctor` reports Node, iPrep home, DB, server, keys, and provider CLIs. |
+| 6     | Interactive setup   | `commands/setup.ts`, `commands/keys.ts`, `utils/prompts.ts`   | User can configure provider keys and defaults from terminal prompts.          |
+| 7     | Session commands    | `commands/status.ts`, `commands/sessions.ts`                  | CLI can read server/session status from the local API.                        |
+| 8     | Analysis and export | `commands/analyze.ts`, `commands/export.ts`                   | CLI can trigger analysis and export results.                                  |
 
 ## CLI and Backend Relationship
 
@@ -191,16 +191,16 @@ apps/cli/
 
 ## Expected User Outcomes
 
-| User Need             | CLI Support                                                                  |
-| --------------------- | ---------------------------------------------------------------------------- |
-| First-time setup      | `iprep onboard` prepares local files, .env, and DB in one command.          |
-| Daily launch          | `iprep start` verifies setup, starts the local app, and opens the browser.  |
-| Quick readiness check | `iprep status` confirms server, DB, and provider state.                     |
-| Troubleshooting       | `iprep doctor` gives a readable checklist and next action hints.            |
-| Session lookup        | `iprep sessions` shows recent interview sessions.                           |
-| Terminal analysis     | `iprep analyze <sessionId>` runs analysis without opening the UI.           |
-| Portability           | `iprep export <sessionId>` creates shareable transcript/feedback files.     |
-| Provider management   | `iprep keys` and `iprep setup` manage BYOK configuration.                   |
+| User Need             | CLI Support                                                                |
+| --------------------- | -------------------------------------------------------------------------- |
+| First-time setup      | `iprep onboard` prepares local files, .env, and DB in one command.         |
+| Daily launch          | `iprep start` verifies setup, starts the local app, and opens the browser. |
+| Quick readiness check | `iprep status` confirms server, DB, and provider state.                    |
+| Troubleshooting       | `iprep doctor` gives a readable checklist and next action hints.           |
+| Session lookup        | `iprep sessions` shows recent interview sessions.                          |
+| Terminal analysis     | `iprep analyze <sessionId>` runs analysis without opening the UI.          |
+| Portability           | `iprep export <sessionId>` creates shareable transcript/feedback files.    |
+| Provider management   | `iprep keys` and `iprep setup` manage BYOK configuration.                  |
 
 ## Notes
 

@@ -22,34 +22,34 @@ It does not describe a full future backend. It only converts the current front-e
 Current methods:
 
 ```js
-MockAPI.load()
-MockAPI.getTutors()
-MockAPI.getPackages()
-MockAPI.getSessions()
-MockAPI.getAnalysis(id)
-MockAPI.getProviders()
-MockAPI.getStats()
-MockAPI.startSession(pkgSlug, tutorSlug)
-MockAPI.endSession(id)
-MockAPI.getConversations()
-MockAPI.createConversation(title)
-MockAPI.addMessage(convId, role, text)
+MockAPI.load();
+MockAPI.getTutors();
+MockAPI.getPackages();
+MockAPI.getSessions();
+MockAPI.getAnalysis(id);
+MockAPI.getProviders();
+MockAPI.getStats();
+MockAPI.startSession(pkgSlug, tutorSlug);
+MockAPI.endSession(id);
+MockAPI.getConversations();
+MockAPI.createConversation(title);
+MockAPI.addMessage(convId, role, text);
 ```
 
 Current direct state operations that also need APIs:
 
 ```js
-State.data.fileSystem
-createFile()
-createFolder()
-uploadFile()
-saveFile()
-deleteFile()
-deleteFolder()
-fileEditorChange()
-toggleKeyVisibility()
-saveAPIKeys()
-savePreferences()
+State.data.fileSystem;
+createFile();
+createFolder();
+uploadFile();
+saveFile();
+deleteFile();
+deleteFolder();
+fileEditorChange();
+toggleKeyVisibility();
+saveAPIKeys();
+savePreferences();
 ```
 
 ## Startup API
@@ -57,14 +57,14 @@ savePreferences()
 The current app starts by fetching one file:
 
 ```js
-fetch('mock-data.json')
+fetch('mock-data.json');
 ```
 
 You can keep one bootstrap endpoint for the same behavior.
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/bootstrap` | `MockAPI.load()` | app boot |
+| Method | Endpoint     | Replaces         | Used By  |
+| ------ | ------------ | ---------------- | -------- |
+| `GET`  | `/bootstrap` | `MockAPI.load()` | app boot |
 
 Response should include the same top-level shape as `mock-data.json`:
 
@@ -89,14 +89,14 @@ If you build separate APIs instead of `/bootstrap`, the app will need to call ea
 Current dashboard calls:
 
 ```js
-MockAPI.getSessions()
-MockAPI.getStats()
+MockAPI.getSessions();
+MockAPI.getStats();
 ```
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/sessions` | `MockAPI.getSessions()` | recent sessions |
-| `GET` | `/stats` | `MockAPI.getStats()` | dashboard cards, quick stats |
+| Method | Endpoint    | Replaces                | Used By                      |
+| ------ | ----------- | ----------------------- | ---------------------------- |
+| `GET`  | `/sessions` | `MockAPI.getSessions()` | recent sessions              |
+| `GET`  | `/stats`    | `MockAPI.getStats()`    | dashboard cards, quick stats |
 
 `GET /stats` response must include:
 
@@ -119,15 +119,15 @@ MockAPI.getStats()
 Current New Interview calls:
 
 ```js
-MockAPI.getPackages()
-MockAPI.getTutors()
-MockAPI.startSession(State.selectedPackage.slug, State.selectedTutor.slug)
+MockAPI.getPackages();
+MockAPI.getTutors();
+MockAPI.startSession(State.selectedPackage.slug, State.selectedTutor.slug);
 ```
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/packages` | `MockAPI.getPackages()` | package selection |
-| `GET` | `/tutors` | `MockAPI.getTutors()` | tutor selection |
+| Method | Endpoint          | Replaces                                   | Used By                |
+| ------ | ----------------- | ------------------------------------------ | ---------------------- |
+| `GET`  | `/packages`       | `MockAPI.getPackages()`                    | package selection      |
+| `GET`  | `/tutors`         | `MockAPI.getTutors()`                      | tutor selection        |
 | `POST` | `/sessions/start` | `MockAPI.startSession(pkgSlug, tutorSlug)` | Start Interview button |
 
 `POST /sessions/start` request:
@@ -166,20 +166,20 @@ Recommended real response can also include:
 Current live session uses local state:
 
 ```js
-State.data.transcript_demo
-State.sessionTimer
-State.transcriptInterval
-toggleMic()
-endSession()
+State.data.transcript_demo;
+State.sessionTimer;
+State.transcriptInterval;
+toggleMic();
+endSession();
 ```
 
 Minimum APIs needed:
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/sessions/{sessionId}/demo-transcript` | `State.data.transcript_demo` | live transcript simulation |
-| `PATCH` | `/sessions/{sessionId}/mic` | `toggleMic()` local state | mic state if backend needs it |
-| `POST` | `/sessions/{sessionId}/end` | `MockAPI.endSession(id)` | End Session button |
+| Method  | Endpoint                                | Replaces                     | Used By                       |
+| ------- | --------------------------------------- | ---------------------------- | ----------------------------- |
+| `GET`   | `/sessions/{sessionId}/demo-transcript` | `State.data.transcript_demo` | live transcript simulation    |
+| `PATCH` | `/sessions/{sessionId}/mic`             | `toggleMic()` local state    | mic state if backend needs it |
+| `POST`  | `/sessions/{sessionId}/end`             | `MockAPI.endSession(id)`     | End Session button            |
 
 `GET /sessions/{sessionId}/demo-transcript` response:
 
@@ -209,7 +209,7 @@ This endpoint is optional unless the backend needs to know mic state.
 The app then navigates to:
 
 ```js
-navigate('analysis', { id: result.analysisId })
+navigate('analysis', { id: result.analysisId });
 ```
 
 ## Analysis APIs
@@ -217,14 +217,14 @@ navigate('analysis', { id: result.analysisId })
 Current Analysis view calls:
 
 ```js
-MockAPI.getAnalysis(id)
-State.data.sessions.find(s => s.id === analysis.sessionId)
+MockAPI.getAnalysis(id);
+State.data.sessions.find((s) => s.id === analysis.sessionId);
 ```
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/analysis/{analysisId}` | `MockAPI.getAnalysis(id)` | Analysis Report page |
-| `GET` | `/sessions/{sessionId}` | session lookup from `State.data.sessions` | analysis page subtitle/detail |
+| Method | Endpoint                 | Replaces                                  | Used By                       |
+| ------ | ------------------------ | ----------------------------------------- | ----------------------------- |
+| `GET`  | `/analysis/{analysisId}` | `MockAPI.getAnalysis(id)`                 | Analysis Report page          |
+| `GET`  | `/sessions/{sessionId}`  | session lookup from `State.data.sessions` | analysis page subtitle/detail |
 
 `GET /analysis/{analysisId}` response must include:
 
@@ -257,23 +257,23 @@ The Communication tab inside Analysis reads `analysis.communicationAnalysis`; no
 Current History view calls:
 
 ```js
-MockAPI.getSessions()
-renderSessionRow(s)
-openHistoryPanel(sessionId, panel)
-exportRecording(id)
-exportTranscript(id)
-handleTranscriptSearch(id, query)
+MockAPI.getSessions();
+renderSessionRow(s);
+openHistoryPanel(sessionId, panel);
+exportRecording(id);
+exportTranscript(id);
+handleTranscriptSearch(id, query);
 ```
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/sessions` | `MockAPI.getSessions()` | history list and filters |
-| `GET` | `/sessions?status=COMPLETED` | local history filter | Completed filter |
-| `GET` | `/sessions?status=ABANDONED` | local history filter | Abandoned filter |
-| `GET` | `/sessions/{sessionId}/recording` | session recording fields | Recording panel |
-| `GET` | `/sessions/{sessionId}/transcript` | `s.transcript` | Transcript panel |
-| `GET` | `/sessions/{sessionId}/recording/download` | `exportRecording(id)` toast | Export Recording |
-| `GET` | `/sessions/{sessionId}/transcript/download` | `exportTranscript(id)` toast | Export Transcript |
+| Method | Endpoint                                    | Replaces                     | Used By                  |
+| ------ | ------------------------------------------- | ---------------------------- | ------------------------ |
+| `GET`  | `/sessions`                                 | `MockAPI.getSessions()`      | history list and filters |
+| `GET`  | `/sessions?status=COMPLETED`                | local history filter         | Completed filter         |
+| `GET`  | `/sessions?status=ABANDONED`                | local history filter         | Abandoned filter         |
+| `GET`  | `/sessions/{sessionId}/recording`           | session recording fields     | Recording panel          |
+| `GET`  | `/sessions/{sessionId}/transcript`          | `s.transcript`               | Transcript panel         |
+| `GET`  | `/sessions/{sessionId}/recording/download`  | `exportRecording(id)` toast  | Export Recording         |
+| `GET`  | `/sessions/{sessionId}/transcript/download` | `exportTranscript(id)` toast | Export Transcript        |
 
 `GET /sessions` response should return session rows with fields used by `renderSessionRow`:
 
@@ -304,21 +304,21 @@ Note: the current UI can work with transcript embedded in `/sessions`, but a rea
 Current Chat view calls:
 
 ```js
-MockAPI.getConversations()
-MockAPI.createConversation(title)
-MockAPI.addMessage(convId, 'user', text)
-getAIResponse(text)
-MockAPI.addMessage(convId, 'ai', aiText.text)
+MockAPI.getConversations();
+MockAPI.createConversation(title);
+MockAPI.addMessage(convId, 'user', text);
+getAIResponse(text);
+MockAPI.addMessage(convId, 'ai', aiText.text);
 ```
 
 The current AI response is generated in the browser by `getAIResponse(userText)`. A real backend should replace that function.
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/conversations` | `MockAPI.getConversations()` | chat sidebar |
-| `POST` | `/conversations` | `MockAPI.createConversation(title)` | New Chat button |
-| `GET` | `/conversations/{conversationId}` | active conversation lookup | message history |
-| `POST` | `/conversations/{conversationId}/messages` | user `addMessage` + `getAIResponse` + AI `addMessage` | Send message |
+| Method | Endpoint                                   | Replaces                                              | Used By         |
+| ------ | ------------------------------------------ | ----------------------------------------------------- | --------------- |
+| `GET`  | `/conversations`                           | `MockAPI.getConversations()`                          | chat sidebar    |
+| `POST` | `/conversations`                           | `MockAPI.createConversation(title)`                   | New Chat button |
+| `GET`  | `/conversations/{conversationId}`          | active conversation lookup                            | message history |
+| `POST` | `/conversations/{conversationId}/messages` | user `addMessage` + `getAIResponse` + AI `addMessage` | Send message    |
 
 `POST /conversations` request:
 
@@ -400,39 +400,39 @@ Backend AI response must support the same topics currently handled by `getAIResp
 Current Files view does not use `MockAPI`; it directly reads and mutates:
 
 ```js
-State.data.fileSystem
-State.data.fileSystem.folders
-State.data.fileSystem.rootFiles
+State.data.fileSystem;
+State.data.fileSystem.folders;
+State.data.fileSystem.rootFiles;
 ```
 
 Current file actions:
 
 ```js
-createFile()
-createFolder()
-uploadFile()
-saveFile(id)
-deleteFile(id)
-deleteFolder(id)
-fileEditorChange(id, value)
-selectFile(id)
-toggleFolder(id)
-switchEditorMode(mode)
+createFile();
+createFolder();
+uploadFile();
+saveFile(id);
+deleteFile(id);
+deleteFolder(id);
+fileEditorChange(id, value);
+selectFile(id);
+toggleFolder(id);
+switchEditorMode(mode);
 ```
 
 Only the actions that change/load data need APIs.
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/file-system` | `State.data.fileSystem` | Files view initial render |
-| `GET` | `/files/{fileId}` | `findFile(id)` | file selection/editor |
-| `POST` | `/files` | `createFile()` | New markdown note |
-| `PATCH` | `/files/{fileId}` | `saveFile(id)` and autosave from `fileEditorChange()` | editor save/autosave |
-| `DELETE` | `/files/{fileId}` | `deleteFile(id)` | Delete file button |
-| `POST` | `/folders` | `createFolder()` | New folder |
-| `DELETE` | `/folders/{folderId}` | `deleteFolder(id)` | Delete folder |
-| `POST` | `/uploads` | `uploadFile()` | Upload `.md`, `.pdf`, `.docx` |
-| `GET` | `/files/{fileId}/download` | simulated download button for PDF/DOCX | Download |
+| Method   | Endpoint                   | Replaces                                              | Used By                       |
+| -------- | -------------------------- | ----------------------------------------------------- | ----------------------------- |
+| `GET`    | `/file-system`             | `State.data.fileSystem`                               | Files view initial render     |
+| `GET`    | `/files/{fileId}`          | `findFile(id)`                                        | file selection/editor         |
+| `POST`   | `/files`                   | `createFile()`                                        | New markdown note             |
+| `PATCH`  | `/files/{fileId}`          | `saveFile(id)` and autosave from `fileEditorChange()` | editor save/autosave          |
+| `DELETE` | `/files/{fileId}`          | `deleteFile(id)`                                      | Delete file button            |
+| `POST`   | `/folders`                 | `createFolder()`                                      | New folder                    |
+| `DELETE` | `/folders/{folderId}`      | `deleteFolder(id)`                                    | Delete folder                 |
+| `POST`   | `/uploads`                 | `uploadFile()`                                        | Upload `.md`, `.pdf`, `.docx` |
+| `GET`    | `/files/{fileId}/download` | simulated download button for PDF/DOCX                | Download                      |
 
 `GET /file-system` response:
 
@@ -503,11 +503,11 @@ State.data.sessions.find(...)
 State.data.analysis.anal_001.communicationAnalysis
 ```
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/stats` | `MockAPI.getStats()` | communication overview |
-| `GET` | `/communication` | `stats.lifetimeCommunication` | optional focused endpoint |
-| `GET` | `/analysis/{analysisId}` | `State.data.analysis.anal_001.communicationAnalysis` | replacement examples and sentence rewrites |
+| Method | Endpoint                 | Replaces                                             | Used By                                    |
+| ------ | ------------------------ | ---------------------------------------------------- | ------------------------------------------ |
+| `GET`  | `/stats`                 | `MockAPI.getStats()`                                 | communication overview                     |
+| `GET`  | `/communication`         | `stats.lifetimeCommunication`                        | optional focused endpoint                  |
+| `GET`  | `/analysis/{analysisId}` | `State.data.analysis.anal_001.communicationAnalysis` | replacement examples and sentence rewrites |
 
 For the current app, `GET /stats` must include `lifetimeCommunication`:
 
@@ -529,8 +529,8 @@ For the current app, `GET /stats` must include `lifetimeCommunication`:
 The current UI also reads communication replacements and rewrites from:
 
 ```js
-State.data.analysis.anal_001.communicationAnalysis.topReplacements
-State.data.analysis.anal_001.communicationAnalysis.sentenceRewrites
+State.data.analysis.anal_001.communicationAnalysis.topReplacements;
+State.data.analysis.anal_001.communicationAnalysis.sentenceRewrites;
 ```
 
 So either:
@@ -540,28 +540,28 @@ So either:
 
 If adding the focused endpoint:
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/communication/examples` | `analysis.anal_001.communicationAnalysis.topReplacements` and `sentenceRewrites` | Communication Coach right column |
+| Method | Endpoint                  | Replaces                                                                         | Used By                          |
+| ------ | ------------------------- | -------------------------------------------------------------------------------- | -------------------------------- |
+| `GET`  | `/communication/examples` | `analysis.anal_001.communicationAnalysis.topReplacements` and `sentenceRewrites` | Communication Coach right column |
 
 ## Settings APIs
 
 Current Settings view calls:
 
 ```js
-MockAPI.getProviders()
-saveAPIKeys()
-savePreferences()
-toggleKeyVisibility()
+MockAPI.getProviders();
+saveAPIKeys();
+savePreferences();
+toggleKeyVisibility();
 ```
 
 `toggleKeyVisibility()` is UI-only and does not need an API.
 
-| Method | Endpoint | Replaces | Used By |
-|---|---|---|---|
-| `GET` | `/providers` | `MockAPI.getProviders()` | Providers tab |
-| `POST` | `/settings/api-keys` | `saveAPIKeys()` | API Keys tab |
-| `PATCH` | `/settings/preferences` | `savePreferences()` | Preferences tab |
+| Method  | Endpoint                | Replaces                 | Used By         |
+| ------- | ----------------------- | ------------------------ | --------------- |
+| `GET`   | `/providers`            | `MockAPI.getProviders()` | Providers tab   |
+| `POST`  | `/settings/api-keys`    | `saveAPIKeys()`          | API Keys tab    |
+| `PATCH` | `/settings/preferences` | `savePreferences()`      | Preferences tab |
 
 `GET /providers` response:
 

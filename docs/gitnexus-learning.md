@@ -270,4 +270,3 @@ The most useful GitNexus areas for iPrep are:
 - Prisma and database health: `packages/db/src`
 
 Use GitNexus especially before changing shared files, because those files are imported by multiple packages.
-
