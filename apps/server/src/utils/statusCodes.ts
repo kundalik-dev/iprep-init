@@ -4,7 +4,7 @@
  * Use these constants instead of inline numeric status values in controllers,
  * middleware, and API helpers.
  */
-const StatusCodes = {
+export const StatusCodes = {
   // 1xx: Informational responses.
   CONTINUE: 100,
   SWITCHING_PROTOCOLS: 101,

@@ -1,122 +1,110 @@
-import { Request, Response } from 'express';
+import type { RequestHandler } from 'express';
 import { UserQuery } from '@iprep/db';
 import type { CreateUserInput, UpdateUserInput } from '@iprep/db';
-import { CreateUserRequestSchema, UpdateUserRequestSchema } from '@iprep/shared';
+import {
+  CreateUserRequestSchema,
+  UpdateUserRequestSchema,
+  UserIdParamSchema,
+} from '@iprep/shared';
+import { ApiError, ApiResponse, StatusCodes, asyncHandler } from '../utils/index.js';
 
-interface UserParams {
-  id: string;
-}
+type ValidationIssue = {
+  message: string;
+  path?: PropertyKey[];
+  code?: string;
+};
 
-function isPrismaErrorWithCode(err: unknown, code: string): boolean {
-  return (
-    typeof err === 'object' &&
-    err !== null &&
-    'code' in err &&
-    (err as { code?: unknown }).code === code
+function buildValidationError(issues: ValidationIssue[]): ApiError {
+  return new ApiError(
+    StatusCodes.BAD_REQUEST,
+    'Validation failed',
+    issues.map((issue) => issue.message),
+    {
+      issues: issues.map((issue) => ({
+        message: issue.message,
+        code: issue.code ?? 'invalid_input',
+        path: issue.path?.map((segment) => String(segment)).join('.') ?? '',
+      })),
+    },
   );
 }
 
-function sendWriteError(res: Response, err: unknown): void {
-  if (isPrismaErrorWithCode(err, 'P2002')) {
-    res.status(409).json({ message: 'user with this email or phone already exists' });
-    return;
+function parseUserId(params: unknown): string {
+  const result = UserIdParamSchema.safeParse(params);
+  if (!result.success) {
+    throw buildValidationError(result.error.issues);
   }
 
-  if (isPrismaErrorWithCode(err, 'P2025')) {
-    res.status(404).json({ message: 'user not found' });
-    return;
-  }
-
-  const message = err instanceof Error ? err.message : 'User request failed';
-  res.status(500).json({ message });
+  return result.data.id;
 }
 
-function sendValidationError(res: Response, error: { issues: Array<{ message: string }> }): void {
-  res.status(400).json({ message: error.issues[0]?.message ?? 'invalid request body' });
-}
+export const findAllUsers: RequestHandler = asyncHandler(async (_req, res) => {
+  const users = await UserQuery.findAll();
 
-export const findAllUsers = async (_req: Request, res: Response) => {
-  try {
-    const users = await UserQuery.findAll();
+  res.status(StatusCodes.OK).json(
+    new ApiResponse(StatusCodes.OK, { users, total: users.length }, 'Users fetched successfully'),
+  );
+});
 
-    res.status(200).json({ users });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Failed to fetch users';
-    res.status(500).json({ message });
+export const findUserById: RequestHandler = asyncHandler(async (req, res) => {
+  const userId = parseUserId(req.params);
+  const user = await UserQuery.findById(userId);
+
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'user not found', ['user does not exist']);
   }
-};
 
-export const findUserById = async (req: Request<UserParams>, res: Response) => {
-  try {
-    const user = await UserQuery.findById(req.params.id);
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { user }, 'User fetched successfully'));
+});
 
-    if (!user) {
-      res.status(404).json({ message: 'user not found' });
-      return;
-    }
-
-    res.status(200).json({ user });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Failed to fetch user';
-    res.status(500).json({ message });
+export const createUser: RequestHandler = asyncHandler(async (req, res) => {
+  const result = CreateUserRequestSchema.safeParse(req.body);
+  if (!result.success) {
+    throw buildValidationError(result.error.issues);
   }
-};
 
-export const createUser = async (req: Request, res: Response) => {
-  try {
-    const result = CreateUserRequestSchema.safeParse(req.body);
-    if (!result.success) {
-      sendValidationError(res, result.error);
-      return;
-    }
+  const { id, name, email, phone } = result.data;
+  const userData: CreateUserInput = { name };
 
-    const { id, name, email, phone } = result.data;
-    const userData: CreateUserInput = {
-      ...(id ? { id } : {}),
-      name,
-    };
+  if (id !== undefined) userData.id = id;
+  if (email !== undefined) userData.email = email;
+  if (phone !== undefined) userData.phone = phone;
 
-    if (email !== undefined) userData.email = email;
+  const user = await UserQuery.createUser(userData);
 
-    if (phone !== undefined) userData.phone = phone;
+  res
+    .status(StatusCodes.CREATED)
+    .json(new ApiResponse(StatusCodes.CREATED, { user }, 'User created successfully'));
+});
 
-    const user = await UserQuery.createUser(userData);
-
-    res.status(201).json({ user });
-  } catch (err: unknown) {
-    sendWriteError(res, err);
+export const updateUser: RequestHandler = asyncHandler(async (req, res) => {
+  const userId = parseUserId(req.params);
+  const result = UpdateUserRequestSchema.safeParse(req.body);
+  if (!result.success) {
+    throw buildValidationError(result.error.issues);
   }
-};
 
-export const updateUser = async (req: Request<UserParams>, res: Response) => {
-  try {
-    const result = UpdateUserRequestSchema.safeParse(req.body);
-    if (!result.success) {
-      sendValidationError(res, result.error);
-      return;
-    }
+  const { name, email, phone } = result.data;
+  const userData: UpdateUserInput = {};
 
-    const { name, email, phone } = result.data;
-    const userData: UpdateUserInput = {};
+  if (name !== undefined) userData.name = name;
+  if (email !== undefined) userData.email = email;
+  if (phone !== undefined) userData.phone = phone;
 
-    if (name !== undefined) userData.name = name;
-    if (email !== undefined) userData.email = email;
-    if (phone !== undefined) userData.phone = phone;
+  const user = await UserQuery.update(userId, userData);
 
-    const user = await UserQuery.update(req.params.id, userData);
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { user }, 'User updated successfully'));
+});
 
-    res.status(200).json({ user });
-  } catch (err: unknown) {
-    sendWriteError(res, err);
-  }
-};
+export const deleteUser: RequestHandler = asyncHandler(async (req, res) => {
+  const userId = parseUserId(req.params);
+  await UserQuery.delete(userId);
 
-export const deleteUser = async (req: Request<UserParams>, res: Response) => {
-  try {
-    await UserQuery.delete(req.params.id);
-
-    res.status(204).send();
-  } catch (err: unknown) {
-    sendWriteError(res, err);
-  }
-};
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { id: userId }, 'User deleted successfully'));
+});
