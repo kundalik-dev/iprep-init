@@ -4,8 +4,7 @@ import fs from 'node:fs';
 import cors from 'cors';
 import express, { type Express } from 'express';
 import { env } from './config/env.js';
-import { apiRoutes } from './routes/index.js';
-import { randomId } from '@iprep/shared';
+import { apiRoutes } from './routes/index.js'; 
 import { errorHandler } from './utils/index.js';
 
 const app: Express = express();
@@ -36,7 +35,6 @@ if (env.NODE_ENV === 'production' && fs.existsSync(frontendDist)) {
 }
 
 app.use(errorHandler);
-
-console.log(`Random id is ${randomId()}`);
+ 
 
 export default app;
