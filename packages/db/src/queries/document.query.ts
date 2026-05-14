@@ -8,6 +8,12 @@ export interface CreateDocumentInput {
   fileUrl?: string | null;
 }
 
+export interface UpdateDocumentInput {
+  title?: string;
+  content?: string | null;
+  fileUrl?: string | null;
+}
+
 async function ensureLocalUser() {
   return prisma.user.upsert({
     where: { id: LOCAL_USER_ID },
@@ -54,6 +60,44 @@ export const DocumentQuery = {
       },
       data: {
         fileUrl,
+      },
+    });
+  },
+
+  async getDocument(documentId: string) {
+    const user = await ensureLocalUser();
+
+    return prisma.note.findFirst({
+      where: {
+        id: documentId,
+        userId: user.id,
+      },
+    });
+  },
+
+  async updateDocument(documentId: string, input: UpdateDocumentInput) {
+    const user = await ensureLocalUser();
+
+    return prisma.note.update({
+      where: {
+        id: documentId,
+        userId: user.id,
+      },
+      data: {
+        ...(input.title !== undefined ? { title: input.title } : {}),
+        ...(input.content !== undefined ? { content: input.content } : {}),
+        ...(input.fileUrl !== undefined ? { fileUrl: input.fileUrl } : {}),
+      },
+    });
+  },
+
+  async deleteDocument(documentId: string) {
+    const user = await ensureLocalUser();
+
+    return prisma.note.delete({
+      where: {
+        id: documentId,
+        userId: user.id,
       },
     });
   },

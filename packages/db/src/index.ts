@@ -11,3 +11,4 @@ export type { CreateDocumentInput } from './queries/document.query.js';
 export { UserQuery } from './queries/user.query.js';
 export type { CreateUserInput, UpdateUserInput } from './queries/user.query.js';
 export { runDbMigrations } from './migrate.js';
+export { SettingsQuery } from './queries/settings.query.js';

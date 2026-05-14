@@ -34,6 +34,7 @@ model User {
   resumeDocumentId String?
   onboardingStep   OnboardingStep @default(PROFILE)
   isOnboardingComplete Boolean @default(false)
+  preferences      Json?
 
   interviews Interview[]
   notes      Note[]
