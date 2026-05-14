@@ -29,7 +29,9 @@ export const IprepPaths = {
   envFilePath: path.join(IPREP_HOME, '.env'),
 
   /** true when ~/.iprep/.env exists on disk */
-  isEnvExists: fs.existsSync(path.join(IPREP_HOME, '.env')),
+  get isEnvExists(): boolean {
+    return fs.existsSync(this.envFilePath);
+  },
 
   /** SQLite database folder: ~/.iprep/database/ */
   database: path.join(IPREP_HOME, 'database'),

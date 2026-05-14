@@ -84,10 +84,9 @@ Active packages: `@iprep/shared` (env, paths, formatters) and `@iprep/server` (E
 All three packages build clean. Next: fleshing out server routes and DB queries.
 
 <!-- gitnexus:start -->
-
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **iprep-init** (2256 symbols, 3712 relationships, 157 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **iprep-init** (2258 symbols, 3713 relationships, 157 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
@@ -108,22 +107,22 @@ This project is indexed by GitNexus as **iprep-init** (2256 symbols, 3712 relati
 
 ## Resources
 
-| Resource                                    | Use for                                  |
-| ------------------------------------------- | ---------------------------------------- |
-| `gitnexus://repo/iprep-init/context`        | Codebase overview, check index freshness |
-| `gitnexus://repo/iprep-init/clusters`       | All functional areas                     |
-| `gitnexus://repo/iprep-init/processes`      | All execution flows                      |
-| `gitnexus://repo/iprep-init/process/{name}` | Step-by-step execution trace             |
+| Resource | Use for |
+|----------|---------|
+| `gitnexus://repo/iprep-init/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/iprep-init/clusters` | All functional areas |
+| `gitnexus://repo/iprep-init/processes` | All execution flows |
+| `gitnexus://repo/iprep-init/process/{name}` | Step-by-step execution trace |
 
 ## CLI
 
-| Task                                         | Read this skill file                                        |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md`       |
-| Blast radius / "What breaks if I change X?"  | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?"             | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md`       |
-| Rename / extract / split / refactor          | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md`     |
-| Tools, resources, schema reference           | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md`           |
-| Index, status, clean, wiki CLI commands      | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md`             |
+| Task | Read this skill file |
+|------|---------------------|
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
+| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
+| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
 
 <!-- gitnexus:end -->

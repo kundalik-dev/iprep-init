@@ -29,25 +29,40 @@ function resolvePackageRoot(): string {
 
 const packageRoot = resolvePackageRoot();
 const schemaPath = path.join(packageRoot, 'prisma', 'schema.prisma');
+const configPath = path.join(packageRoot, 'prisma.config.ts');
 
 export async function runDbMigrations(): Promise<void> {
   const isWin = process.platform === 'win32';
   const npxBin = isWin ? 'npx.cmd' : 'npx';
   const pnpmBin = isWin ? 'pnpm.cmd' : 'pnpm';
 
+  const configArgs = fs.existsSync(configPath) ? ['--config', configPath] : [];
+
   try {
     // Try npx first as it is almost always available with Node.js
-    await execFileAsync(npxBin, ['prisma', 'migrate', 'deploy', '--schema', schemaPath], {
-      cwd: packageRoot,
-      env: process.env,
-      shell: isWin,
-    });
+    await execFileAsync(
+      npxBin,
+      ['prisma', 'migrate', 'deploy', '--schema', schemaPath, ...configArgs],
+      {
+        cwd: packageRoot,
+        env: process.env,
+        shell: isWin,
+      },
+    );
   } catch (npxErr: any) {
     // Fallback to pnpm if npx fails
     try {
       await execFileAsync(
         pnpmBin,
-        ['exec', 'prisma', 'migrate', 'deploy', '--schema', schemaPath],
+        [
+          'exec',
+          'prisma',
+          'migrate',
+          'deploy',
+          '--schema',
+          schemaPath,
+          ...configArgs,
+        ],
         {
           cwd: packageRoot,
           env: process.env,

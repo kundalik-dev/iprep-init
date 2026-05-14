@@ -5,7 +5,7 @@ import { IprepPaths } from '../utils/iprep-path.js';
 import { EnvSchema, type EnvVars } from '../schemas/env.schema.js';
 
 export const APP_NAME = 'iPrep';
-export const APP_VERSION = '1.2.5';
+export const APP_VERSION = '1.2.6';
 
 const DEFAULTS: EnvVars = {
   PORT: 5545,
