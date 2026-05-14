@@ -1,6 +1,6 @@
 {
   "name": "iprep",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "iPrep — self-hosted interview preparation platform. Run locally with CLI, server, and frontend.",
   "main": "dist/index.js",
   "bin": {
