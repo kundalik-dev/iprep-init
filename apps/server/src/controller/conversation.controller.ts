@@ -2,6 +2,14 @@ import type { RequestHandler } from 'express';
 import { ConversationQuery } from '@iprep/db';
 import { ApiError, ApiResponse, StatusCodes, asyncHandler } from '../utils/index.js';
 
+function getParam(value: string | string[] | undefined, name: string) {
+  if (typeof value === 'string' && value.trim()) {
+    return value;
+  }
+
+  throw new ApiError(StatusCodes.BAD_REQUEST, `${name} is required`);
+}
+
 export const listConversations: RequestHandler = asyncHandler(async (req, res) => {
   const conversations = await ConversationQuery.listConversations();
   res
@@ -20,7 +28,7 @@ export const createConversation: RequestHandler = asyncHandler(async (req, res) 
 });
 
 export const getConversation: RequestHandler = asyncHandler(async (req, res) => {
-  const conversationId = req.params.conversationId;
+  const conversationId = getParam(req.params.conversationId, 'conversationId');
   const conversation = await ConversationQuery.getConversation(conversationId);
 
   if (!conversation) {
@@ -33,7 +41,7 @@ export const getConversation: RequestHandler = asyncHandler(async (req, res) => 
 });
 
 export const updateConversation: RequestHandler = asyncHandler(async (req, res) => {
-  const conversationId = req.params.conversationId;
+  const conversationId = getParam(req.params.conversationId, 'conversationId');
   const title = req.body?.title;
 
   const conversation = await ConversationQuery.updateConversation(conversationId, { title });
@@ -44,7 +52,7 @@ export const updateConversation: RequestHandler = asyncHandler(async (req, res) 
 });
 
 export const deleteConversation: RequestHandler = asyncHandler(async (req, res) => {
-  const conversationId = req.params.conversationId;
+  const conversationId = getParam(req.params.conversationId, 'conversationId');
   
   await ConversationQuery.deleteConversation(conversationId);
 
@@ -54,8 +62,8 @@ export const deleteConversation: RequestHandler = asyncHandler(async (req, res) 
 });
 
 export const addMessage: RequestHandler = asyncHandler(async (req, res) => {
-  const conversationId = req.params.conversationId;
-  const { text, contextDocumentIds } = req.body;
+  const conversationId = getParam(req.params.conversationId, 'conversationId');
+  const { text } = req.body;
 
   if (!text) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'text is required');
@@ -80,7 +88,7 @@ export const addMessage: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const createInterviewPlan: RequestHandler = asyncHandler(async (req, res) => {
-  const conversationId = req.params.conversationId;
+  const conversationId = getParam(req.params.conversationId, 'conversationId');
   
   // Dummy logic: return a mock plan based on brainstorm notes
   const plan = {

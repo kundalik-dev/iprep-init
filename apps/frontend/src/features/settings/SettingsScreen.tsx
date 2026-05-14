@@ -1,66 +1,76 @@
 import { useEffect, useState } from 'react';
-import { Bot, Terminal, Edit2, Trash2, Plus, Sparkles, Mic, Brain, Zap, KeyRound, Settings as SettingsIcon, Eye, Loader2 } from 'lucide-react';
+import {
+  Bot, Terminal, Trash2, Sparkles, Mic, Brain,
+  Zap, KeyRound, Settings as SettingsIcon, Eye, EyeOff,
+  Loader2, CheckCircle2, XCircle, ShieldCheck,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getPreferences, updatePreferences, getProviders, deleteProvider, type ProviderData } from './api';
+import {
+  getPreferences,
+  updatePreferences,
+  getProviders,
+  saveApiKey,
+  deleteProviderKey,
+  type ProviderData,
+} from './api';
 
-const mockProviders = [
-  {
-    id: 'deepgram',
-    name: 'Deepgram Nova 2',
-    status: 'active',
-    statusClass: 'status-active',
-    type: 'Speech-to-Text • nova-2-general',
-    desc: 'Primary STT provider. Provides low-latency streaming transcription with punctuation.',
-    icon: <Mic size={20} />
+// ── Static provider catalog (UI display layer only) ───────────────────────────
+const PROVIDER_CATALOG = [
+  { 
+    key: 'OTHER',
+    name: 'Deepgram',
+    label: 'Deepgram',
+    type: 'Speech-to-Text',
+    placeholder: 'dg_••••••••••••••••••••••••••••••••',
+    desc: 'Primary STT provider. Low-latency streaming transcription with punctuation.',
+    icon: <Mic size={20} />,
+    noKey: false,
   },
   {
-    id: 'claude',
+    key: 'CLAUDE',
     name: 'Anthropic Claude',
-    status: 'active',
-    statusClass: 'status-active',
-    type: 'AI Analysis • claude-3-5-sonnet-20241022',
+    label: 'Anthropic / Claude',
+    type: 'AI Analysis',
+    placeholder: 'sk-ant-••••••••••••••••••••••••••••••',
     desc: 'Primary analysis, coaching, and session generation engine.',
-    icon: <Brain size={20} />
+    icon: <Brain size={20} />,
+    noKey: false,
   },
   {
-    id: 'gemini',
+    key: 'GEMINI',
     name: 'Google Gemini',
-    status: 'fallback',
-    statusClass: 'status-fallback',
-    type: 'AI Analysis • gemini-1.5-pro-002',
+    label: 'Google Gemini',
+    type: 'AI Analysis',
+    placeholder: 'AIza••••••••••••••••••••••••••••••••',
     desc: 'Fallback AI provider when Claude is rate-limited or unavailable.',
-    icon: <Sparkles size={20} />
+    icon: <Sparkles size={20} />,
+    noKey: false,
   },
   {
-    id: 'gpt4o',
-    name: 'OpenAI GPT-4o',
-    status: 'configured',
-    statusClass: 'status-configured',
-    type: 'AI Analysis • gpt-4o-2024-11-20',
-    desc: 'Secondary fallback. Higher cost per token than primary providers.',
-    icon: <Bot size={20} />
+    key: 'CODEX',
+    name: 'OpenAI GPT',
+    label: 'OpenAI',
+    type: 'AI Analysis',
+    placeholder: 'sk-••••••••••••••••••••••••••••••••••',
+    desc: 'Secondary fallback. Compatible with GPT-4o and GPT-4 Turbo.',
+    icon: <Bot size={20} />,
+    noKey: false,
   },
   {
-    id: 'whisper',
-    name: 'OpenAI Whisper',
-    status: 'not configured',
-    statusClass: 'status-disabled',
-    type: 'Speech to Text • whisper-1',
-    desc: 'Alternative STT. Higher accuracy on accented speech, higher latency.',
-    icon: <Mic size={20} />
-  },
-  {
-    id: 'ollama',
+    key: 'OLLAMA',
     name: 'Ollama (Local)',
-    status: 'not installed',
-    statusClass: 'status-disabled',
-    type: 'Local AI',
+    label: 'Ollama',
+    type: 'Local AI (no key needed)',
+    placeholder: 'No API key required',
     desc: 'Run models locally for offline use. No API key or internet required.',
     icon: <Terminal size={20} />,
-    command: 'brew install ollama && ollama pull llama3.2'
-  }
-];
+    noKey: true,
+  },
+] as const;
 
+const PLACEHOLDER_MASK = '••••••••••••••••';
+
+// ── Root ──────────────────────────────────────────────────────────────────────
 export function SettingsScreen({
   theme,
   setTheme,
@@ -111,6 +121,7 @@ export function SettingsScreen({
   );
 }
 
+// ── Preferences Tab ───────────────────────────────────────────────────────────
 function PreferencesTab({
   theme,
   setTheme,
@@ -120,6 +131,7 @@ function PreferencesTab({
 }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved' | 'error'>('idle');
   const [prefs, setPrefs] = useState({
     defaultTutor: 'alex',
     defaultPackage: 'behavioral',
@@ -128,27 +140,29 @@ function PreferencesTab({
   });
 
   useEffect(() => {
-    getPreferences().then((data) => {
-      if (data && Object.keys(data).length > 0) {
-        setPrefs(prev => ({ ...prev, ...data }));
-      }
-      setLoading(false);
-    }).catch(console.error);
+    getPreferences()
+      .then((data) => {
+        if (data && Object.keys(data).length > 0) setPrefs(prev => ({ ...prev, ...data }));
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const handleSave = async () => {
     setSaving(true);
+    setSaveStatus('idle');
     try {
       await updatePreferences(prefs);
-    } catch (e) {
-      console.error(e);
+      setSaveStatus('saved');
+    } catch {
+      setSaveStatus('error');
+    } finally {
+      setSaving(false);
+      setTimeout(() => setSaveStatus('idle'), 3000);
     }
-    setSaving(false);
   };
 
-  if (loading) {
-    return <div style={{ padding: '40px', textAlign: 'center' }}><Loader2 className="spin" size={24} style={{ margin: '0 auto' }} /></div>;
-  }
+  if (loading) return <Spinner />;
 
   return (
     <>
@@ -157,123 +171,103 @@ function PreferencesTab({
       <div className="settings-form">
         <div className="input-group">
           <div className="input-label">Default Tutor</div>
-          <select 
-            className="input" 
-            value={prefs.defaultTutor}
-            onChange={e => setPrefs({...prefs, defaultTutor: e.target.value})}
-          >
+          <select className="input" value={prefs.defaultTutor} onChange={e => setPrefs({ ...prefs, defaultTutor: e.target.value })}>
             <option value="alex">Alex Chen</option>
             <option value="sarah">Sarah Jenkins</option>
           </select>
         </div>
         <div className="input-group">
           <div className="input-label">Default Package</div>
-          <select 
-            className="input"
-            value={prefs.defaultPackage}
-            onChange={e => setPrefs({...prefs, defaultPackage: e.target.value})}
-          >
+          <select className="input" value={prefs.defaultPackage} onChange={e => setPrefs({ ...prefs, defaultPackage: e.target.value })}>
             <option value="behavioral">Behavioral Interview</option>
             <option value="technical">Technical Interview</option>
           </select>
         </div>
-        <div className="settings-divider"></div>
-        <div className="toggle-wrap">
-          <div className="toggle-info">
-            <div className="toggle-title">Voice Mode</div>
-            <div className="toggle-desc">Enable microphone input during sessions</div>
-          </div>
-          <label className="toggle-switch">
-            <input 
-              type="checkbox" 
-              checked={prefs.voiceMode}
-              onChange={e => setPrefs({...prefs, voiceMode: e.target.checked})}
-            />
-            <span className="toggle-slider"></span>
-          </label>
+        <div className="settings-divider" />
+        <Toggle
+          label="Voice Mode"
+          desc="Enable microphone input during sessions"
+          checked={prefs.voiceMode}
+          onChange={v => setPrefs({ ...prefs, voiceMode: v })}
+        />
+        <Toggle
+          label="Auto-Analyze on End"
+          desc="Automatically generate analysis when session ends"
+          checked={prefs.autoAnalyze}
+          onChange={v => setPrefs({ ...prefs, autoAnalyze: v })}
+        />
+        <Toggle
+          label="Dark Theme"
+          desc="Toggle between dark and light interface"
+          checked={theme === 'dark'}
+          onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        />
+        <div className="settings-divider" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            className="btn btn-primary"
+            style={{ width: 'fit-content', display: 'flex', alignItems: 'center', gap: '8px' }}
+            onClick={handleSave}
+            disabled={saving}
+          >
+            {saving ? <Loader2 size={15} className="spin" /> : null}
+            Save Preferences
+          </button>
+          {saveStatus === 'saved' && (
+            <span style={{ color: 'var(--success, #4ade80)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px' }}>
+              <CheckCircle2 size={15} /> Saved
+            </span>
+          )}
+          {saveStatus === 'error' && (
+            <span style={{ color: 'var(--danger, #f87171)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px' }}>
+              <XCircle size={15} /> Save failed
+            </span>
+          )}
         </div>
-        <div className="toggle-wrap">
-          <div className="toggle-info">
-            <div className="toggle-title">Auto-Analyze on End</div>
-            <div className="toggle-desc">Automatically generate analysis when session ends</div>
-          </div>
-          <label className="toggle-switch">
-            <input 
-              type="checkbox" 
-              checked={prefs.autoAnalyze}
-              onChange={e => setPrefs({...prefs, autoAnalyze: e.target.checked})}
-            />
-            <span className="toggle-slider"></span>
-          </label>
-        </div>
-        <div className="toggle-wrap">
-          <div className="toggle-info">
-            <div className="toggle-title">Dark Theme</div>
-            <div className="toggle-desc">Toggle between dark and light interface</div>
-          </div>
-          <label className="toggle-switch">
-            <input
-              type="checkbox"
-              checked={theme === 'dark'}
-              onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            />
-            <span className="toggle-slider"></span>
-          </label>
-        </div>
-        <div className="settings-divider"></div>
-        <button 
-          className="btn btn-primary" 
-          style={{ width: 'fit-content', display: 'flex', alignItems: 'center', gap: '8px' }}
-          onClick={handleSave}
-          disabled={saving}
-        >
-          {saving && <Loader2 size={16} className="spin" />}
-          Save Preferences
-        </button>
       </div>
     </>
   );
 }
 
+// ── Providers Tab ─────────────────────────────────────────────────────────────
 function ProvidersTab() {
-  type DisplayProvider = (typeof mockProviders)[number] & { dbId?: string };
   const [dbProviders, setDbProviders] = useState<ProviderData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fetchProviders = () => {
     setLoading(true);
-    getProviders().then((data) => {
-      setDbProviders(data || []);
-      setLoading(false);
-    }).catch((e) => {
-      console.error(e);
-      setLoading(false);
-    });
+    getProviders()
+      .then(data => { setDbProviders(data || []); setLoading(false); })
+      .catch(() => setLoading(false));
   };
 
   useEffect(() => {
-    const timer = window.setTimeout(() => fetchProviders(), 0);
-    return () => window.clearTimeout(timer);
+    const t = setTimeout(fetchProviders, 0);
+    return () => clearTimeout(t);
   }, []);
 
-  const handleDelete = async (dbId: string) => {
-    if (confirm('Are you sure you want to remove this provider?')) {
-      await deleteProvider(dbId);
+  const handleDelete = async (credentialId: string) => {
+    if (!confirm('Remove this provider key?')) return;
+    setDeletingId(credentialId);
+    try {
+      await deleteProviderKey(credentialId);
       fetchProviders();
+    } catch {
+      alert('Failed to delete provider key.');
+    } finally {
+      setDeletingId(null);
     }
   };
 
-  const displayProviders: DisplayProvider[] = mockProviders.map(p => {
-    const found = dbProviders.find(db => db.provider === p.id.toUpperCase());
-    if (found) {
-      return {
-        ...p,
-        status: found.isWorking ? 'active' : 'configured',
-        statusClass: found.isWorking ? 'status-active' : 'status-configured',
-        dbId: found.id
-      };
-    }
-    return p;
+  // Merge DB state into catalog
+  const displayProviders = PROVIDER_CATALOG.map(p => {
+    const db = dbProviders.find(d => d.provider === p.key);
+    const status = db?.hasApiKey
+      ? db.isWorking ? 'active' : 'configured'
+      : 'not configured';
+    const statusClass = status === 'active' ? 'status-active' : status === 'configured' ? 'status-configured' : 'status-disabled';
+    return { ...p, status, statusClass, dbEntry: db ?? null };
   });
 
   return (
@@ -282,51 +276,44 @@ function ProvidersTab() {
         <div>
           <div className="settings-section-title">AI Providers</div>
           <div className="settings-section-sub">
-            Configured providers for speech, analysis, and coaching. Fallback chain runs top to bottom.
+            Configured providers. Go to <strong>API Keys</strong> tab to add or update a key.
           </div>
         </div>
-        <button className="btn btn-primary btn-sm" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Plus size={16} /> Add Provider
-        </button>
       </div>
-      
-      {loading ? (
-        <div style={{ padding: '40px', textAlign: 'center' }}><Loader2 className="spin" size={24} style={{ margin: '0 auto' }} /></div>
-      ) : (
+
+      {loading ? <Spinner /> : (
         <div className="settings-provider-list">
           {displayProviders.map((provider) => (
-            <div key={provider.id} className="settings-provider-card">
-              <div className="spc-icon">
-                {provider.icon}
-              </div>
+            <div key={provider.key} className="settings-provider-card">
+              <div className="spc-icon">{provider.icon}</div>
               <div className="spc-content">
                 <div className="spc-header">
                   <div className="spc-title-row">
                     <span className="spc-name">{provider.name}</span>
                     <span className={cn('spc-status', provider.statusClass)}>
-                      <span className="spc-status-dot"></span> {provider.status}
+                      <span className="spc-status-dot" /> {provider.status}
                     </span>
                   </div>
                   <div className="spc-actions">
-                    <button className="spc-action-btn" title="Edit">
-                      <Edit2 size={16} />
-                    </button>
-                    {provider.dbId && (
-                      <button 
-                        className="spc-action-btn danger" 
-                        title="Delete"
-                        onClick={() => handleDelete(provider.dbId!)}
+                    {provider.dbEntry && (
+                      <button
+                        className="spc-action-btn danger"
+                        title="Remove key"
+                        disabled={deletingId === provider.dbEntry.id}
+                        onClick={() => handleDelete(provider.dbEntry!.id)}
                       >
-                        <Trash2 size={16} />
+                        {deletingId === provider.dbEntry.id
+                          ? <Loader2 size={15} className="spin" />
+                          : <Trash2 size={15} />}
                       </button>
                     )}
                   </div>
                 </div>
                 <div className="spc-type">{provider.type}</div>
                 <div className="spc-desc">{provider.desc}</div>
-                {provider.command && (
-                  <div className="spc-command-box">
-                    <strong>Run:</strong> {provider.command}
+                {provider.dbEntry?.hasApiKey && (
+                  <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
+                    <ShieldCheck size={13} /> Key stored and encrypted (AES-256-GCM)
                   </div>
                 )}
               </div>
@@ -338,59 +325,185 @@ function ProvidersTab() {
   );
 }
 
+// ── API Keys Tab ──────────────────────────────────────────────────────────────
+type KeyRowStatus = 'idle' | 'saving' | 'saved' | 'error';
+
 function ApiKeysTab() {
-  const apiKeys = [
-    {
-      id: 'deepgram',
-      label: 'Deepgram',
-      placeholder: 'STT provider for live transcription...',
-    },
-    {
-      id: 'claude',
-      label: 'Anthropic / Claude',
-      placeholder: 'Primary AI analysis engine...',
-    },
-    {
-      id: 'gemini',
-      label: 'Google Gemini',
-      placeholder: 'Fallback AI provider...',
-    },
-    {
-      id: 'openai',
-      label: 'OpenAI',
-      placeholder: 'Secondary fallback AI...',
-    },
-  ];
+  const [keys, setKeys] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
+  const [rowStatus, setRowStatus] = useState<Record<string, KeyRowStatus>>({});
+  const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
+  const [dbIds, setDbIds] = useState<Record<string, string>>({});  // providerKey -> credential id
+
+  const loadProviders = () => {
+    setLoading(true);
+    getProviders()
+      .then(data => {
+        const filled: Record<string, string> = {};
+        const ids: Record<string, string> = {};
+        data?.forEach(p => {
+          if (p.hasApiKey) filled[p.provider] = PLACEHOLDER_MASK;
+          ids[p.provider] = p.id;
+        });
+        setKeys(filled);
+        setDbIds(ids);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    const timer = window.setTimeout(loadProviders, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const handleSaveKey = async (providerKey: string) => {
+    const val = keys[providerKey];
+    if (!val || val === PLACEHOLDER_MASK) return;
+
+    setRowStatus(s => ({ ...s, [providerKey]: 'saving' }));
+    try {
+      const result = await saveApiKey({ provider: providerKey, mode: 'API_KEY', apiKey: val });
+      if (result) {
+        setDbIds(ids => ({ ...ids, [providerKey]: result.id }));
+        setKeys(k => ({ ...k, [providerKey]: PLACEHOLDER_MASK }));
+      }
+      setRowStatus(s => ({ ...s, [providerKey]: 'saved' }));
+    } catch {
+      setRowStatus(s => ({ ...s, [providerKey]: 'error' }));
+    } finally {
+      setTimeout(() => setRowStatus(s => ({ ...s, [providerKey]: 'idle' })), 3000);
+    }
+  };
+
+  const handleDeleteKey = async (providerKey: string) => {
+    const credId = dbIds[providerKey];
+    if (!credId || !confirm('Remove this API key?')) return;
+    setRowStatus(s => ({ ...s, [providerKey]: 'saving' }));
+    try {
+      await deleteProviderKey(credId);
+      setKeys(k => { const n = { ...k }; delete n[providerKey]; return n; });
+      setDbIds(ids => { const n = { ...ids }; delete n[providerKey]; return n; });
+      setRowStatus(s => ({ ...s, [providerKey]: 'idle' }));
+    } catch {
+      setRowStatus(s => ({ ...s, [providerKey]: 'error' }));
+      setTimeout(() => setRowStatus(s => ({ ...s, [providerKey]: 'idle' })), 3000);
+    }
+  };
+
+  if (loading) return <Spinner />;
 
   return (
     <>
       <div className="settings-section-title">API Keys</div>
-      <div className="settings-section-sub">
-        Keys are stored locally and never sent to iPrep servers. Used only for direct provider calls.
+      <div className="settings-section-sub" style={{ marginBottom: '20px' }}>
+        Keys are encrypted with AES-256-GCM and stored locally. They are never sent to iPrep servers.
       </div>
+
       <div className="api-key-form">
-        {apiKeys.map((provider) => (
-          <div className="api-key-row" key={provider.id}>
-            <label className="input-label" htmlFor={`${provider.id}-api-key`}>
-              {provider.label}
-            </label>
-            <div className="input-with-action api-key-input">
-              <input
-                className="input"
-                id={`${provider.id}-api-key`}
-                type="password"
-                placeholder={provider.placeholder}
-              />
-              <button className="input-action-btn" type="button" aria-label={`Show ${provider.label} API key`}>
-                <Eye size={15} />
-              </button>
+        {PROVIDER_CATALOG.filter(p => !p.noKey).map((provider) => {
+          const status = rowStatus[provider.key] ?? 'idle';
+          const hasStoredKey = keys[provider.key] === PLACEHOLDER_MASK;
+          const isDirty = keys[provider.key] && keys[provider.key] !== PLACEHOLDER_MASK;
+
+          return (
+            <div className="api-key-row" key={provider.key}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <label className="input-label" style={{ margin: 0 }} htmlFor={`${provider.key}-api-key`}>
+                  {provider.label}
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {hasStoredKey && !isDirty && (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
+                      <ShieldCheck size={12} /> Stored
+                    </span>
+                  )}
+                  {status === 'saved' && (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
+                      <CheckCircle2 size={12} /> Saved
+                    </span>
+                  )}
+                  {status === 'error' && (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--danger, #f87171)' }}>
+                      <XCircle size={12} /> Error
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="input-with-action api-key-input" style={{ flex: 1 }}>
+                  <input
+                    className="input"
+                    id={`${provider.key}-api-key`}
+                    type={showKeys[provider.key] ? 'text' : 'password'}
+                    placeholder={provider.placeholder}
+                    value={keys[provider.key] || ''}
+                    onChange={e => setKeys({ ...keys, [provider.key]: e.target.value })}
+                    disabled={status === 'saving'}
+                  />
+                  <button
+                    className="input-action-btn"
+                    type="button"
+                    aria-label={`Toggle ${provider.label} key visibility`}
+                    onClick={() => setShowKeys({ ...showKeys, [provider.key]: !showKeys[provider.key] })}
+                  >
+                    {showKeys[provider.key]
+                      ? <EyeOff size={15} />
+                      : <Eye size={15} style={{ opacity: 0.6 }} />}
+                  </button>
+                </div>
+
+                <button
+                  className="btn btn-primary btn-sm"
+                  style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: '6px' }}
+                  onClick={() => handleSaveKey(provider.key)}
+                  disabled={!isDirty || status === 'saving'}
+                >
+                  {status === 'saving' ? <Loader2 size={13} className="spin" /> : null}
+                  Save
+                </button>
+
+                {hasStoredKey && (
+                  <button
+                    className="btn btn-sm"
+                    style={{ flexShrink: 0, color: 'var(--danger, #f87171)', border: '1px solid var(--danger, #f87171)', background: 'transparent' }}
+                    onClick={() => handleDeleteKey(provider.key)}
+                    title="Remove key"
+                    disabled={status === 'saving'}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-        <button className="btn btn-primary" style={{ width: 'fit-content' }}>
-          Save Keys
-        </button>
+          );
+        })}
       </div>
     </>
+  );
+}
+
+// ── Shared Components ─────────────────────────────────────────────────────────
+function Toggle({ label, desc, checked, onChange }: { label: string; desc: string; checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <div className="toggle-wrap">
+      <div className="toggle-info">
+        <div className="toggle-title">{label}</div>
+        <div className="toggle-desc">{desc}</div>
+      </div>
+      <label className="toggle-switch">
+        <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} />
+        <span className="toggle-slider" />
+      </label>
+    </div>
+  );
+}
+
+function Spinner() {
+  return (
+    <div style={{ padding: '40px', textAlign: 'center' }}>
+      <Loader2 className="spin" size={24} style={{ margin: '0 auto' }} />
+    </div>
   );
 }

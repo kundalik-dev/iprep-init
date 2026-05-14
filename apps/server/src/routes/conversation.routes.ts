@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, type Router as ExpressRouter } from 'express';
 import {
   listConversations,
   createConversation,
@@ -9,7 +9,7 @@ import {
   createInterviewPlan,
 } from '../controller/conversation.controller.js';
 
-export const conversationRouter = Router();
+export const conversationRouter: ExpressRouter = Router();
 
 conversationRouter.get('/', listConversations);
 conversationRouter.post('/', createConversation);

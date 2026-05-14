@@ -7,18 +7,23 @@ export type ProviderData = {
   modelName?: string;
   hasApiKey: boolean;
   isWorking: boolean;
+  isSelected: boolean;
+  lastTestPassed?: boolean | null;
+  lastTestedAt?: string | null;
   createdAt: string;
+  updatedAt: string;
 };
 
 export type PreferencesData = Record<string, unknown>;
 
-export type UpsertProviderPayload = {
+export type SaveApiKeyPayload = {
   provider: string;
-  mode: string;
+  mode?: string;
+  apiKey: string;
   modelName?: string;
-  apiKey?: string;
 };
 
+// ── Preferences ───────────────────────────────────────────────────────────────
 export async function getPreferences() {
   return apiRequest<PreferencesData>('/settings/preferences');
 }
@@ -30,19 +35,39 @@ export async function updatePreferences(preferences: PreferencesData) {
   });
 }
 
+// ── Providers ─────────────────────────────────────────────────────────────────
 export async function getProviders() {
   return apiRequest<ProviderData[]>('/settings/providers');
 }
 
-export async function upsertProvider(providerData: UpsertProviderPayload) {
-  return apiRequest<ProviderData>('/settings/providers', {
+// ── API Keys ──────────────────────────────────────────────────────────────────
+export async function saveApiKey(payload: SaveApiKeyPayload) {
+  return apiRequest<{ id: string; provider: string; hasApiKey: boolean }>('/settings/api-keys', {
     method: 'POST',
-    body: JSON.stringify(providerData),
+    body: JSON.stringify(payload),
   });
 }
 
-export async function deleteProvider(id: string) {
-  await apiRequest(`/settings/providers/${id}`, {
+export async function deleteProviderKey(id: string) {
+  return apiRequest<{ id: string }>(`/settings/api-keys/${id}`, {
     method: 'DELETE',
   });
+}
+
+// Also export as upsertProvider alias for backward-compat with SettingsScreen
+export async function upsertProvider(payload: { provider: string; mode: string; apiKey?: string; modelName?: string }) {
+  if (payload.apiKey) {
+    return saveApiKey({
+      provider: payload.provider,
+      mode: payload.mode,
+      apiKey: payload.apiKey,
+      modelName: payload.modelName,
+    });
+  }
+  // No key to save — just resolve with no-op
+  return null;
+}
+
+export async function deleteProvider(id: string) {
+  return deleteProviderKey(id);
 }

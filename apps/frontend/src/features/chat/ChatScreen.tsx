@@ -1,124 +1,218 @@
-import { Plus, SendHorizonal } from 'lucide-react';
-
-type Conversation = {
-  id: string;
-  title: string;
-  preview: string;
-  time: string;
-  group: 'today' | 'earlier';
-};
-
-const conversations: Conversation[] = [
-  {
-    id: 'last-session',
-    title: 'How did my last session go?',
-    preview: 'Your most recent session was Behavior...',
-    time: '10:16 am',
-    group: 'today',
-  },
-  {
-    id: 'behavioral-review',
-    title: 'Behavioral session review',
-    preview: 'Based on your last 3 sessions, here are...',
-    time: '6 May',
-    group: 'earlier',
-  },
-  {
-    id: 'dsa-strategy',
-    title: 'DSA improvement strategy',
-    preview: 'DSA Performance — 2 sessions, avg 6...',
-    time: '5 May',
-    group: 'earlier',
-  },
-  {
-    id: 'system-design',
-    title: 'System design gaps',
-    preview: 'System Design — 7.5/10 with Morgan: Y...',
-    time: '4 May',
-    group: 'earlier',
-  },
-];
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { Loader2, MessageCircle, Plus, SendHorizonal, Sparkles, Trash2 } from 'lucide-react';
+import {
+  listConversations,
+  getConversation,
+  createConversation,
+  addMessage,
+  deleteConversation,
+  type Conversation,
+  type ChatMessage,
+} from './api';
 
 export function ChatScreen() {
-  const today = conversations.filter((conversation) => conversation.group === 'today');
-  const earlier = conversations.filter((conversation) => conversation.group === 'earlier');
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const loadConversations = useCallback(async () => {
+    try {
+      const data = await listConversations();
+      setConversations(data);
+      setActiveConversation((current) => current ?? data[0] ?? null);
+    } catch (err) {
+      console.error('Failed to load conversations', err);
+    }
+  }, []);
+
+  const loadMessages = useCallback(async (id: string) => {
+    setIsLoading(true);
+    try {
+      const chat = await getConversation(id);
+      setActiveConversation(chat);
+      setMessages(chat.messages || []);
+    } catch (err) {
+      console.error('Failed to load messages', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => void loadConversations(), 0);
+    return () => window.clearTimeout(timer);
+  }, [loadConversations]);
+
+  useEffect(() => {
+    if (activeConversation?.id) {
+      const timer = window.setTimeout(() => void loadMessages(activeConversation.id), 0);
+      return () => window.clearTimeout(timer);
+    }
+  }, [activeConversation?.id, loadMessages]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isSending]);
+
+  async function handleNewChat() {
+    try {
+      const newChat = await createConversation('New Conversation');
+      setConversations([newChat, ...conversations]);
+      setActiveConversation(newChat);
+    } catch (err) {
+      console.error('Failed to create conversation', err);
+    }
+  }
+
+  async function handleDeleteChat(id: string) {
+    try {
+      await deleteConversation(id);
+      setConversations(conversations.filter(c => c.id !== id));
+      if (activeConversation?.id === id) {
+        setActiveConversation(null);
+        setMessages([]);
+      }
+    } catch (err) {
+      console.error('Failed to delete conversation', err);
+    }
+  }
+
+  async function handleSendMessage(e: React.FormEvent) {
+    e.preventDefault();
+    if (!inputText.trim() || isSending) return;
+
+    let chatId = activeConversation?.id;
+    if (!chatId) {
+      const newChat = await createConversation(inputText.slice(0, 30) + '...');
+      setConversations([newChat, ...conversations]);
+      setActiveConversation(newChat);
+      chatId = newChat.id;
+    }
+
+    const textToSend = inputText;
+    setInputText('');
+    setIsSending(true);
+
+    try {
+      const result = await addMessage(chatId, textToSend);
+      setMessages(prev => [...prev, result.userMessage, result.aiMessage]);
+    } catch (err) {
+      console.error('Failed to send message', err);
+    } finally {
+      setIsSending(false);
+    }
+  }
+
+  const formatTime = (isoString: string) => {
+    try {
+      const d = new Date(isoString);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return '';
+    }
+  };
 
   return (
     <div className="chat-layout view-enter">
       <aside className="chat-sidebar">
-        <ConversationGroup label="Today" conversations={today} activeId="last-session" />
-        <ConversationGroup label="Earlier" conversations={earlier} activeId="last-session" />
+        <div className="conv-group">
+          <div className="conv-group-label">
+            <span>Recent Chats</span>
+          </div>
+          {conversations.length === 0 && (
+            <div className="chat-empty-sidebar">
+              <div className="chat-empty-sidebar-icon">
+                <MessageCircle size={16} />
+              </div>
+              <div className="chat-empty-sidebar-title">No conversations yet</div>
+              <div className="chat-empty-sidebar-copy">Ask a question to create your first chat.</div>
+            </div>
+          )}
+          {conversations.map((conversation) => (
+            <div
+              key={conversation.id}
+              className={`conv-item ${conversation.id === activeConversation?.id ? 'active' : ''}`}
+            >
+              <button
+                type="button"
+                className="conv-item-inner"
+                onClick={() => setActiveConversation(conversation)}
+              >
+                <div className="conv-item-title">{conversation.title}</div>
+                <div className="conv-item-time">{formatTime(conversation.lastMessageAt || conversation.createdAt)}</div>
+              </button>
+              <button 
+                className="conv-delete-btn"
+                onClick={(e) => { e.stopPropagation(); handleDeleteChat(conversation.id); }}
+                title="Delete Chat"
+                type="button"
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
       </aside>
 
       <section className="chat-main">
         <header className="chat-header">
           <div>
-            <div className="chat-title">iPrep AI Assistant</div>
+            <div className="chat-title">{activeConversation?.title || 'iPrep AI Assistant'}</div>
             <div className="chat-meta">Ask anything about your interview prep</div>
           </div>
-          <button className="btn btn-primary btn-sm chat-new-btn">
+          <button className="btn btn-primary btn-sm chat-new-btn" onClick={handleNewChat}>
             <Plus size={14} /> New Chat
           </button>
         </header>
 
         <div className="chat-messages">
-          <div className="message user">
-            <div className="msg-avatar user">K</div>
-            <div className="msg-body">
-              <div className="msg-bubble">How did my last session go?</div>
-              <div className="msg-time">10:16 am</div>
+          {isLoading ? (
+            <div className="chat-loading-state">
+              <Loader2 className="animate-spin" size={24} /> Loading conversation...
             </div>
-          </div>
-
-          <div className="message ai">
-            <div className="msg-avatar ai">iP</div>
-            <div className="msg-body">
-              <div className="msg-bubble">
-                <p>
-                  Your most recent session was <strong>Behavioral with Priya</strong> on 6 May
-                  2026.
-                </p>
-                <p>
-                  <strong>Overall Score: 8.2/10</strong>
-                </p>
-                <p>
-                  <strong>Score breakdown:</strong>
-                  <br />
-                  - Communication: 9/10
-                  <br />
-                  - Technical: 6/10
-                  <br />
-                  - Problem Solving: 8/10
-                  <br />
-                  - Confidence: 8/10
-                </p>
-                <p>
-                  <strong>Top strength:</strong> Excellent use of STAR method throughout all
-                  answers
-                </p>
-                <p>
-                  <strong>Key improvement:</strong> Quantify impact more - 'increased efficiency'
-                  needs a number
-                </p>
-                <p>Want the full analysis or tips on what to practice next?</p>
+          ) : messages.length === 0 ? (
+            <EmptyChatState />
+          ) : (
+            messages.map((msg) => (
+              <div key={msg.id} className={`message ${msg.role.toLowerCase()}`}>
+                <div className={`msg-avatar ${msg.role.toLowerCase()}`}>
+                  {msg.role === 'USER' ? 'U' : 'iP'}
+                </div>
+                <div className="msg-body">
+                  <div className="msg-bubble" style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</div>
+                  <div className="msg-time">{formatTime(msg.sentAt)}</div>
+                </div>
               </div>
-              <div className="msg-actions">
-                <button className="msg-action-btn">View Full Analysis</button>
-                <button className="msg-action-btn">What to Practice Next</button>
+            ))
+          )}
+          {isSending && (
+            <div className="message ai">
+              <div className="msg-avatar ai">iP</div>
+              <div className="msg-body">
+                <div className="msg-bubble">
+                  <Loader2 className="animate-spin" size={16} />
+                </div>
               </div>
-              <div className="msg-time">10:18 am</div>
             </div>
-          </div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
 
-        <form className="chat-input-area">
+        <form className="chat-input-area" onSubmit={handleSendMessage}>
           <div className="chat-input-row">
-            <textarea
+            <input
+              type="text"
               className="chat-input"
               placeholder="Ask about your sessions, get tips, or start a new interview..."
-              rows={1}
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              disabled={isSending}
             />
-            <button className="btn btn-primary chat-send-btn" type="button" aria-label="Send message">
+            <button className="btn btn-primary chat-send-btn" type="submit" aria-label="Send message" disabled={isSending || !inputText.trim()}>
               <SendHorizonal size={18} />
             </button>
           </div>
@@ -129,29 +223,24 @@ export function ChatScreen() {
   );
 }
 
-function ConversationGroup({
-  label,
-  conversations,
-  activeId,
-}: {
-  label: string;
-  conversations: Conversation[];
-  activeId: string;
-}) {
+function EmptyChatState() {
   return (
-    <div className="conv-group">
-      <div className="conv-group-label">{label}</div>
-      {conversations.map((conversation) => (
-        <button
-          className={`conv-item ${conversation.id === activeId ? 'active' : ''}`}
-          key={conversation.id}
-          type="button"
-        >
-          <div className="conv-item-title">{conversation.title}</div>
-          <div className="conv-item-meta">{conversation.preview}</div>
-          <div className="conv-item-time">{conversation.time}</div>
-        </button>
-      ))}
+    <div className="chat-empty-state">
+      <div className="chat-empty-card">
+        <div className="chat-empty-icon">
+          <Sparkles size={22} />
+        </div>
+        <div className="chat-empty-title">Start with your iPrep assistant</div>
+        <div className="chat-empty-copy">
+          Ask about recent sessions, weak spots, practice plans, or how to use your notes as
+          interview context.
+        </div>
+        <div className="chat-prompt-grid">
+          <button type="button">Review my last interview</button>
+          <button type="button">What should I practice next?</button>
+          <button type="button">Make a 25 minute prep plan</button>
+        </div>
+      </div>
     </div>
   );
 }
