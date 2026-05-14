@@ -132,6 +132,12 @@ async function writeEnvFile(yes: boolean): Promise<void> {
 
 async function runDbMigration(): Promise<void> {
   try {
+    // Ensure DATABASE_URL is set in the current process environment
+    // so it's passed to the migration child process.
+    if (!process.env.DATABASE_URL) {
+      process.env.DATABASE_URL = `file:${IprepPaths.dbFile.replace(/\\/g, '/')}`;
+    }
+
     await runDbMigrations();
     console.log(`  ${log.success('Database migrated')}`);
   } catch (err: unknown) {
