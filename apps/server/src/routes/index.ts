@@ -7,6 +7,7 @@ import { onboardingRoutes } from './onboarding.route.js';
 import { profileRoutes } from './profile.route.js';
 import { userRoutes } from './user.route.js';
 import settingsRoutes from './settings.route.js';
+import { conversationRouter } from './conversation.routes.js';
 
 const router: Router = Router();
 
@@ -18,5 +19,6 @@ router.use('/onboarding', onboardingRoutes);
 router.use('/user', profileRoutes);
 router.use('/users', userRoutes);
 router.use('/settings', settingsRoutes);
+router.use('/conversations', conversationRouter);
 
 export { router as apiRoutes };

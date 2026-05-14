@@ -54,6 +54,7 @@ Planning and design documents for the iPrep CLI (`apps/cli`).
 | `01-cli-plan.md`           | Master CLI plan - stack, folder structure, all commands, utilities, local home structure, and implementation phases. Primary reference for CLI design. |
 | `02-onboard-plan.md`       | Detailed plan for the `iprep onboard` command - 7-step flow, inputs, outputs, and handler design (`runOnBoard`).                                       |
 | `03-start-command.plan.md` | Detailed plan for the `iprep start` command - prerequisite checks, server spawn, health wait, and handler design (`runStart`).                         |
+| `04-doctor-command.plan.md`| Detailed plan for the `iprep doctor` command - system checks, environmental readiness, JSON output support, and handler architecture (`runDoctor`).    |
 
 ---
 

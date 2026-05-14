@@ -1,6 +1,7 @@
 import { Moon, Settings, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { practiceNav, toolNav, type ViewId } from '@/config/navigation';
+import { ChatScreen } from '@/features/chat/ChatScreen';
 import { DashboardScreen } from '@/features/dashboard/DashboardScreen';
 import { NotesFilesScreen } from '@/features/notes-files/NotesFilesScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
@@ -123,6 +124,8 @@ export function AppLayout({ activeView, setActiveView, theme, setTheme }: AppLay
         <div id="view-root">
           {activeView === 'dashboard' ? (
             <DashboardScreen />
+          ) : activeView === 'chat' ? (
+            <ChatScreen />
           ) : activeView === 'files' ? (
             <NotesFilesScreen />
           ) : activeView === 'settings' ? (

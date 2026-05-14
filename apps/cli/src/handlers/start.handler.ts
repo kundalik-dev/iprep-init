@@ -43,7 +43,14 @@ async function verifyPrerequisites(): Promise<void> {
 
 // ─── Step 2 ─────────────────────────────────────────────────────────────────
 
-function readPort(): number {
+function readPort(optsPort?: string): number {
+  if (optsPort) {
+    const port = parseInt(optsPort, 10);
+    if (!isNaN(port) && port > 0 && port <= 65535) {
+      return port;
+    }
+    console.log(log.warn(`Invalid port "${optsPort}" provided. Using default ${env.PORT}.`));
+  }
   return env.PORT;
 }
 
@@ -129,12 +136,12 @@ function attachShutdownHook(child: ChildProcess): void {
 
 // ─── Orchestrator ────────────────────────────────────────────────────────────
 
-export async function runStart(_opts: Record<string, unknown>): Promise<void> {
+export async function runStart(opts: { port?: string; open?: boolean }): Promise<void> {
   printBanner();
   printSeparator();
   printCommandBadge('iprep start');
 
-  const port = readPort();
+  const port = readPort(opts.port);
 
   printMeta([`port: ${port}`, `server: http://localhost:${port}`, `db: ${IprepPaths.dbFile}`]);
 
@@ -156,5 +163,13 @@ export async function runStart(_opts: Record<string, unknown>): Promise<void> {
   }
 
   showRunningBanner(port);
+  
+  if (opts.open !== false) {
+    const open = (await import('open')).default;
+    await open(`http://localhost:${port}`).catch(() => {
+      console.log(log.warn('Could not open browser automatically.'));
+    });
+  }
+
   attachShutdownHook(child);
 }

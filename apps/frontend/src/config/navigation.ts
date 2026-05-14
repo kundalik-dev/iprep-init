@@ -24,7 +24,7 @@ export const practiceNav: NavItem[] = [
 ];
 
 export const toolNav: NavItem[] = [
-  { id: 'chat', label: 'AI Coach', icon: Bot },
+  { id: 'chat', label: 'AI Chat', icon: Bot },
   { id: 'files', label: 'Notes & Files', icon: FolderOpen },
   { id: 'communication', label: 'Communication', icon: Mic },
 ];

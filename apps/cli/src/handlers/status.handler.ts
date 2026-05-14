@@ -9,14 +9,30 @@ function formatDatabasePath(databaseUrl: string): string {
   return databaseUrl.startsWith('file:') ? databaseUrl.replace('file:', '') : databaseUrl;
 }
 
-export async function runStatus(): Promise<void> {
-  console.log(log.bold('\niPrep System Status\n'));
+export async function runStatus(opts: { json?: boolean } = {}): Promise<void> {
+  if (!opts.json) console.log(log.bold('\niPrep System Status\n'));
 
   const [serverUp, dbUp] = await Promise.all([checkHealth(), checkDbHealth()]);
 
   const dbPath = formatDatabasePath(env.DATABASE_URL);
   const configExists = fs.existsSync(IprepPaths.envFilePath);
   const databaseFileExists = fs.existsSync(dbPath);
+
+  if (opts.json) {
+    console.log(
+      JSON.stringify(
+        {
+          server: { up: serverUp, apiBase: env.API_BASE_URL },
+          config: { exists: configExists, mode: env.NODE_ENV, port: env.PORT },
+          database: { up: dbUp, path: dbPath, fileExists: databaseFileExists },
+          frontend: { origin: env.CORS_ORIGIN },
+        },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
 
   const label = (value: string) => chalk.dim(value.padEnd(10));
   const indent = ' '.repeat(14);

@@ -6,6 +6,7 @@ import {
   FileText,
   Folder,
   FolderOpen,
+  MoreHorizontal,
   Plus,
   RefreshCw,
   Search,
@@ -40,6 +41,7 @@ type TocItem = {
   depth: number;
   text: string;
 };
+const WORKSPACE_ROOT_ID = 'workspace-root';
 
 export function NotesFilesScreen() {
   const [documents, setDocuments] = useState<IprepDocument[]>([]);
@@ -90,13 +92,26 @@ export function NotesFilesScreen() {
 
   const rootDocuments = filteredDocuments.filter((document) => !document.folderId);
   const documentsByFolder = new Map<string, IprepDocument[]>();
+  const foldersByParent = new Map<string, IprepFolder[]>();
 
   for (const folder of folders) {
+    const parentId = folder.parentFolderId ?? WORKSPACE_ROOT_ID;
+    foldersByParent.set(parentId, [...(foldersByParent.get(parentId) ?? []), folder]);
     documentsByFolder.set(
       folder.id,
       filteredDocuments.filter((document) => document.folderId === folder.id),
     );
   }
+
+  for (const groupedFolders of foldersByParent.values()) {
+    groupedFolders.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  for (const groupedDocuments of documentsByFolder.values()) {
+    groupedDocuments.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  rootDocuments.sort((a, b) => a.title.localeCompare(b.title));
 
   async function refreshWorkspace() {
     setIsLoading(true);
@@ -107,7 +122,7 @@ export function NotesFilesScreen() {
 
       setDocuments(nextDocuments);
       setFolders(nextFolders);
-      setExpandedFolders(new Set(nextFolders.map((folder) => folder.id)));
+      setExpandedFolders(new Set([WORKSPACE_ROOT_ID, ...nextFolders.map((folder) => folder.id)]));
 
       if (!selectedDocumentId && nextDocuments.length > 0) {
         setSelectedDocumentId(nextDocuments[0].id);
@@ -263,6 +278,8 @@ export function NotesFilesScreen() {
     });
   }
 
+  const workspaceOpen = expandedFolders.has(WORKSPACE_ROOT_ID);
+
   return (
     <div className="files-screen view-enter">
       <div className="files-topbar">
@@ -302,58 +319,49 @@ export function NotesFilesScreen() {
 
       <div className="files-layout">
         <aside className="file-tree">
-          <div className="file-tree-header">
-            <span className="file-tree-title">Files</span>
-            <div className="file-tree-actions">
-              <button
-                className="tree-action-btn"
-                onClick={() => void refreshWorkspace()}
-                title="Refresh"
-                aria-label="Refresh files"
-              >
-                <RefreshCw size={14} />
-              </button>
-            </div>
-          </div>
           <div className="file-tree-body">
             {isLoading ? (
               <TreeLoading />
             ) : documents.length === 0 ? (
               <div className="files-tree-empty">No notes yet</div>
             ) : (
-              <>
-                {folders.map((folder) => (
-                  <div className="tree-folder" key={folder.id}>
+              <div className="workspace-tree">
+                <div className="workspace-tree-root">
+                  <button
+                    className={cn('workspace-root-row', workspaceOpen && 'open')}
+                    onClick={() => toggleFolder(WORKSPACE_ROOT_ID)}
+                  >
+                    <ChevronRight className="tree-chevron" size={13} />
+                    <span className="workspace-root-name">IPREP-INIT</span>
+                  </button>
+                  <div className="workspace-root-actions">
                     <button
-                      className={cn('tree-folder-row', expandedFolders.has(folder.id) && 'open')}
-                      onClick={() => toggleFolder(folder.id)}
+                      className="tree-action-btn"
+                      onClick={() => void refreshWorkspace()}
+                      title="Refresh"
+                      aria-label="Refresh files"
                     >
-                      <ChevronRight className="tree-chevron" size={13} />
-                      {expandedFolders.has(folder.id) ? (
-                        <FolderOpen className="tree-folder-icon" size={16} fill="#ffc107" stroke="#ffc107" />
-                      ) : (
-                        <Folder className="tree-folder-icon" size={16} fill="#ffc107" stroke="#ffc107" />
-                      )}
-                      <span className="tree-folder-name">{folder.name}</span>
-                      <span className="tree-folder-count">
-                        {documentsByFolder.get(folder.id)?.length ?? 0}
-                      </span>
+                      <RefreshCw size={13} />
                     </button>
-                    <div className="tree-files">
-                      {(documentsByFolder.get(folder.id) ?? []).map((document) => (
-                        <DocumentTreeRow
-                          key={document.id}
-                          document={document}
-                          isSelected={selectedDocumentId === document.id}
-                          onSelect={() => setSelectedDocumentId(document.id)}
-                        />
-                      ))}
-                    </div>
+                    <button className="tree-action-btn" title="More" aria-label="More file actions">
+                      <MoreHorizontal size={14} />
+                    </button>
                   </div>
-                ))}
-                {rootDocuments.length > 0 && (
-                  <div className="tree-root-group">
-                    <div className="tree-root-label">Root</div>
+                </div>
+                {workspaceOpen && (
+                  <div className="workspace-tree-children">
+                    {(foldersByParent.get(WORKSPACE_ROOT_ID) ?? []).map((folder) => (
+                      <FolderTreeNode
+                        key={folder.id}
+                        folder={folder}
+                        foldersByParent={foldersByParent}
+                        documentsByFolder={documentsByFolder}
+                        expandedFolders={expandedFolders}
+                        selectedDocumentId={selectedDocumentId}
+                        onToggle={toggleFolder}
+                        onSelectDocument={setSelectedDocumentId}
+                      />
+                    ))}
                     {rootDocuments.map((document) => (
                       <DocumentTreeRow
                         key={document.id}
@@ -364,7 +372,7 @@ export function NotesFilesScreen() {
                     ))}
                   </div>
                 )}
-              </>
+              </div>
             )}
           </div>
           <div className="tree-storage-info">Stored locally in ~/.iprep/docs</div>
@@ -496,6 +504,67 @@ export function NotesFilesScreen() {
   );
 }
 
+function FolderTreeNode({
+  folder,
+  foldersByParent,
+  documentsByFolder,
+  expandedFolders,
+  selectedDocumentId,
+  onToggle,
+  onSelectDocument,
+}: {
+  folder: IprepFolder;
+  foldersByParent: Map<string, IprepFolder[]>;
+  documentsByFolder: Map<string, IprepDocument[]>;
+  expandedFolders: Set<string>;
+  selectedDocumentId: string | null;
+  onToggle: (folderId: string) => void;
+  onSelectDocument: (documentId: string) => void;
+}) {
+  const isOpen = expandedFolders.has(folder.id);
+  const childFolders = foldersByParent.get(folder.id) ?? [];
+  const childDocuments = documentsByFolder.get(folder.id) ?? [];
+  const hasChildren = childFolders.length > 0 || childDocuments.length > 0;
+
+  return (
+    <div className="tree-folder">
+      <button className={cn('tree-folder-row', isOpen && 'open')} onClick={() => onToggle(folder.id)}>
+        <ChevronRight className={cn('tree-chevron', !hasChildren && 'empty')} size={13} />
+        {isOpen ? (
+          <FolderOpen className="tree-folder-icon" size={16} />
+        ) : (
+          <Folder className="tree-folder-icon" size={16} />
+        )}
+        <span className="tree-folder-name">{folder.name}</span>
+      </button>
+      {isOpen && hasChildren && (
+        <div className="tree-children">
+          {childFolders.map((childFolder) => (
+            <FolderTreeNode
+              key={childFolder.id}
+              folder={childFolder}
+              foldersByParent={foldersByParent}
+              documentsByFolder={documentsByFolder}
+              expandedFolders={expandedFolders}
+              selectedDocumentId={selectedDocumentId}
+              onToggle={onToggle}
+              onSelectDocument={onSelectDocument}
+            />
+          ))}
+          {childDocuments.map((document) => (
+            <DocumentTreeRow
+              key={document.id}
+              document={document}
+              isSelected={selectedDocumentId === document.id}
+              onSelect={() => onSelectDocument(document.id)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DocumentTreeRow({
   document,
   isSelected,
@@ -508,9 +577,13 @@ function DocumentTreeRow({
   return (
     <button className={cn('tree-file', isSelected && 'selected')} onClick={onSelect}>
       <FileText className="tree-file-icon" size={14} />
-      <span className="tree-file-name">{document.title}</span>
+      <span className="tree-file-name">{formatTreeFileName(document.title)}</span>
     </button>
   );
+}
+
+function formatTreeFileName(title: string) {
+  return title.replace(/\.(md|markdown)$/i, '');
 }
 
 function NotesFilesModal({
