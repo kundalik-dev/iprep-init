@@ -34,7 +34,7 @@ export function ChatScreen() {
 
   useEffect(() => {
     getPreferences()
-      .then((prefs: Record<string, any>) => {
+      .then((prefs: Record<string, unknown>) => {
         setAiProvider((prefs?.aiProvider as string) ?? null);
         setAiMode((prefs?.aiMode as string) ?? null);
       })
@@ -46,7 +46,7 @@ export function ChatScreen() {
       const data = await listConversations();
       setConversations(data);
       setActiveConversation((current) => current ?? data[0] ?? null);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to load conversations', err);
     }
   }, []);
@@ -57,7 +57,7 @@ export function ChatScreen() {
       const chat = await getConversation(id);
       setActiveConversation(chat);
       setMessages(chat.messages || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to load messages', err);
     } finally {
       setIsLoading(false);
@@ -85,7 +85,7 @@ export function ChatScreen() {
       const newChat = await createConversation('New Conversation');
       setConversations([newChat, ...conversations]);
       setActiveConversation(newChat);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to create conversation', err);
     }
   }
@@ -98,7 +98,7 @@ export function ChatScreen() {
         setActiveConversation(null);
         setMessages([]);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to delete conversation', err);
     }
   }
@@ -122,7 +122,7 @@ export function ChatScreen() {
     try {
       const result = await addMessage(chatId, textToSend);
       setMessages((prev) => [...prev, result.userMessage, result.aiMessage]);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to send message', err);
     } finally {
       setIsSending(false);

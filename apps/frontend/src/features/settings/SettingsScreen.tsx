@@ -159,7 +159,7 @@ function PreferencesTab({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saved' | 'error'>('idle');
-  const [prefs, setPrefs] = useState<Record<string, any>>({
+  const [prefs, setPrefs] = useState<Record<string, unknown>>({
     defaultTutor: 'alex',
     defaultPackage: 'behavioral',
     voiceMode: true,
@@ -206,7 +206,7 @@ function PreferencesTab({
           <div className="input-label">Default Tutor</div>
           <select
             className="input"
-            value={prefs.defaultTutor}
+            value={prefs.defaultTutor as string}
             onChange={(e) => setPrefs({ ...prefs, defaultTutor: e.target.value })}
           >
             <option value="alex">Alex Chen</option>
@@ -217,7 +217,7 @@ function PreferencesTab({
           <div className="input-label">Default Package</div>
           <select
             className="input"
-            value={prefs.defaultPackage}
+            value={prefs.defaultPackage as string}
             onChange={(e) => setPrefs({ ...prefs, defaultPackage: e.target.value })}
           >
             <option value="behavioral">Behavioral Interview</option>
@@ -341,7 +341,7 @@ function PreferencesTab({
             <select
               id="pref-ai-provider"
               className="input"
-              value={prefs.aiProvider ?? 'CLAUDE'}
+              value={(prefs.aiProvider as string) ?? 'CLAUDE'}
               onChange={(e) => setPrefs({ ...prefs, aiProvider: e.target.value })}
             >
               {AI_PROVIDER_OPTIONS.map((opt) => (
@@ -378,7 +378,7 @@ function PreferencesTab({
                         ? 'e.g. llama3'
                         : 'Enter model ID'
               }
-              value={prefs.aiModel ?? ''}
+              value={(prefs.aiModel as string) ?? ''}
               onChange={(e) => setPrefs({ ...prefs, aiModel: e.target.value })}
             />
             <div
@@ -429,13 +429,13 @@ function PreferencesTab({
         <Toggle
           label="Voice Mode"
           desc="Enable microphone input during sessions"
-          checked={prefs.voiceMode}
+          checked={prefs.voiceMode as boolean}
           onChange={(v) => setPrefs({ ...prefs, voiceMode: v })}
         />
         <Toggle
           label="Auto-Analyze on End"
           desc="Automatically generate analysis when session ends"
-          checked={prefs.autoAnalyze}
+          checked={prefs.autoAnalyze as boolean}
           onChange={(v) => setPrefs({ ...prefs, autoAnalyze: v })}
         />
         <Toggle
@@ -515,7 +515,6 @@ function ProvidersTab() {
   }, []);
 
   useEffect(() => {
-    setCliLoading(true);
     getCliStatus()
       .then((data) => {
         setCliStatus(data);
@@ -547,10 +546,11 @@ function ProvidersTab() {
       }));
       // Refresh so isWorking badge updates
       fetchProviders();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
       setTestState((s) => ({
         ...s,
-        [credentialId]: { status: 'failed', message: err?.message ?? 'Unknown error' },
+        [credentialId]: { status: 'failed', message },
       }));
     }
   };
