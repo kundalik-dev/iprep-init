@@ -7,25 +7,29 @@ import {
   deleteProviderKey,
   revealApiKey,
 } from '../controller/settings.controller.js';
+import { getCliStatus, testProvider } from '../controller/provider-check.controller.js';
 
 const router: Router = Router();
 
 // ── Preferences ───────────────────────────────────────────────────────────────
-// GET  /api/v1/settings/preferences
-// PUT  /api/v1/settings/preferences
 router.get('/preferences', getPreferences);
 router.put('/preferences', updatePreferences);
 
 // ── Provider credentials list ─────────────────────────────────────────────────
-// GET  /api/v1/settings/providers
 router.get('/providers', getProviders);
 
+// ── CLI installation status ───────────────────────────────────────────────────
+// GET /api/v1/settings/providers/cli-status
+router.get('/providers/cli-status', getCliStatus);
+
+// ── Test a stored provider key ────────────────────────────────────────────────
+// POST /api/v1/settings/providers/:id/test
+router.post('/providers/:id/test', testProvider);
+
 // ── API Key management ────────────────────────────────────────────────────────
-// POST   /api/v1/settings/api-keys          — add or replace a key (encrypted)
-// DELETE /api/v1/settings/api-keys/:id      — remove a key
-// GET    /api/v1/settings/api-keys/:id/reveal — decrypt and return (use with care)
 router.post('/api-keys', saveApiKey);
 router.delete('/api-keys/:id', deleteProviderKey);
 router.get('/api-keys/:id/reveal', revealApiKey);
 
 export default router;
+

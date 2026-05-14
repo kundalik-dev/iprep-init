@@ -71,3 +71,25 @@ export async function upsertProvider(payload: { provider: string; mode: string; 
 export async function deleteProvider(id: string) {
   return deleteProviderKey(id);
 }
+
+// ── Provider health test ──────────────────────────────────────────────────────
+export type TestResult = { passed: boolean; message: string; provider: string };
+
+export async function testProviderKey(credentialId: string): Promise<TestResult> {
+  return apiRequest<TestResult>(`/settings/providers/${credentialId}/test`, { method: 'POST' });
+}
+
+// ── CLI status ────────────────────────────────────────────────────────────────
+export type CliEntry = {
+  key: string;
+  label: string;
+  installed: boolean;
+  version: string | null;
+  installNpm: string;
+  installWin: string;
+  installMac: string;
+};
+
+export async function getCliStatus(): Promise<CliEntry[]> {
+  return apiRequest<CliEntry[]>('/settings/providers/cli-status');
+}

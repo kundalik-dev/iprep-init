@@ -83,4 +83,16 @@ export class SettingsQuery {
       where: { id, userId },
     });
   }
+
+  static async markProviderTestResult(id: string, userId: string, passed: boolean, message: string) {
+    return prisma.providerCredential.updateMany({
+      where: { id, userId },
+      data: {
+        isWorking: passed,
+        lastTestPassed: passed,
+        lastTestMessage: message,
+        lastTestedAt: new Date(),
+      },
+    });
+  }
 }

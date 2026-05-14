@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import {
   Bot, Terminal, Trash2, Sparkles, Mic, Brain,
   Zap, KeyRound, Settings as SettingsIcon, Eye, EyeOff,
-  Loader2, CheckCircle2, XCircle, ShieldCheck,
+  Loader2, CheckCircle2, XCircle, ShieldCheck, FlaskConical,
+  Copy, CheckCheck, Monitor,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -11,7 +12,10 @@ import {
   getProviders,
   saveApiKey,
   deleteProviderKey,
+  testProviderKey,
+  getCliStatus,
   type ProviderData,
+  type CliEntry,
 } from './api';
 
 // ── Static provider catalog (UI display layer only) ───────────────────────────
@@ -230,10 +234,16 @@ function PreferencesTab({
 }
 
 // ── Providers Tab ─────────────────────────────────────────────────────────────
+type TestState = { status: 'idle' | 'testing' | 'passed' | 'failed'; message?: string };
+
 function ProvidersTab() {
   const [dbProviders, setDbProviders] = useState<ProviderData[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [testState, setTestState] = useState<Record<string, TestState>>({});
+  const [cliStatus, setCliStatus] = useState<CliEntry[]>([]);
+  const [cliLoading, setCliLoading] = useState(true);
+  const [copied, setCopied] = useState<string | null>(null);
 
   const fetchProviders = () => {
     setLoading(true);
@@ -245,6 +255,13 @@ function ProvidersTab() {
   useEffect(() => {
     const t = setTimeout(fetchProviders, 0);
     return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    setCliLoading(true);
+    getCliStatus()
+      .then(data => { setCliStatus(data); setCliLoading(false); })
+      .catch(() => setCliLoading(false));
   }, []);
 
   const handleDelete = async (credentialId: string) => {
@@ -260,6 +277,27 @@ function ProvidersTab() {
     }
   };
 
+  const handleTest = async (credentialId: string) => {
+    setTestState(s => ({ ...s, [credentialId]: { status: 'testing' } }));
+    try {
+      const result = await testProviderKey(credentialId);
+      setTestState(s => ({
+        ...s,
+        [credentialId]: { status: result.passed ? 'passed' : 'failed', message: result.message },
+      }));
+      // Refresh so isWorking badge updates
+      fetchProviders();
+    } catch (err: any) {
+      setTestState(s => ({ ...s, [credentialId]: { status: 'failed', message: err?.message ?? 'Unknown error' } }));
+    }
+  };
+
+  const handleCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
   // Merge DB state into catalog
   const displayProviders = PROVIDER_CATALOG.map(p => {
     const db = dbProviders.find(d => d.provider === p.key);
@@ -269,6 +307,8 @@ function ProvidersTab() {
     const statusClass = status === 'active' ? 'status-active' : status === 'configured' ? 'status-configured' : 'status-disabled';
     return { ...p, status, statusClass, dbEntry: db ?? null };
   });
+
+  const isWin = navigator.userAgent.includes('Windows');
 
   return (
     <>
@@ -283,49 +323,180 @@ function ProvidersTab() {
 
       {loading ? <Spinner /> : (
         <div className="settings-provider-list">
-          {displayProviders.map((provider) => (
-            <div key={provider.key} className="settings-provider-card">
-              <div className="spc-icon">{provider.icon}</div>
-              <div className="spc-content">
-                <div className="spc-header">
-                  <div className="spc-title-row">
-                    <span className="spc-name">{provider.name}</span>
-                    <span className={cn('spc-status', provider.statusClass)}>
-                      <span className="spc-status-dot" /> {provider.status}
-                    </span>
+          {displayProviders.map((provider) => {
+            const test = provider.dbEntry ? (testState[provider.dbEntry.id] ?? { status: 'idle' }) : null;
+            return (
+              <div key={provider.key} className="settings-provider-card">
+                <div className="spc-icon">{provider.icon}</div>
+                <div className="spc-content">
+                  <div className="spc-header">
+                    <div className="spc-title-row">
+                      <span className="spc-name">{provider.name}</span>
+                      <span className={cn('spc-status', provider.statusClass)}>
+                        <span className="spc-status-dot" /> {provider.status}
+                      </span>
+                    </div>
+                    <div className="spc-actions">
+                      {/* Test button – only if key is stored */}
+                      {provider.dbEntry?.hasApiKey && (
+                        <button
+                          className={cn(
+                            'spc-action-btn',
+                            test?.status === 'passed' && 'success',
+                            test?.status === 'failed' && 'danger',
+                          )}
+                          title="Test API key"
+                          disabled={test?.status === 'testing'}
+                          onClick={() => handleTest(provider.dbEntry!.id)}
+                          style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', padding: '4px 10px' }}
+                        >
+                          {test?.status === 'testing' && <Loader2 size={13} className="spin" />}
+                          {test?.status === 'passed' && <CheckCircle2 size={13} />}
+                          {test?.status === 'failed' && <XCircle size={13} />}
+                          {(!test || test.status === 'idle') && <FlaskConical size={13} />}
+                          {test?.status === 'testing' ? 'Testing…' : 'Test'}
+                        </button>
+                      )}
+                      {/* Delete */}
+                      {provider.dbEntry && (
+                        <button
+                          className="spc-action-btn danger"
+                          title="Remove key"
+                          disabled={deletingId === provider.dbEntry.id}
+                          onClick={() => handleDelete(provider.dbEntry!.id)}
+                        >
+                          {deletingId === provider.dbEntry.id
+                            ? <Loader2 size={14} className="spin" />
+                            : <Trash2 size={14} />}
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div className="spc-actions">
-                    {provider.dbEntry && (
-                      <button
-                        className="spc-action-btn danger"
-                        title="Remove key"
-                        disabled={deletingId === provider.dbEntry.id}
-                        onClick={() => handleDelete(provider.dbEntry!.id)}
-                      >
-                        {deletingId === provider.dbEntry.id
-                          ? <Loader2 size={15} className="spin" />
-                          : <Trash2 size={15} />}
-                      </button>
+
+                  <div className="spc-type">{provider.type}</div>
+                  <div className="spc-desc">{provider.desc}</div>
+
+                  {/* Test result */}
+                  {test && test.status !== 'idle' && test.message && (
+                    <div style={{
+                      marginTop: '8px', fontSize: '12px',
+                      color: test.status === 'passed' ? 'var(--success, #4ade80)' : test.status === 'failed' ? 'var(--danger, #f87171)' : 'var(--text-m)',
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                    }}>
+                      {test.status === 'passed' && <CheckCircle2 size={12} />}
+                      {test.status === 'failed' && <XCircle size={12} />}
+                      {test.message}
+                    </div>
+                  )}
+
+                  {/* Encryption badge */}
+                  {provider.dbEntry?.hasApiKey && (
+                    <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
+                      <ShieldCheck size={12} /> Key stored · AES-256-GCM encrypted
+                    </div>
+                  )}
+
+                  {/* Last tested */}
+                  {provider.dbEntry?.lastTestedAt && (
+                    <div style={{ marginTop: '4px', fontSize: '11px', color: 'var(--text-m)' }}>
+                      Last tested: {new Date(provider.dbEntry.lastTestedAt).toLocaleString()}
+                      {provider.dbEntry.lastTestMessage && ` · ${provider.dbEntry.lastTestMessage}`}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* CLI Installation Section */}
+      <div style={{ marginTop: '32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Monitor size={16} />
+            <div className="settings-section-title" style={{ margin: 0 }}>CLI Tools</div>
+          </div>
+          <button
+            className="btn btn-sm"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-m)', borderRadius: '8px', padding: '5px 12px', cursor: 'pointer' }}
+            onClick={() => {
+              setCliLoading(true);
+              getCliStatus()
+                .then(data => { setCliStatus(data); setCliLoading(false); })
+                .catch(() => setCliLoading(false));
+            }}
+            disabled={cliLoading}
+          >
+            {cliLoading ? <Loader2 size={13} className="spin" /> : <FlaskConical size={13} />}
+            {cliLoading ? 'Checking…' : 'Refresh'}
+          </button>
+        </div>
+        <div className="settings-section-sub" style={{ marginBottom: '16px' }}>
+          iPrep auto-detects installed AI CLIs. Use the install commands below to add missing tools.
+        </div>
+
+        {cliLoading ? <Spinner /> : (
+          <div className="settings-provider-list">
+            {cliStatus.map(cli => {
+              const installCmd = isWin ? cli.installWin : cli.installMac;
+              const copyKey = `cli-${cli.key}`;
+              return (
+                <div key={cli.key} className="settings-provider-card" style={{ padding: '14px 18px' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span className="spc-name" style={{ fontSize: '14px' }}>{cli.label}</span>
+                        {cli.installed ? (
+                          <span className="spc-status status-active" style={{ fontSize: '11px' }}>
+                            <span className="spc-status-dot" /> Installed
+                            {cli.version && <span style={{ marginLeft: '4px', opacity: 0.7 }}>({cli.version})</span>}
+                          </span>
+                        ) : (
+                          <span className="spc-status status-disabled" style={{ fontSize: '11px' }}>
+                            <span className="spc-status-dot" /> Not installed
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {installCmd && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <code style={{
+                          background: 'var(--surface-3, rgba(255,255,255,0.06))',
+                          border: '1px solid var(--border, rgba(255,255,255,0.1))',
+                          borderRadius: '6px',
+                          padding: '5px 12px',
+                          fontSize: '12px',
+                          fontFamily: 'monospace',
+                          color: 'var(--text-p)',
+                          flex: 1,
+                          userSelect: 'all' as const,
+                        }}>
+                          {installCmd}
+                        </code>
+                        <button
+                          className="spc-action-btn"
+                          title="Copy install command"
+                          onClick={() => handleCopy(installCmd, copyKey)}
+                        >
+                          {copied === copyKey ? <CheckCheck size={14} /> : <Copy size={14} />}
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
-                <div className="spc-type">{provider.type}</div>
-                <div className="spc-desc">{provider.desc}</div>
-                {provider.dbEntry?.hasApiKey && (
-                  <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
-                    <ShieldCheck size={13} /> Key stored and encrypted (AES-256-GCM)
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        )}
+      </div>
+
     </>
   );
 }
 
 // ── API Keys Tab ──────────────────────────────────────────────────────────────
+
 type KeyRowStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 function ApiKeysTab() {
