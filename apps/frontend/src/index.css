@@ -4116,17 +4116,33 @@ mark.highlight {
   border-radius: 50%;
 }
 
-.status-active { color: #10b981; }
-.status-active .spc-status-dot { background: #10b981; }
+.status-active {
+  color: #10b981;
+}
+.status-active .spc-status-dot {
+  background: #10b981;
+}
 
-.status-fallback { color: #f59e0b; }
-.status-fallback .spc-status-dot { background: #f59e0b; }
+.status-fallback {
+  color: #f59e0b;
+}
+.status-fallback .spc-status-dot {
+  background: #f59e0b;
+}
 
-.status-configured { color: #3b82f6; }
-.status-configured .spc-status-dot { background: #3b82f6; }
+.status-configured {
+  color: #3b82f6;
+}
+.status-configured .spc-status-dot {
+  background: #3b82f6;
+}
 
-.status-disabled { color: #94a3b8; }
-.status-disabled .spc-status-dot { background: #94a3b8; }
+.status-disabled {
+  color: #94a3b8;
+}
+.status-disabled .spc-status-dot {
+  background: #94a3b8;
+}
 
 .spc-actions {
   display: flex;
@@ -4517,7 +4533,7 @@ mark.highlight {
   right: -20%;
   width: 80%;
   height: 80%;
-  background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
   border-radius: 50%;
   z-index: 1;
 }
@@ -4723,12 +4739,12 @@ mark.highlight {
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-.field input[type="file"] {
+.field input[type='file'] {
   padding: 8px 12px;
   color: var(--text-s);
 }
 
-.field input[type="file"]::file-selector-button {
+.field input[type='file']::file-selector-button {
   background: var(--bg-elevated);
   border: 1px solid var(--bg-border);
   color: var(--text-p);
@@ -4739,7 +4755,7 @@ mark.highlight {
   transition: background var(--tr-fast);
 }
 
-.field input[type="file"]::file-selector-button:hover {
+.field input[type='file']::file-selector-button:hover {
   background: var(--bg-hover);
 }
 
@@ -4940,7 +4956,7 @@ mark.highlight {
   .goal-card-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .stepper {
     flex-direction: column;
     align-items: flex-start;

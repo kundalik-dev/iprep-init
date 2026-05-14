@@ -1,9 +1,24 @@
 import { useEffect, useState } from 'react';
 import {
-  Bot, Terminal, Trash2, Sparkles, Mic, Brain,
-  Zap, KeyRound, Settings as SettingsIcon, Eye, EyeOff,
-  Loader2, CheckCircle2, XCircle, ShieldCheck, FlaskConical,
-  Copy, CheckCheck, Monitor,
+  Bot,
+  Terminal,
+  Trash2,
+  Sparkles,
+  Mic,
+  Brain,
+  Zap,
+  KeyRound,
+  Settings as SettingsIcon,
+  Eye,
+  EyeOff,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  ShieldCheck,
+  FlaskConical,
+  Copy,
+  CheckCheck,
+  Monitor,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -20,7 +35,7 @@ import {
 
 // ── Static provider catalog (UI display layer only) ───────────────────────────
 const PROVIDER_CATALOG = [
-  { 
+  {
     key: 'OTHER',
     name: 'Deepgram',
     label: 'Deepgram',
@@ -127,10 +142,10 @@ export function SettingsScreen({
 
 // ── AI Provider options for the Preferences dropdown ──────────────────────────
 const AI_PROVIDER_OPTIONS = [
-  { value: 'CLAUDE',  label: 'Anthropic Claude' },
-  { value: 'GEMINI',  label: 'Google Gemini' },
-  { value: 'CODEX',   label: 'OpenAI GPT' },
-  { value: 'OLLAMA',  label: 'Ollama (Local)' },
+  { value: 'CLAUDE', label: 'Anthropic Claude' },
+  { value: 'GEMINI', label: 'Google Gemini' },
+  { value: 'CODEX', label: 'OpenAI GPT' },
+  { value: 'OLLAMA', label: 'Ollama (Local)' },
 ];
 
 // ── Preferences Tab ───────────────────────────────────────────────────────────
@@ -158,7 +173,7 @@ function PreferencesTab({
   useEffect(() => {
     getPreferences()
       .then((data) => {
-        if (data && Object.keys(data).length > 0) setPrefs(prev => ({ ...prev, ...data }));
+        if (data && Object.keys(data).length > 0) setPrefs((prev) => ({ ...prev, ...data }));
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -189,14 +204,22 @@ function PreferencesTab({
       <div className="settings-form">
         <div className="input-group">
           <div className="input-label">Default Tutor</div>
-          <select className="input" value={prefs.defaultTutor} onChange={e => setPrefs({ ...prefs, defaultTutor: e.target.value })}>
+          <select
+            className="input"
+            value={prefs.defaultTutor}
+            onChange={(e) => setPrefs({ ...prefs, defaultTutor: e.target.value })}
+          >
             <option value="alex">Alex Chen</option>
             <option value="sarah">Sarah Jenkins</option>
           </select>
         </div>
         <div className="input-group">
           <div className="input-label">Default Package</div>
-          <select className="input" value={prefs.defaultPackage} onChange={e => setPrefs({ ...prefs, defaultPackage: e.target.value })}>
+          <select
+            className="input"
+            value={prefs.defaultPackage}
+            onChange={(e) => setPrefs({ ...prefs, defaultPackage: e.target.value })}
+          >
             <option value="behavioral">Behavioral Interview</option>
             <option value="technical">Technical Interview</option>
           </select>
@@ -208,7 +231,9 @@ function PreferencesTab({
         <div style={{ marginBottom: '4px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <Brain size={15} style={{ opacity: 0.7 }} />
-            <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-p)' }}>AI Configuration</span>
+            <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-p)' }}>
+              AI Configuration
+            </span>
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-m)', marginBottom: '16px' }}>
             Choose how iPrep sends prompts to AI for chat and analysis.
@@ -216,55 +241,95 @@ function PreferencesTab({
 
           {/* Mode: API Key vs CLI */}
           <div style={{ marginBottom: '14px' }}>
-            <div className="input-label" style={{ marginBottom: '8px' }}>Connection Mode</div>
+            <div className="input-label" style={{ marginBottom: '8px' }}>
+              Connection Mode
+            </div>
             <div style={{ display: 'flex', gap: '10px' }}>
               <label
                 htmlFor="pref-mode-apikey"
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  padding: '10px 16px', borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
                   border: `2px solid ${!isCliMode ? 'var(--accent, #6366f1)' : 'var(--border, rgba(255,255,255,0.1))'}`,
-                  background: !isCliMode ? 'rgba(99,102,241,0.1)' : 'var(--surface-2, rgba(255,255,255,0.04))',
-                  cursor: 'pointer', flex: 1, transition: 'border-color 0.2s, background 0.2s',
+                  background: !isCliMode
+                    ? 'rgba(99,102,241,0.1)'
+                    : 'var(--surface-2, rgba(255,255,255,0.04))',
+                  cursor: 'pointer',
+                  flex: 1,
+                  transition: 'border-color 0.2s, background 0.2s',
                 }}
               >
                 <input
                   id="pref-mode-apikey"
-                  type="radio" name="aiMode" value="API_KEY"
+                  type="radio"
+                  name="aiMode"
+                  value="API_KEY"
                   checked={!isCliMode}
                   onChange={() => setPrefs({ ...prefs, aiMode: 'API_KEY' })}
                   style={{ accentColor: 'var(--accent, #6366f1)', width: '15px', height: '15px' }}
                 />
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', fontWeight: 600 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                    }}
+                  >
                     <KeyRound size={13} /> API Key
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>Use a stored provider API key</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>
+                    Use a stored provider API key
+                  </div>
                 </div>
               </label>
 
               <label
                 htmlFor="pref-mode-cli"
                 style={{
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  padding: '10px 16px', borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
                   border: `2px solid ${isCliMode ? 'var(--accent, #6366f1)' : 'var(--border, rgba(255,255,255,0.1))'}`,
-                  background: isCliMode ? 'rgba(99,102,241,0.1)' : 'var(--surface-2, rgba(255,255,255,0.04))',
-                  cursor: 'pointer', flex: 1, transition: 'border-color 0.2s, background 0.2s',
+                  background: isCliMode
+                    ? 'rgba(99,102,241,0.1)'
+                    : 'var(--surface-2, rgba(255,255,255,0.04))',
+                  cursor: 'pointer',
+                  flex: 1,
+                  transition: 'border-color 0.2s, background 0.2s',
                 }}
               >
                 <input
                   id="pref-mode-cli"
-                  type="radio" name="aiMode" value="CLI"
+                  type="radio"
+                  name="aiMode"
+                  value="CLI"
                   checked={isCliMode}
                   onChange={() => setPrefs({ ...prefs, aiMode: 'CLI' })}
                   style={{ accentColor: 'var(--accent, #6366f1)', width: '15px', height: '15px' }}
                 />
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', fontWeight: 600 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                    }}
+                  >
                     <Terminal size={13} /> CLI Tool
                   </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>Use an installed CLI (no key needed)</div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>
+                    Use an installed CLI (no key needed)
+                  </div>
                 </div>
               </label>
             </div>
@@ -277,51 +342,84 @@ function PreferencesTab({
               id="pref-ai-provider"
               className="input"
               value={prefs.aiProvider ?? 'CLAUDE'}
-              onChange={e => setPrefs({ ...prefs, aiProvider: e.target.value })}
+              onChange={(e) => setPrefs({ ...prefs, aiProvider: e.target.value })}
             >
-              {AI_PROVIDER_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              {AI_PROVIDER_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </select>
           </div>
 
           {/* Model name */}
           <div className="input-group" style={{ marginBottom: '0' }}>
-            <div className="input-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div
+              className="input-label"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            >
               <span>API Model ID</span>
-              <span style={{ fontSize: '11px', color: 'var(--text-m)', fontWeight: 400 }}>optional — leave blank for default</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-m)', fontWeight: 400 }}>
+                optional — leave blank for default
+              </span>
             </div>
             <input
               id="pref-ai-model"
-              className="input" type="text"
+              className="input"
+              type="text"
               placeholder={
-                prefs.aiProvider === 'CLAUDE' ? 'e.g. claude-3-5-sonnet-latest' :
-                prefs.aiProvider === 'GEMINI' ? 'e.g. gemini-1.5-flash' :
-                prefs.aiProvider === 'CODEX'  ? 'e.g. gpt-4o-mini' :
-                prefs.aiProvider === 'OLLAMA' ? 'e.g. llama3' : 'Enter model ID'
+                prefs.aiProvider === 'CLAUDE'
+                  ? 'e.g. claude-3-5-sonnet-latest'
+                  : prefs.aiProvider === 'GEMINI'
+                    ? 'e.g. gemini-1.5-flash'
+                    : prefs.aiProvider === 'CODEX'
+                      ? 'e.g. gpt-4o-mini'
+                      : prefs.aiProvider === 'OLLAMA'
+                        ? 'e.g. llama3'
+                        : 'Enter model ID'
               }
               value={prefs.aiModel ?? ''}
-              onChange={e => setPrefs({ ...prefs, aiModel: e.target.value })}
+              onChange={(e) => setPrefs({ ...prefs, aiModel: e.target.value })}
             />
-            <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '4px', opacity: 0.8 }}>
+            <div
+              style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '4px', opacity: 0.8 }}
+            >
               Use the technical ID (slug) from your provider's docs.
             </div>
           </div>
 
           {/* Contextual hint */}
-          <div style={{
-            marginTop: '10px', padding: '10px 14px', borderRadius: '8px',
-            background: 'rgba(99,102,241,0.07)', border: '1px solid rgba(99,102,241,0.2)',
-            fontSize: '12px', color: 'var(--text-m)',
-            display: 'flex', alignItems: 'flex-start', gap: '8px',
-          }}>
-            {isCliMode
-              ? <Terminal size={13} style={{ marginTop: '1px', flexShrink: 0, opacity: 0.7 }} />
-              : <KeyRound size={13} style={{ marginTop: '1px', flexShrink: 0, opacity: 0.7 }} />}
+          <div
+            style={{
+              marginTop: '10px',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              background: 'rgba(99,102,241,0.07)',
+              border: '1px solid rgba(99,102,241,0.2)',
+              fontSize: '12px',
+              color: 'var(--text-m)',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px',
+            }}
+          >
+            {isCliMode ? (
+              <Terminal size={13} style={{ marginTop: '1px', flexShrink: 0, opacity: 0.7 }} />
+            ) : (
+              <KeyRound size={13} style={{ marginTop: '1px', flexShrink: 0, opacity: 0.7 }} />
+            )}
             <span>
-              {isCliMode
-                ? <>CLI mode runs the AI tool installed on your machine. Check <strong>Providers → CLI Tools</strong> to verify installation status.</>
-                : <>API Key mode uses the key saved in the <strong>API Keys</strong> tab for the selected provider.</>}
+              {isCliMode ? (
+                <>
+                  CLI mode runs the AI tool installed on your machine. Check{' '}
+                  <strong>Providers → CLI Tools</strong> to verify installation status.
+                </>
+              ) : (
+                <>
+                  API Key mode uses the key saved in the <strong>API Keys</strong> tab for the
+                  selected provider.
+                </>
+              )}
             </span>
           </div>
         </div>
@@ -332,13 +430,13 @@ function PreferencesTab({
           label="Voice Mode"
           desc="Enable microphone input during sessions"
           checked={prefs.voiceMode}
-          onChange={v => setPrefs({ ...prefs, voiceMode: v })}
+          onChange={(v) => setPrefs({ ...prefs, voiceMode: v })}
         />
         <Toggle
           label="Auto-Analyze on End"
           desc="Automatically generate analysis when session ends"
           checked={prefs.autoAnalyze}
-          onChange={v => setPrefs({ ...prefs, autoAnalyze: v })}
+          onChange={(v) => setPrefs({ ...prefs, autoAnalyze: v })}
         />
         <Toggle
           label="Dark Theme"
@@ -358,12 +456,28 @@ function PreferencesTab({
             Save Preferences
           </button>
           {saveStatus === 'saved' && (
-            <span style={{ color: 'var(--success, #4ade80)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px' }}>
+            <span
+              style={{
+                color: 'var(--success, #4ade80)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '13px',
+              }}
+            >
               <CheckCircle2 size={15} /> Saved
             </span>
           )}
           {saveStatus === 'error' && (
-            <span style={{ color: 'var(--danger, #f87171)', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px' }}>
+            <span
+              style={{
+                color: 'var(--danger, #f87171)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                fontSize: '13px',
+              }}
+            >
               <XCircle size={15} /> Save failed
             </span>
           )}
@@ -372,7 +486,6 @@ function PreferencesTab({
     </>
   );
 }
-
 
 // ── Providers Tab ─────────────────────────────────────────────────────────────
 type TestState = { status: 'idle' | 'testing' | 'passed' | 'failed'; message?: string };
@@ -389,7 +502,10 @@ function ProvidersTab() {
   const fetchProviders = () => {
     setLoading(true);
     getProviders()
-      .then(data => { setDbProviders(data || []); setLoading(false); })
+      .then((data) => {
+        setDbProviders(data || []);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   };
 
@@ -401,7 +517,10 @@ function ProvidersTab() {
   useEffect(() => {
     setCliLoading(true);
     getCliStatus()
-      .then(data => { setCliStatus(data); setCliLoading(false); })
+      .then((data) => {
+        setCliStatus(data);
+        setCliLoading(false);
+      })
       .catch(() => setCliLoading(false));
   }, []);
 
@@ -419,17 +538,20 @@ function ProvidersTab() {
   };
 
   const handleTest = async (credentialId: string) => {
-    setTestState(s => ({ ...s, [credentialId]: { status: 'testing' } }));
+    setTestState((s) => ({ ...s, [credentialId]: { status: 'testing' } }));
     try {
       const result = await testProviderKey(credentialId);
-      setTestState(s => ({
+      setTestState((s) => ({
         ...s,
         [credentialId]: { status: result.passed ? 'passed' : 'failed', message: result.message },
       }));
       // Refresh so isWorking badge updates
       fetchProviders();
     } catch (err: any) {
-      setTestState(s => ({ ...s, [credentialId]: { status: 'failed', message: err?.message ?? 'Unknown error' } }));
+      setTestState((s) => ({
+        ...s,
+        [credentialId]: { status: 'failed', message: err?.message ?? 'Unknown error' },
+      }));
     }
   };
 
@@ -440,12 +562,15 @@ function ProvidersTab() {
   };
 
   // Merge DB state into catalog
-  const displayProviders = PROVIDER_CATALOG.map(p => {
-    const db = dbProviders.find(d => d.provider === p.key);
-    const status = db?.hasApiKey
-      ? db.isWorking ? 'active' : 'configured'
-      : 'not configured';
-    const statusClass = status === 'active' ? 'status-active' : status === 'configured' ? 'status-configured' : 'status-disabled';
+  const displayProviders = PROVIDER_CATALOG.map((p) => {
+    const db = dbProviders.find((d) => d.provider === p.key);
+    const status = db?.hasApiKey ? (db.isWorking ? 'active' : 'configured') : 'not configured';
+    const statusClass =
+      status === 'active'
+        ? 'status-active'
+        : status === 'configured'
+          ? 'status-configured'
+          : 'status-disabled';
     return { ...p, status, statusClass, dbEntry: db ?? null };
   });
 
@@ -462,10 +587,14 @@ function ProvidersTab() {
         </div>
       </div>
 
-      {loading ? <Spinner /> : (
+      {loading ? (
+        <Spinner />
+      ) : (
         <div className="settings-provider-list">
           {displayProviders.map((provider) => {
-            const test = provider.dbEntry ? (testState[provider.dbEntry.id] ?? { status: 'idle' }) : null;
+            const test = provider.dbEntry
+              ? (testState[provider.dbEntry.id] ?? { status: 'idle' })
+              : null;
             return (
               <div key={provider.key} className="settings-provider-card">
                 <div className="spc-icon">{provider.icon}</div>
@@ -489,7 +618,13 @@ function ProvidersTab() {
                           title="Test API key"
                           disabled={test?.status === 'testing'}
                           onClick={() => handleTest(provider.dbEntry!.id)}
-                          style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', padding: '4px 10px' }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '12px',
+                            padding: '4px 10px',
+                          }}
                         >
                           {test?.status === 'testing' && <Loader2 size={13} className="spin" />}
                           {test?.status === 'passed' && <CheckCircle2 size={13} />}
@@ -506,9 +641,11 @@ function ProvidersTab() {
                           disabled={deletingId === provider.dbEntry.id}
                           onClick={() => handleDelete(provider.dbEntry!.id)}
                         >
-                          {deletingId === provider.dbEntry.id
-                            ? <Loader2 size={14} className="spin" />
-                            : <Trash2 size={14} />}
+                          {deletingId === provider.dbEntry.id ? (
+                            <Loader2 size={14} className="spin" />
+                          ) : (
+                            <Trash2 size={14} />
+                          )}
                         </button>
                       )}
                     </div>
@@ -519,11 +656,21 @@ function ProvidersTab() {
 
                   {/* Test result */}
                   {test && test.status !== 'idle' && test.message && (
-                    <div style={{
-                      marginTop: '8px', fontSize: '12px',
-                      color: test.status === 'passed' ? 'var(--success, #4ade80)' : test.status === 'failed' ? 'var(--danger, #f87171)' : 'var(--text-m)',
-                      display: 'flex', alignItems: 'center', gap: '6px',
-                    }}>
+                    <div
+                      style={{
+                        marginTop: '8px',
+                        fontSize: '12px',
+                        color:
+                          test.status === 'passed'
+                            ? 'var(--success, #4ade80)'
+                            : test.status === 'failed'
+                              ? 'var(--danger, #f87171)'
+                              : 'var(--text-m)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                    >
                       {test.status === 'passed' && <CheckCircle2 size={12} />}
                       {test.status === 'failed' && <XCircle size={12} />}
                       {test.message}
@@ -532,7 +679,16 @@ function ProvidersTab() {
 
                   {/* Encryption badge */}
                   {provider.dbEntry?.hasApiKey && (
-                    <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
+                    <div
+                      style={{
+                        marginTop: '6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontSize: '12px',
+                        color: 'var(--success, #4ade80)',
+                      }}
+                    >
                       <ShieldCheck size={12} /> Key stored · AES-256-GCM encrypted
                     </div>
                   )}
@@ -553,18 +709,40 @@ function ProvidersTab() {
 
       {/* CLI Installation Section */}
       <div style={{ marginTop: '32px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '4px',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Monitor size={16} />
-            <div className="settings-section-title" style={{ margin: 0 }}>CLI Tools</div>
+            <div className="settings-section-title" style={{ margin: 0 }}>
+              CLI Tools
+            </div>
           </div>
           <button
             className="btn btn-sm"
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-m)', borderRadius: '8px', padding: '5px 12px', cursor: 'pointer' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: '1px solid var(--border)',
+              background: 'transparent',
+              color: 'var(--text-m)',
+              borderRadius: '8px',
+              padding: '5px 12px',
+              cursor: 'pointer',
+            }}
             onClick={() => {
               setCliLoading(true);
               getCliStatus()
-                .then(data => { setCliStatus(data); setCliLoading(false); })
+                .then((data) => {
+                  setCliStatus(data);
+                  setCliLoading(false);
+                })
                 .catch(() => setCliLoading(false));
             }}
             disabled={cliLoading}
@@ -577,21 +755,40 @@ function ProvidersTab() {
           iPrep auto-detects installed AI CLIs. Use the install commands below to add missing tools.
         </div>
 
-        {cliLoading ? <Spinner /> : (
+        {cliLoading ? (
+          <Spinner />
+        ) : (
           <div className="settings-provider-list">
-            {cliStatus.map(cli => {
+            {cliStatus.map((cli) => {
               const installCmd = isWin ? cli.installWin : cli.installMac;
               const copyKey = `cli-${cli.key}`;
               return (
-                <div key={cli.key} className="settings-provider-card" style={{ padding: '14px 18px' }}>
+                <div
+                  key={cli.key}
+                  className="settings-provider-card"
+                  style={{ padding: '14px 18px' }}
+                >
                   <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: '8px',
+                      }}
+                    >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span className="spc-name" style={{ fontSize: '14px' }}>{cli.label}</span>
+                        <span className="spc-name" style={{ fontSize: '14px' }}>
+                          {cli.label}
+                        </span>
                         {cli.installed ? (
                           <span className="spc-status status-active" style={{ fontSize: '11px' }}>
                             <span className="spc-status-dot" /> Installed
-                            {cli.version && <span style={{ marginLeft: '4px', opacity: 0.7 }}>({cli.version})</span>}
+                            {cli.version && (
+                              <span style={{ marginLeft: '4px', opacity: 0.7 }}>
+                                ({cli.version})
+                              </span>
+                            )}
                           </span>
                         ) : (
                           <span className="spc-status status-disabled" style={{ fontSize: '11px' }}>
@@ -602,17 +799,19 @@ function ProvidersTab() {
                     </div>
                     {installCmd && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <code style={{
-                          background: 'var(--surface-3, rgba(255,255,255,0.06))',
-                          border: '1px solid var(--border, rgba(255,255,255,0.1))',
-                          borderRadius: '6px',
-                          padding: '5px 12px',
-                          fontSize: '12px',
-                          fontFamily: 'monospace',
-                          color: 'var(--text-p)',
-                          flex: 1,
-                          userSelect: 'all' as const,
-                        }}>
+                        <code
+                          style={{
+                            background: 'var(--surface-3, rgba(255,255,255,0.06))',
+                            border: '1px solid var(--border, rgba(255,255,255,0.1))',
+                            borderRadius: '6px',
+                            padding: '5px 12px',
+                            fontSize: '12px',
+                            fontFamily: 'monospace',
+                            color: 'var(--text-p)',
+                            flex: 1,
+                            userSelect: 'all' as const,
+                          }}
+                        >
                           {installCmd}
                         </code>
                         <button
@@ -631,7 +830,6 @@ function ProvidersTab() {
           </div>
         )}
       </div>
-
     </>
   );
 }
@@ -645,15 +843,15 @@ function ApiKeysTab() {
   const [loading, setLoading] = useState(true);
   const [rowStatus, setRowStatus] = useState<Record<string, KeyRowStatus>>({});
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
-  const [dbIds, setDbIds] = useState<Record<string, string>>({});  // providerKey -> credential id
+  const [dbIds, setDbIds] = useState<Record<string, string>>({}); // providerKey -> credential id
 
   const loadProviders = () => {
     setLoading(true);
     getProviders()
-      .then(data => {
+      .then((data) => {
         const filled: Record<string, string> = {};
         const ids: Record<string, string> = {};
-        data?.forEach(p => {
+        data?.forEach((p) => {
           if (p.hasApiKey) filled[p.provider] = PLACEHOLDER_MASK;
           ids[p.provider] = p.id;
         });
@@ -673,33 +871,41 @@ function ApiKeysTab() {
     const val = keys[providerKey];
     if (!val || val === PLACEHOLDER_MASK) return;
 
-    setRowStatus(s => ({ ...s, [providerKey]: 'saving' }));
+    setRowStatus((s) => ({ ...s, [providerKey]: 'saving' }));
     try {
       const result = await saveApiKey({ provider: providerKey, mode: 'API_KEY', apiKey: val });
       if (result) {
-        setDbIds(ids => ({ ...ids, [providerKey]: result.id }));
-        setKeys(k => ({ ...k, [providerKey]: PLACEHOLDER_MASK }));
+        setDbIds((ids) => ({ ...ids, [providerKey]: result.id }));
+        setKeys((k) => ({ ...k, [providerKey]: PLACEHOLDER_MASK }));
       }
-      setRowStatus(s => ({ ...s, [providerKey]: 'saved' }));
+      setRowStatus((s) => ({ ...s, [providerKey]: 'saved' }));
     } catch {
-      setRowStatus(s => ({ ...s, [providerKey]: 'error' }));
+      setRowStatus((s) => ({ ...s, [providerKey]: 'error' }));
     } finally {
-      setTimeout(() => setRowStatus(s => ({ ...s, [providerKey]: 'idle' })), 3000);
+      setTimeout(() => setRowStatus((s) => ({ ...s, [providerKey]: 'idle' })), 3000);
     }
   };
 
   const handleDeleteKey = async (providerKey: string) => {
     const credId = dbIds[providerKey];
     if (!credId || !confirm('Remove this API key?')) return;
-    setRowStatus(s => ({ ...s, [providerKey]: 'saving' }));
+    setRowStatus((s) => ({ ...s, [providerKey]: 'saving' }));
     try {
       await deleteProviderKey(credId);
-      setKeys(k => { const n = { ...k }; delete n[providerKey]; return n; });
-      setDbIds(ids => { const n = { ...ids }; delete n[providerKey]; return n; });
-      setRowStatus(s => ({ ...s, [providerKey]: 'idle' }));
+      setKeys((k) => {
+        const n = { ...k };
+        delete n[providerKey];
+        return n;
+      });
+      setDbIds((ids) => {
+        const n = { ...ids };
+        delete n[providerKey];
+        return n;
+      });
+      setRowStatus((s) => ({ ...s, [providerKey]: 'idle' }));
     } catch {
-      setRowStatus(s => ({ ...s, [providerKey]: 'error' }));
-      setTimeout(() => setRowStatus(s => ({ ...s, [providerKey]: 'idle' })), 3000);
+      setRowStatus((s) => ({ ...s, [providerKey]: 'error' }));
+      setTimeout(() => setRowStatus((s) => ({ ...s, [providerKey]: 'idle' })), 3000);
     }
   };
 
@@ -709,34 +915,70 @@ function ApiKeysTab() {
     <>
       <div className="settings-section-title">API Keys</div>
       <div className="settings-section-sub" style={{ marginBottom: '20px' }}>
-        Keys are encrypted with AES-256-GCM and stored locally. They are never sent to iPrep servers.
+        Keys are encrypted with AES-256-GCM and stored locally. They are never sent to iPrep
+        servers.
       </div>
 
       <div className="api-key-form">
-        {PROVIDER_CATALOG.filter(p => !p.noKey).map((provider) => {
+        {PROVIDER_CATALOG.filter((p) => !p.noKey).map((provider) => {
           const status = rowStatus[provider.key] ?? 'idle';
           const hasStoredKey = keys[provider.key] === PLACEHOLDER_MASK;
           const isDirty = keys[provider.key] && keys[provider.key] !== PLACEHOLDER_MASK;
 
           return (
             <div className="api-key-row" key={provider.key}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <label className="input-label" style={{ margin: 0 }} htmlFor={`${provider.key}-api-key`}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '6px',
+                }}
+              >
+                <label
+                  className="input-label"
+                  style={{ margin: 0 }}
+                  htmlFor={`${provider.key}-api-key`}
+                >
                   {provider.label}
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   {hasStoredKey && !isDirty && (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '12px',
+                        color: 'var(--success, #4ade80)',
+                      }}
+                    >
                       <ShieldCheck size={12} /> Stored
                     </span>
                   )}
                   {status === 'saved' && (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--success, #4ade80)' }}>
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '12px',
+                        color: 'var(--success, #4ade80)',
+                      }}
+                    >
                       <CheckCircle2 size={12} /> Saved
                     </span>
                   )}
                   {status === 'error' && (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', color: 'var(--danger, #f87171)' }}>
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '12px',
+                        color: 'var(--danger, #f87171)',
+                      }}
+                    >
                       <XCircle size={12} /> Error
                     </span>
                   )}
@@ -751,18 +993,22 @@ function ApiKeysTab() {
                     type={showKeys[provider.key] ? 'text' : 'password'}
                     placeholder={provider.placeholder}
                     value={keys[provider.key] || ''}
-                    onChange={e => setKeys({ ...keys, [provider.key]: e.target.value })}
+                    onChange={(e) => setKeys({ ...keys, [provider.key]: e.target.value })}
                     disabled={status === 'saving'}
                   />
                   <button
                     className="input-action-btn"
                     type="button"
                     aria-label={`Toggle ${provider.label} key visibility`}
-                    onClick={() => setShowKeys({ ...showKeys, [provider.key]: !showKeys[provider.key] })}
+                    onClick={() =>
+                      setShowKeys({ ...showKeys, [provider.key]: !showKeys[provider.key] })
+                    }
                   >
-                    {showKeys[provider.key]
-                      ? <EyeOff size={15} />
-                      : <Eye size={15} style={{ opacity: 0.6 }} />}
+                    {showKeys[provider.key] ? (
+                      <EyeOff size={15} />
+                    ) : (
+                      <Eye size={15} style={{ opacity: 0.6 }} />
+                    )}
                   </button>
                 </div>
 
@@ -779,7 +1025,12 @@ function ApiKeysTab() {
                 {hasStoredKey && (
                   <button
                     className="btn btn-sm"
-                    style={{ flexShrink: 0, color: 'var(--danger, #f87171)', border: '1px solid var(--danger, #f87171)', background: 'transparent' }}
+                    style={{
+                      flexShrink: 0,
+                      color: 'var(--danger, #f87171)',
+                      border: '1px solid var(--danger, #f87171)',
+                      background: 'transparent',
+                    }}
                     onClick={() => handleDeleteKey(provider.key)}
                     title="Remove key"
                     disabled={status === 'saving'}
@@ -797,7 +1048,17 @@ function ApiKeysTab() {
 }
 
 // ── Shared Components ─────────────────────────────────────────────────────────
-function Toggle({ label, desc, checked, onChange }: { label: string; desc: string; checked: boolean; onChange: (v: boolean) => void }) {
+function Toggle({
+  label,
+  desc,
+  checked,
+  onChange,
+}: {
+  label: string;
+  desc: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
   return (
     <div className="toggle-wrap">
       <div className="toggle-info">
@@ -805,7 +1066,7 @@ function Toggle({ label, desc, checked, onChange }: { label: string; desc: strin
         <div className="toggle-desc">{desc}</div>
       </div>
       <label className="toggle-switch">
-        <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} />
+        <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
         <span className="toggle-slider" />
       </label>
     </div>

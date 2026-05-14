@@ -13,10 +13,10 @@ import { getPreferences } from '../settings/api';
 
 /** Map provider key → display label */
 const PROVIDER_LABELS: Record<string, string> = {
-  CLAUDE:  'Claude (Anthropic)',
-  GEMINI:  'Gemini (Google)',
-  CODEX:   'GPT (OpenAI)',
-  OLLAMA:  'Ollama (Local)',
+  CLAUDE: 'Claude (Anthropic)',
+  GEMINI: 'Gemini (Google)',
+  CODEX: 'GPT (OpenAI)',
+  OLLAMA: 'Ollama (Local)',
 };
 
 export function ChatScreen() {
@@ -93,7 +93,7 @@ export function ChatScreen() {
   async function handleDeleteChat(id: string) {
     try {
       await deleteConversation(id);
-      setConversations(conversations.filter(c => c.id !== id));
+      setConversations(conversations.filter((c) => c.id !== id));
       if (activeConversation?.id === id) {
         setActiveConversation(null);
         setMessages([]);
@@ -121,7 +121,7 @@ export function ChatScreen() {
 
     try {
       const result = await addMessage(chatId, textToSend);
-      setMessages(prev => [...prev, result.userMessage, result.aiMessage]);
+      setMessages((prev) => [...prev, result.userMessage, result.aiMessage]);
     } catch (err) {
       console.error('Failed to send message', err);
     } finally {
@@ -156,7 +156,9 @@ export function ChatScreen() {
                 <MessageCircle size={16} />
               </div>
               <div className="chat-empty-sidebar-title">No conversations yet</div>
-              <div className="chat-empty-sidebar-copy">Ask a question to create your first chat.</div>
+              <div className="chat-empty-sidebar-copy">
+                Ask a question to create your first chat.
+              </div>
             </div>
           )}
           {conversations.map((conversation) => (
@@ -170,11 +172,16 @@ export function ChatScreen() {
                 onClick={() => setActiveConversation(conversation)}
               >
                 <div className="conv-item-title">{conversation.title}</div>
-                <div className="conv-item-time">{formatTime(conversation.lastMessageAt || conversation.createdAt)}</div>
+                <div className="conv-item-time">
+                  {formatTime(conversation.lastMessageAt || conversation.createdAt)}
+                </div>
               </button>
-              <button 
+              <button
                 className="conv-delete-btn"
-                onClick={(e) => { e.stopPropagation(); handleDeleteChat(conversation.id); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteChat(conversation.id);
+                }}
                 title="Delete Chat"
                 type="button"
               >
@@ -210,7 +217,9 @@ export function ChatScreen() {
                   {msg.role === 'USER' ? 'U' : 'iP'}
                 </div>
                 <div className="msg-body">
-                  <div className="msg-bubble" style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</div>
+                  <div className="msg-bubble" style={{ whiteSpace: 'pre-wrap' }}>
+                    {msg.content}
+                  </div>
                   <div className="msg-time">{formatTime(msg.sentAt)}</div>
                 </div>
               </div>
@@ -239,15 +248,26 @@ export function ChatScreen() {
               onChange={(e) => setInputText(e.target.value)}
               disabled={isSending}
             />
-            <button className="btn btn-primary chat-send-btn" type="submit" aria-label="Send message" disabled={isSending || !inputText.trim()}>
+            <button
+              className="btn btn-primary chat-send-btn"
+              type="submit"
+              aria-label="Send message"
+              disabled={isSending || !inputText.trim()}
+            >
               <SendHorizonal size={18} />
             </button>
           </div>
           <div className="chat-input-footnote">
             Stored in local database ·{' '}
-            {aiLabel
-              ? <>Powered by <strong>{aiLabel}</strong></>
-              : <span style={{ color: 'var(--danger, #f87171)' }}>No AI configured — go to Settings → Preferences</span>}
+            {aiLabel ? (
+              <>
+                Powered by <strong>{aiLabel}</strong>
+              </>
+            ) : (
+              <span style={{ color: 'var(--danger, #f87171)' }}>
+                No AI configured — go to Settings → Preferences
+              </span>
+            )}
           </div>
         </form>
       </section>
@@ -276,5 +296,3 @@ function EmptyChatState() {
     </div>
   );
 }
-
-

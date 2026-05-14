@@ -33,17 +33,26 @@ export class SettingsQuery {
   }
 
   static async upsertProvider(userId: string, data: any) {
-    const { provider, mode, modelName, apiKeyHash, apiKeyCiphertext, apiKeyIv, apiKeyAuthTag, hasApiKey } = data;
-    
+    const {
+      provider,
+      mode,
+      modelName,
+      apiKeyHash,
+      apiKeyCiphertext,
+      apiKeyIv,
+      apiKeyAuthTag,
+      hasApiKey,
+    } = data;
+
     // Check if the combination already exists
     const existing = await prisma.providerCredential.findUnique({
       where: {
         userId_provider_mode: {
           userId,
           provider,
-          mode
-        }
-      }
+          mode,
+        },
+      },
     });
 
     if (existing) {
@@ -59,7 +68,7 @@ export class SettingsQuery {
           isWorking: false, // Reset test status on update
           lastTestPassed: null,
           lastTestMessage: null,
-        }
+        },
       });
     } else {
       return prisma.providerCredential.create({
@@ -73,7 +82,7 @@ export class SettingsQuery {
           apiKeyCiphertext,
           apiKeyIv,
           apiKeyAuthTag,
-        }
+        },
       });
     }
   }
@@ -84,7 +93,12 @@ export class SettingsQuery {
     });
   }
 
-  static async markProviderTestResult(id: string, userId: string, passed: boolean, message: string) {
+  static async markProviderTestResult(
+    id: string,
+    userId: string,
+    passed: boolean,
+    message: string,
+  ) {
     return prisma.providerCredential.updateMany({
       where: { id, userId },
       data: {

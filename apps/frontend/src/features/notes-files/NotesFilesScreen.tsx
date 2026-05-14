@@ -284,7 +284,12 @@ export function NotesFilesScreen() {
     <div className="files-screen view-enter">
       <div className="files-topbar">
         <div className="files-titlebar">
-          <Folder className="files-title-icon" size={24} fill="currentColor" stroke="currentColor" />
+          <Folder
+            className="files-title-icon"
+            size={24}
+            fill="currentColor"
+            stroke="currentColor"
+          />
           <div className="page-title">Files</div>
         </div>
         <div className="files-topbar-actions">
@@ -386,12 +391,14 @@ export function NotesFilesScreen() {
                   <FileText size={16} className="editor-file-icon" />
                   <div className="editor-filename">{selectedDocument.title}</div>
                   {selectedDocument.type !== 'md' && (
-                    <span className={cn('badge', statusBadgeClass(selectedDocument.conversionStatus))}>
+                    <span
+                      className={cn('badge', statusBadgeClass(selectedDocument.conversionStatus))}
+                    >
                       {selectedDocument.conversionStatus.replace('_', ' ')}
                     </span>
                   )}
                 </div>
-                
+
                 <div className="editor-actions">
                   {selectedDocument.type === 'md' && (
                     <div className="editor-mode-tabs">
@@ -409,15 +416,21 @@ export function NotesFilesScreen() {
                       </button>
                     </div>
                   )}
-                  {selectedDocument.type === 'md' && saveState !== 'idle' && saveState !== 'saved' && (
-                    <button
-                      className="btn btn-secondary btn-sm editor-save-btn"
-                      disabled={saveState === 'saving'}
-                      onClick={() => void handleSave()}
-                    >
-                      {saveState === 'saving' ? <RefreshCw className="spin" size={14} /> : 'Save ✓'}
-                    </button>
-                  )}
+                  {selectedDocument.type === 'md' &&
+                    saveState !== 'idle' &&
+                    saveState !== 'saved' && (
+                      <button
+                        className="btn btn-secondary btn-sm editor-save-btn"
+                        disabled={saveState === 'saving'}
+                        onClick={() => void handleSave()}
+                      >
+                        {saveState === 'saving' ? (
+                          <RefreshCw className="spin" size={14} />
+                        ) : (
+                          'Save ✓'
+                        )}
+                      </button>
+                    )}
                   {selectedDocument.type !== 'md' && (
                     <button
                       className="btn btn-secondary btn-sm"
@@ -428,7 +441,10 @@ export function NotesFilesScreen() {
                       Convert
                     </button>
                   )}
-                  <button className="btn btn-secondary btn-sm editor-icon-btn" title="Download original">
+                  <button
+                    className="btn btn-secondary btn-sm editor-icon-btn"
+                    title="Download original"
+                  >
                     <Download size={14} />
                   </button>
                   <button
@@ -462,7 +478,9 @@ export function NotesFilesScreen() {
                     />
                   )}
                   <div className="editor-statusbar">
-                    <span>Last saved: {new Date(selectedDocument.updatedAt).toLocaleDateString()}</span>
+                    <span>
+                      Last saved: {new Date(selectedDocument.updatedAt).toLocaleDateString()}
+                    </span>
                     <span>{(draftMarkdown.length / 1024).toFixed(1)} KB</span>
                   </div>
                   <SaveIndicator state={saveState} />
@@ -475,7 +493,8 @@ export function NotesFilesScreen() {
                     Original: {selectedDocument.originalPath || 'stored locally'}
                   </div>
                   <div className="placeholder-note">
-                    Convert this {selectedDocument.type.toUpperCase()} file to Markdown before using it as AI context.
+                    Convert this {selectedDocument.type.toUpperCase()} file to Markdown before using
+                    it as AI context.
                   </div>
                 </div>
               )}
@@ -528,7 +547,10 @@ function FolderTreeNode({
 
   return (
     <div className="tree-folder">
-      <button className={cn('tree-folder-row', isOpen && 'open')} onClick={() => onToggle(folder.id)}>
+      <button
+        className={cn('tree-folder-row', isOpen && 'open')}
+        onClick={() => onToggle(folder.id)}
+      >
         <ChevronRight className={cn('tree-chevron', !hasChildren && 'empty')} size={13} />
         {isOpen ? (
           <FolderOpen className="tree-folder-icon" size={16} />
@@ -625,7 +647,10 @@ function NotesFilesModal({
   }
 
   return (
-    <div className="modal-overlay" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
+    <div
+      className="modal-overlay"
+      onMouseDown={(event) => event.target === event.currentTarget && onClose()}
+    >
       <div className="modal-box files-modal">
         <div className="modal-title">
           {modal === 'new-file' && 'New Markdown File'}
@@ -635,7 +660,9 @@ function NotesFilesModal({
 
         {modal !== 'upload' ? (
           <div className="modal-field">
-            <label className="modal-label">{modal === 'new-folder' ? 'Folder name' : 'File name'}</label>
+            <label className="modal-label">
+              {modal === 'new-folder' ? 'Folder name' : 'File name'}
+            </label>
             <input
               className="modal-input"
               value={name}
@@ -773,7 +800,10 @@ function MarkdownViewer({
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[
                 rehypeSlug,
-                [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: ['heading-anchor'] } }],
+                [
+                  rehypeAutolinkHeadings,
+                  { behavior: 'wrap', properties: { className: ['heading-anchor'] } },
+                ],
               ]}
             >
               {stripFirstHeading(parsed.content, displayTitle)}
@@ -817,7 +847,10 @@ function parseMarkdownDocument(source: string) {
     }
 
     const key = line.slice(0, separatorIndex).trim();
-    const value = line.slice(separatorIndex + 1).trim().replace(/^['"]|['"]$/g, '');
+    const value = line
+      .slice(separatorIndex + 1)
+      .trim()
+      .replace(/^['"]|['"]$/g, '');
     if (key) {
       frontmatter[key] = value;
     }

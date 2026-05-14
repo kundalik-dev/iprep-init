@@ -69,7 +69,8 @@ async function mapDocument(document: DbDocument, includeContent = false) {
     originalPath: document.fileUrl,
     markdownPath: hasMarkdown ? markdownPath : null,
     conversionStatus:
-      metadata.conversionStatus ?? (type === 'md' ? 'not_required' : hasMarkdown ? 'completed' : 'queued'),
+      metadata.conversionStatus ??
+      (type === 'md' ? 'not_required' : hasMarkdown ? 'completed' : 'queued'),
     ...(includeContent ? { contentMarkdown: document.content ?? '' } : {}),
     createdAt: document.createdAt,
     updatedAt: document.updatedAt,
@@ -127,7 +128,13 @@ export const createDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   res
     .status(StatusCodes.CREATED)
-    .json(new ApiResponse(StatusCodes.CREATED, await mapDocument(document, true), 'Document created successfully'));
+    .json(
+      new ApiResponse(
+        StatusCodes.CREATED,
+        await mapDocument(document, true),
+        'Document created successfully',
+      ),
+    );
 });
 
 export const uploadDocument: RequestHandler = asyncHandler(async (req, res) => {
@@ -163,7 +170,12 @@ export const uploadDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   await writeMetadata(initialDocument.id, {
     folderId: req.body?.folderId ? String(req.body.folderId) : null,
-    tags: req.body?.tags ? String(req.body.tags).split(',').map((tag) => tag.trim()).filter(Boolean) : [],
+    tags: req.body?.tags
+      ? String(req.body.tags)
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : [],
     conversionStatus: isMarkdown ? 'not_required' : 'queued',
     markdownPath: content !== null ? markdownPath : null,
   });
@@ -172,7 +184,13 @@ export const uploadDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   res
     .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, await mapDocument(document, true), 'Document uploaded successfully'));
+    .json(
+      new ApiResponse(
+        StatusCodes.OK,
+        await mapDocument(document, true),
+        'Document uploaded successfully',
+      ),
+    );
 });
 
 export const getDocument: RequestHandler = asyncHandler(async (req, res) => {
@@ -185,7 +203,13 @@ export const getDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   res
     .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, await mapDocument(document, true), 'Document fetched successfully'));
+    .json(
+      new ApiResponse(
+        StatusCodes.OK,
+        await mapDocument(document, true),
+        'Document fetched successfully',
+      ),
+    );
 });
 
 export const updateDocument: RequestHandler = asyncHandler(async (req, res) => {
@@ -198,10 +222,15 @@ export const updateDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   const metadata = await readMetadata(currentDocument.id);
   const nextContent =
-    req.body?.contentMarkdown !== undefined ? String(req.body.contentMarkdown) : currentDocument.content;
+    req.body?.contentMarkdown !== undefined
+      ? String(req.body.contentMarkdown)
+      : currentDocument.content;
   const nextTitle =
-    req.body?.title !== undefined ? String(req.body.title).trim() || currentDocument.title : currentDocument.title;
-  const markdownPath = metadata.markdownPath ?? path.join(documentDir(currentDocument.id), 'content.md');
+    req.body?.title !== undefined
+      ? String(req.body.title).trim() || currentDocument.title
+      : currentDocument.title;
+  const markdownPath =
+    metadata.markdownPath ?? path.join(documentDir(currentDocument.id), 'content.md');
 
   if (req.body?.contentMarkdown !== undefined) {
     await fs.mkdir(documentDir(currentDocument.id), { recursive: true });
@@ -210,9 +239,9 @@ export const updateDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   await writeMetadata(currentDocument.id, {
     ...metadata,
-    folderId: req.body?.folderId !== undefined ? req.body.folderId : metadata.folderId ?? null,
-    tags: Array.isArray(req.body?.tags) ? req.body.tags : metadata.tags ?? [],
-    markdownPath: nextContent ? markdownPath : metadata.markdownPath ?? null,
+    folderId: req.body?.folderId !== undefined ? req.body.folderId : (metadata.folderId ?? null),
+    tags: Array.isArray(req.body?.tags) ? req.body.tags : (metadata.tags ?? []),
+    markdownPath: nextContent ? markdownPath : (metadata.markdownPath ?? null),
     conversionStatus: metadata.conversionStatus ?? 'not_required',
   });
 
@@ -223,7 +252,13 @@ export const updateDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   res
     .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, await mapDocument(document, true), 'Document updated successfully'));
+    .json(
+      new ApiResponse(
+        StatusCodes.OK,
+        await mapDocument(document, true),
+        'Document updated successfully',
+      ),
+    );
 });
 
 export const deleteDocument: RequestHandler = asyncHandler(async (req, res) => {
@@ -232,7 +267,9 @@ export const deleteDocument: RequestHandler = asyncHandler(async (req, res) => {
 
   await fs.rm(documentDir(document.id), { recursive: true, force: true });
 
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, { id: document.id }, 'Document deleted'));
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { id: document.id }, 'Document deleted'));
 });
 
 export const convertDocument: RequestHandler = asyncHandler(async (req, res) => {
@@ -261,11 +298,19 @@ export const convertDocument: RequestHandler = asyncHandler(async (req, res) => 
 
   res
     .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, await mapDocument(document, true), 'Document conversion updated'));
+    .json(
+      new ApiResponse(
+        StatusCodes.OK,
+        await mapDocument(document, true),
+        'Document conversion updated',
+      ),
+    );
 });
 
 export const listFolders: RequestHandler = asyncHandler(async (_req, res) => {
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, await readFolders(), 'Folders fetched'));
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, await readFolders(), 'Folders fetched'));
 });
 
 export const createFolder: RequestHandler = asyncHandler(async (req, res) => {
@@ -286,7 +331,9 @@ export const createFolder: RequestHandler = asyncHandler(async (req, res) => {
   const folders = await readFolders();
   await writeFolders([...folders, folder]);
 
-  res.status(StatusCodes.CREATED).json(new ApiResponse(StatusCodes.CREATED, folder, 'Folder created'));
+  res
+    .status(StatusCodes.CREATED)
+    .json(new ApiResponse(StatusCodes.CREATED, folder, 'Folder created'));
 });
 
 export const updateFolder: RequestHandler = asyncHandler(async (req, res) => {
@@ -322,5 +369,7 @@ export const deleteFolder: RequestHandler = asyncHandler(async (req, res) => {
 
   await writeFolders(nextFolders);
 
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, { id: folderId }, 'Folder deleted'));
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { id: folderId }, 'Folder deleted'));
 });

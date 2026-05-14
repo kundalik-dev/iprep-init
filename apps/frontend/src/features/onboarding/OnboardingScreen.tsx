@@ -1,5 +1,14 @@
 import { useMemo, useState } from 'react';
-import { Bot, CheckCircle2, FileUp, KeyRound, Loader2, Sparkles, Terminal, UserRound } from 'lucide-react';
+import {
+  Bot,
+  CheckCircle2,
+  FileUp,
+  KeyRound,
+  Loader2,
+  Sparkles,
+  Terminal,
+  UserRound,
+} from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -205,9 +214,10 @@ export function OnboardingScreen({ initialStep, onComplete }: OnboardingScreenPr
           </div>
           <h1 className="hero-title">Welcome to iPrep</h1>
           <p className="hero-subtitle">
-            Your personal AI-powered interview coach. Set up your local environment and start practicing in minutes.
+            Your personal AI-powered interview coach. Set up your local environment and start
+            practicing in minutes.
           </p>
-          
+
           <div className="hero-features">
             <div className="feature-item">
               <CheckCircle2 size={20} className="feature-icon" />
@@ -239,47 +249,48 @@ export function OnboardingScreen({ initialStep, onComplete }: OnboardingScreenPr
 
         <div className="onboarding-form-container">
           <Card className="onboarding-card">
-        <CardHeader>
-          <Badge variant="muted">Step {activeStepIndex + 1} of 3</Badge>
-          <CardTitle className="onboarding-title">Set up your local coach</CardTitle>
-          <CardDescription>
-            This setup is saved through your local iPrep server and stored in your local database.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Stepper activeStep={step} />
-          {error ? <div className="form-error">{error}</div> : null}
+            <CardHeader>
+              <Badge variant="muted">Step {activeStepIndex + 1} of 3</Badge>
+              <CardTitle className="onboarding-title">Set up your local coach</CardTitle>
+              <CardDescription>
+                This setup is saved through your local iPrep server and stored in your local
+                database.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Stepper activeStep={step} />
+              {error ? <div className="form-error">{error}</div> : null}
 
-          {step === 'profile' ? (
-            <ProfileStep
-              profile={profile}
-              isSaving={isSaving}
-              onChange={setProfile}
-              onContinue={handleProfileContinue}
-            />
-          ) : null}
+              {step === 'profile' ? (
+                <ProfileStep
+                  profile={profile}
+                  isSaving={isSaving}
+                  onChange={setProfile}
+                  onContinue={handleProfileContinue}
+                />
+              ) : null}
 
-          {step === 'goal' ? (
-            <GoalStep
-              goal={goal}
-              isSaving={isSaving}
-              onBack={() => setStep('profile')}
-              onChange={setGoal}
-              onContinue={handleGoalContinue}
-            />
-          ) : null}
+              {step === 'goal' ? (
+                <GoalStep
+                  goal={goal}
+                  isSaving={isSaving}
+                  onBack={() => setStep('profile')}
+                  onChange={setGoal}
+                  onContinue={handleGoalContinue}
+                />
+              ) : null}
 
-          {step === 'provider' ? (
-            <ProviderStep
-              provider={provider}
-              isSaving={isSaving}
-              onBack={() => setStep('goal')}
-              onChange={setProvider}
-              onFinish={handleFinish}
-              onTest={handleProviderTest}
-            />
-          ) : null}
-        </CardContent>
+              {step === 'provider' ? (
+                <ProviderStep
+                  provider={provider}
+                  isSaving={isSaving}
+                  onBack={() => setStep('goal')}
+                  onChange={setProvider}
+                  onFinish={handleFinish}
+                  onTest={handleProviderTest}
+                />
+              ) : null}
+            </CardContent>
           </Card>
         </div>
       </div>

@@ -15,9 +15,9 @@ import { decryptProviderSecret } from './providerSecrets.js';
 // ── Types ──────────────────────────────────────────────────────────────────────
 
 export interface AiPrefs {
-  aiMode?: 'CLI' | 'API_KEY';          // preferred connection mode
-  aiProvider?: string;                  // e.g. 'CLAUDE' | 'GEMINI' | 'CODEX' | 'OLLAMA'
-  aiModel?: string;                     // optional model override
+  aiMode?: 'CLI' | 'API_KEY'; // preferred connection mode
+  aiProvider?: string; // e.g. 'CLAUDE' | 'GEMINI' | 'CODEX' | 'OLLAMA'
+  aiModel?: string; // optional model override
 }
 
 export interface AiAdapterResult {
@@ -40,8 +40,12 @@ function runCli(command: string, args: string[], input: string): Promise<string>
     let stdout = '';
     let stderr = '';
 
-    proc.stdout.on('data', (d: Buffer) => { stdout += d.toString(); });
-    proc.stderr.on('data', (d: Buffer) => { stderr += d.toString(); });
+    proc.stdout.on('data', (d: Buffer) => {
+      stdout += d.toString();
+    });
+    proc.stderr.on('data', (d: Buffer) => {
+      stderr += d.toString();
+    });
 
     proc.on('close', (code) => {
       if (code === 0) resolve(stdout.trim());
@@ -58,7 +62,11 @@ function runCli(command: string, args: string[], input: string): Promise<string>
 
 // ── CLI adapters ───────────────────────────────────────────────────────────────
 
-async function callViaCli(provider: string, model: string | null, prompt: string): Promise<AiAdapterResult> {
+async function callViaCli(
+  provider: string,
+  model: string | null,
+  prompt: string,
+): Promise<AiAdapterResult> {
   const isWin = process.platform === 'win32';
 
   switch (provider) {
@@ -67,9 +75,7 @@ async function callViaCli(provider: string, model: string | null, prompt: string
       const args = ['--print', '--output-format', 'text'];
       if (model) args.push('--model', model);
       args.push('-p', prompt);
-      const content = await runCli(cmd, args, '').catch(() =>
-        runCli('claude', args, ''),
-      );
+      const content = await runCli(cmd, args, '').catch(() => runCli('claude', args, ''));
       return { content, provider, model };
     }
 
@@ -100,7 +106,7 @@ async function callViaCli(provider: string, model: string | null, prompt: string
         body: JSON.stringify({ model: ollamaModel, prompt, stream: false }),
       });
       if (!response.ok) throw new Error(`Ollama error ${response.status}`);
-      const json = await response.json() as { response: string };
+      const json = (await response.json()) as { response: string };
       return { content: json.response, provider, model: ollamaModel };
     }
 
@@ -137,7 +143,7 @@ async function callViaApiKey(
         const err = await r.text();
         throw new Error(`Anthropic API error ${r.status}: ${err}`);
       }
-      const json = await r.json() as { content: Array<{ text: string }> };
+      const json = (await r.json()) as { content: Array<{ text: string }> };
       return { content: json.content[0]?.text ?? '', provider, model: m };
     }
 
@@ -153,7 +159,9 @@ async function callViaApiKey(
         const err = await r.text();
         throw new Error(`Gemini API error ${r.status}: ${err}`);
       }
-      const json = await r.json() as { candidates: Array<{ content: { parts: Array<{ text: string }> } }> };
+      const json = (await r.json()) as {
+        candidates: Array<{ content: { parts: Array<{ text: string }> } }>;
+      };
       return { content: json.candidates[0]?.content?.parts[0]?.text ?? '', provider, model: m };
     }
 
@@ -174,7 +182,7 @@ async function callViaApiKey(
         const err = await r.text();
         throw new Error(`OpenAI API error ${r.status}: ${err}`);
       }
-      const json = await r.json() as { choices: Array<{ message: { content: string } }> };
+      const json = (await r.json()) as { choices: Array<{ message: { content: string } }> };
       return { content: json.choices[0]?.message?.content ?? '', provider, model: m };
     }
 
@@ -187,7 +195,7 @@ async function callViaApiKey(
         body: JSON.stringify({ model: m, prompt, stream: false }),
       });
       if (!r.ok) throw new Error(`Ollama error ${r.status}`);
-      const json = await r.json() as { response: string };
+      const json = (await r.json()) as { response: string };
       return { content: json.response, provider, model: m };
     }
 
@@ -215,16 +223,19 @@ export async function callAi(userId: string, prompt: string): Promise<AiAdapterR
   // 1. Load user preferences
   let rawPrefs: Record<string, unknown> = {};
   try {
-    rawPrefs = (await SettingsQuery.getPreferences(userId) as Record<string, unknown>) ?? {};
+    rawPrefs = ((await SettingsQuery.getPreferences(userId)) as Record<string, unknown>) ?? {};
   } catch {
     return FALLBACK;
   }
 
-  const aiMode     = (rawPrefs.aiMode     as string | undefined)?.toUpperCase() as 'CLI' | 'API_KEY' | undefined;
+  const aiMode = (rawPrefs.aiMode as string | undefined)?.toUpperCase() as
+    | 'CLI'
+    | 'API_KEY'
+    | undefined;
   const aiProvider = (rawPrefs.aiProvider as string | undefined)?.toUpperCase();
   // Normalize model name: trim whitespace and lowercase so users can type "GPT-4o" etc.
-  const rawModel   = (rawPrefs.aiModel as string | undefined)?.trim();
-  const aiModel    = rawModel ? rawModel.toLowerCase() : null;
+  const rawModel = (rawPrefs.aiModel as string | undefined)?.trim();
+  const aiModel = rawModel ? rawModel.toLowerCase() : null;
 
   if (!aiMode || !aiProvider) return FALLBACK;
 

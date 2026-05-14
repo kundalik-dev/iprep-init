@@ -3,22 +3,19 @@ import type * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-const badgeVariants = cva(
-  'badge',
-  {
-    variants: {
-      variant: {
-        default: 'badge-pro',
-        muted: 'badge-muted',
-        success: 'badge-success',
-        warning: 'badge-warning',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
+const badgeVariants = cva('badge', {
+  variants: {
+    variant: {
+      default: 'badge-pro',
+      muted: 'badge-muted',
+      success: 'badge-success',
+      warning: 'badge-warning',
     },
   },
-);
+  defaultVariants: {
+    variant: 'default',
+  },
+});
 
 function Badge({
   className,

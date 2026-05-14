@@ -51,7 +51,10 @@ export async function getConversation(id: string): Promise<Conversation> {
   return json.data;
 }
 
-export async function createConversation(title: string, documentIds?: string[]): Promise<Conversation> {
+export async function createConversation(
+  title: string,
+  documentIds?: string[],
+): Promise<Conversation> {
   const response = await fetch(`${API_BASE}/conversations`, {
     method: 'POST',
     headers: HEADERS,
@@ -65,7 +68,7 @@ export async function createConversation(title: string, documentIds?: string[]):
 export async function addMessage(
   conversationId: string,
   text: string,
-  contextDocumentIds?: string[]
+  contextDocumentIds?: string[],
 ): Promise<{ userMessage: ChatMessage; aiMessage: ChatMessage }> {
   const response = await fetch(`${API_BASE}/conversations/${conversationId}/messages`, {
     method: 'POST',

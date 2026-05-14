@@ -171,7 +171,7 @@ export function DashboardScreen() {
                 marginTop: '14px',
               }}
             >
-               Technical
+              Technical
             </div>
             <div style={{ fontSize: '12px', color: 'var(--text-m)' }}>Best Category</div>
           </div>

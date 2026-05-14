@@ -59,12 +59,14 @@ export const updateConversation: RequestHandler = asyncHandler(async (req, res) 
 
 export const deleteConversation: RequestHandler = asyncHandler(async (req, res) => {
   const conversationId = getParam(req.params.conversationId, 'conversationId');
-  
+
   await ConversationQuery.deleteConversation(conversationId);
 
   res
     .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, { id: conversationId }, 'Conversation deleted successfully'));
+    .json(
+      new ApiResponse(StatusCodes.OK, { id: conversationId }, 'Conversation deleted successfully'),
+    );
 });
 
 export const addMessage: RequestHandler = asyncHandler(async (req, res) => {
@@ -91,22 +93,24 @@ export const addMessage: RequestHandler = asyncHandler(async (req, res) => {
 
   res
     .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, { userMessage, aiMessage }, 'Message added and AI responded'));
+    .json(
+      new ApiResponse(StatusCodes.OK, { userMessage, aiMessage }, 'Message added and AI responded'),
+    );
 });
 
 export const createInterviewPlan: RequestHandler = asyncHandler(async (req, res) => {
   const conversationId = getParam(req.params.conversationId, 'conversationId');
-  
+
   // Dummy logic: return a mock plan based on brainstorm notes
   const plan = {
     id: `plan_${Date.now()}`,
-    type: "BEHAVIORAL",
-    difficulty: "MEDIUM",
+    type: 'BEHAVIORAL',
+    difficulty: 'MEDIUM',
     durationMin: 25,
-    mode: "VOICE",
-    tutorStyle: "supportive",
-    topics: ["leadership", "conflict", "ownership"],
-    questionPlan: []
+    mode: 'VOICE',
+    tutorStyle: 'supportive',
+    topics: ['leadership', 'conflict', 'ownership'],
+    questionPlan: [],
   };
 
   res

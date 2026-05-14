@@ -76,7 +76,10 @@ export const ConversationQuery = {
     });
   },
 
-  async addMessage(chatId: string, input: { role: 'AI' | 'USER'; content: string; relatedInterviewId?: string }) {
+  async addMessage(
+    chatId: string,
+    input: { role: 'AI' | 'USER'; content: string; relatedInterviewId?: string },
+  ) {
     // Ensure chat exists and belongs to user
     const chat = await prisma.chat.findUnique({
       where: { id: chatId, userId: LOCAL_USER_ID },

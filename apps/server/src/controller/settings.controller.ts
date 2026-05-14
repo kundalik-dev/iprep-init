@@ -36,13 +36,17 @@ function validateProviderInput(provider: string, mode: string): void {
 export const getPreferences = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
   const preferences = await SettingsQuery.getPreferences(uid);
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, preferences ?? {}, 'Preferences fetched'));
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, preferences ?? {}, 'Preferences fetched'));
 });
 
 export const updatePreferences = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
   const updated = await SettingsQuery.updatePreferences(uid, req.body);
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, updated.preferences, 'Preferences saved'));
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, updated.preferences, 'Preferences saved'));
 });
 
 // ── Providers list ─────────────────────────────────────────────────────────────
@@ -74,7 +78,12 @@ export const getProviders = asyncHandler(async (req: Request, res: Response) => 
 
 export const saveApiKey = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
-  const { provider, mode = 'API_KEY', apiKey, modelName } = req.body as {
+  const {
+    provider,
+    mode = 'API_KEY',
+    apiKey,
+    modelName,
+  } = req.body as {
     provider: string;
     mode?: string;
     apiKey: string;
@@ -105,13 +114,17 @@ export const saveApiKey = asyncHandler(async (req: Request, res: Response) => {
   });
 
   res.status(StatusCodes.OK).json(
-    new ApiResponse(StatusCodes.OK, {
-      id: result.id,
-      provider: result.provider,
-      mode: result.mode,
-      hasApiKey: true,
-      isWorking: result.isWorking,
-    }, 'API key saved successfully'),
+    new ApiResponse(
+      StatusCodes.OK,
+      {
+        id: result.id,
+        provider: result.provider,
+        mode: result.mode,
+        hasApiKey: true,
+        isWorking: result.isWorking,
+      },
+      'API key saved successfully',
+    ),
   );
 });
 
@@ -124,7 +137,9 @@ export const deleteProviderKey = asyncHandler(async (req: Request, res: Response
   if (!credentialId) throw new ApiError(StatusCodes.BAD_REQUEST, 'id param is required');
 
   await SettingsQuery.deleteProvider(credentialId, uid);
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, { id: credentialId }, 'Provider key deleted'));
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { id: credentialId }, 'Provider key deleted'));
 });
 
 // ── Decrypt key (internal / admin use only) ────────────────────────────────────
@@ -148,5 +163,7 @@ export const revealApiKey = asyncHandler(async (req: Request, res: Response) => 
     authTag: credential.apiKeyAuthTag,
   });
 
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, { apiKey: plaintext }, 'Key decrypted'));
+  res
+    .status(StatusCodes.OK)
+    .json(new ApiResponse(StatusCodes.OK, { apiKey: plaintext }, 'Key decrypted'));
 });

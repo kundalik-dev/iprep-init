@@ -4,28 +4,25 @@ import type * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-const buttonVariants = cva(
-  'btn',
-  {
-    variants: {
-      variant: {
-        default: 'btn-primary',
-        secondary: 'btn-secondary',
-        ghost: 'btn-ghost',
-        danger: 'btn-danger',
-      },
-      size: {
-        default: '',
-        sm: 'btn-sm',
-        icon: 'btn-icon',
-      },
+const buttonVariants = cva('btn', {
+  variants: {
+    variant: {
+      default: 'btn-primary',
+      secondary: 'btn-secondary',
+      ghost: 'btn-ghost',
+      danger: 'btn-danger',
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
+    size: {
+      default: '',
+      sm: 'btn-sm',
+      icon: 'btn-icon',
     },
   },
-);
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
 
 function Button({
   className,

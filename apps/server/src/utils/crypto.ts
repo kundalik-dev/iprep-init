@@ -18,10 +18,10 @@ export function encryptApiKey(text: string) {
   const key = getKey();
 
   const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
-  
+
   let encrypted = cipher.update(text, 'utf8', 'hex');
   encrypted += cipher.final('hex');
-  
+
   const authTag = cipher.getAuthTag();
 
   // Create a fast hash for equality checks (so we can see if they are sending the same key)

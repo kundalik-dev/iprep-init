@@ -56,7 +56,12 @@ export async function deleteProviderKey(id: string) {
 }
 
 // Also export as upsertProvider alias for backward-compat with SettingsScreen
-export async function upsertProvider(payload: { provider: string; mode: string; apiKey?: string; modelName?: string }) {
+export async function upsertProvider(payload: {
+  provider: string;
+  mode: string;
+  apiKey?: string;
+  modelName?: string;
+}) {
   if (payload.apiKey) {
     return saveApiKey({
       provider: payload.provider,

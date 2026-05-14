@@ -39,23 +39,23 @@ The Notes & Files page gives the AI clean, user-approved preparation context. Th
 
 Primary use cases:
 
-| Use case | Description |
-| --- | --- |
-| Resume context | Upload a resume during onboarding or later, convert it to Markdown, and reuse it in interviews. |
-| Preparation notes | Create or upload Markdown notes for topics, projects, STAR stories, system design, or DSA patterns. |
-| Job-specific context | Upload job descriptions or role notes and attach them to a targeted interview. |
-| AI coaching context | Let AI Coach read selected notes when answering questions or generating a preparation roadmap. |
-| Interview setup context | Select documents while creating an interview so questions and feedback are personalized. |
+| Use case                | Description                                                                                         |
+| ----------------------- | --------------------------------------------------------------------------------------------------- |
+| Resume context          | Upload a resume during onboarding or later, convert it to Markdown, and reuse it in interviews.     |
+| Preparation notes       | Create or upload Markdown notes for topics, projects, STAR stories, system design, or DSA patterns. |
+| Job-specific context    | Upload job descriptions or role notes and attach them to a targeted interview.                      |
+| AI coaching context     | Let AI Coach read selected notes when answering questions or generating a preparation roadmap.      |
+| Interview setup context | Select documents while creating an interview so questions and feedback are personalized.            |
 
 ## First-Version Scope
 
 Supported file types:
 
-| Extension | Stored as original | Editable in UI | AI context source |
-| --- | --- | --- | --- |
-| `.md` | Yes | Yes | Directly from Markdown content |
-| `.pdf` | Yes | No | Converted `content.md` |
-| `.docx` | Yes | No | Converted `content.md` |
+| Extension | Stored as original | Editable in UI | AI context source              |
+| --------- | ------------------ | -------------- | ------------------------------ |
+| `.md`     | Yes                | Yes            | Directly from Markdown content |
+| `.pdf`    | Yes                | No             | Converted `content.md`         |
+| `.docx`   | Yes                | No             | Converted `content.md`         |
 
 For the first version, AI context should always come from Markdown. If a PDF or DOCX has not been converted yet, the UI should make that status visible and prompt the user to convert it before using it as context.
 
@@ -81,11 +81,11 @@ The CLI onboarding flow creates the local `.iprep` workspace. Notes & Files shou
 
 File responsibilities:
 
-| File | Purpose |
-| --- | --- |
-| `original.<ext>` | The original uploaded file. For Markdown notes created in the UI, this may be omitted or mirror `content.md`. |
-| `content.md` | The Markdown version used for AI context, preview, editing, and export. |
-| `metadata.json` | Document title, type, tags, folder reference, upload source, conversion status, timestamps, and parsing errors. |
+| File             | Purpose                                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------------------------- |
+| `original.<ext>` | The original uploaded file. For Markdown notes created in the UI, this may be omitted or mirror `content.md`.   |
+| `content.md`     | The Markdown version used for AI context, preview, editing, and export.                                         |
+| `metadata.json`  | Document title, type, tags, folder reference, upload source, conversion status, timestamps, and parsing errors. |
 
 The local SQLite database should store searchable metadata, relationships, and document references. The file system should store the original and Markdown content. The database record and file folder must use the same `documentId`.
 
@@ -111,13 +111,13 @@ Recommended document metadata:
 
 Recommended conversion statuses:
 
-| Status | Meaning |
-| --- | --- |
-| `not_required` | Markdown was created directly or uploaded as `.md`. |
-| `queued` | Conversion has been requested but has not started. |
-| `processing` | The server is converting the original file to Markdown. |
-| `completed` | `content.md` is ready for AI context. |
-| `failed` | Conversion failed; show the error and allow retry. |
+| Status         | Meaning                                                 |
+| -------------- | ------------------------------------------------------- |
+| `not_required` | Markdown was created directly or uploaded as `.md`.     |
+| `queued`       | Conversion has been requested but has not started.      |
+| `processing`   | The server is converting the original file to Markdown. |
+| `completed`    | `content.md` is ready for AI context.                   |
+| `failed`       | Conversion failed; show the error and allow retry.      |
 
 ## Folder Model
 
@@ -172,14 +172,14 @@ The prototype in `docs/demo-app/codex-iprep-html` uses a two-panel Files view. T
 
 Recommended first-version layout:
 
-| Area | Behavior |
-| --- | --- |
-| Header | Shows page title, search field, and document actions. |
-| Tree panel | Shows folders, root files, selected file, conversion status, and empty state. |
-| Detail panel | Shows preview, editor, metadata, and document-specific actions. |
-| Upload modal | Accepts `.md`, `.pdf`, `.docx`, optional folder, optional tags, and conversion preference. |
-| New file modal | Creates a Markdown note and opens it in edit mode. |
-| New folder modal | Creates a folder and expands it immediately. |
+| Area             | Behavior                                                                                   |
+| ---------------- | ------------------------------------------------------------------------------------------ |
+| Header           | Shows page title, search field, and document actions.                                      |
+| Tree panel       | Shows folders, root files, selected file, conversion status, and empty state.              |
+| Detail panel     | Shows preview, editor, metadata, and document-specific actions.                            |
+| Upload modal     | Accepts `.md`, `.pdf`, `.docx`, optional folder, optional tags, and conversion preference. |
+| New file modal   | Creates a Markdown note and opens it in edit mode.                                         |
+| New folder modal | Creates a folder and expands it immediately.                                               |
 
 ## Markdown Editing
 
@@ -212,12 +212,12 @@ Documents become useful when they can be attached to workflows.
 
 Supported context attachment points:
 
-| Workflow | Field |
-| --- | --- |
-| Ready-made interview creation | `contextDocumentIds` |
-| AI-guided interview setup | `contextDocumentIds` inferred or selected during chat |
-| AI Coach message | `contextDocumentIds` |
-| Onboarding goal step | `resumeDocumentId` |
+| Workflow                      | Field                                                 |
+| ----------------------------- | ----------------------------------------------------- |
+| Ready-made interview creation | `contextDocumentIds`                                  |
+| AI-guided interview setup     | `contextDocumentIds` inferred or selected during chat |
+| AI Coach message              | `contextDocumentIds`                                  |
+| Onboarding goal step          | `resumeDocumentId`                                    |
 
 Context rules:
 
@@ -231,31 +231,31 @@ Context rules:
 
 The canonical API surface is documented in [`api-requirements.md`](./api-requirements.md). Notes & Files should use these endpoints:
 
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| `GET` | `/api/v1/documents` | List uploaded documents and Markdown notes. |
-| `POST` | `/api/v1/documents` | Create a Markdown note. |
-| `POST` | `/api/v1/documents/upload` | Upload resume, notes, PDF, DOCX, or Markdown. |
-| `GET` | `/api/v1/documents/{documentId}` | Read document metadata and Markdown content. |
-| `PATCH` | `/api/v1/documents/{documentId}` | Update title, tags, folder, or Markdown content. |
-| `DELETE` | `/api/v1/documents/{documentId}` | Delete a document. |
-| `POST` | `/api/v1/documents/{documentId}/convert` | Convert original file to Markdown. |
-| `POST` | `/api/v1/documents/{documentId}/optimize` | Ask AI to improve notes or identify missing topics. |
-| `GET` | `/api/v1/documents/{documentId}/download` | Download the original or Markdown document. |
-| `GET` | `/api/v1/folders` | List document folders. |
-| `POST` | `/api/v1/folders` | Create a folder. |
-| `PATCH` | `/api/v1/folders/{folderId}` | Rename or move a folder. |
-| `DELETE` | `/api/v1/folders/{folderId}` | Delete a folder. |
+| Method   | Endpoint                                  | Purpose                                             |
+| -------- | ----------------------------------------- | --------------------------------------------------- |
+| `GET`    | `/api/v1/documents`                       | List uploaded documents and Markdown notes.         |
+| `POST`   | `/api/v1/documents`                       | Create a Markdown note.                             |
+| `POST`   | `/api/v1/documents/upload`                | Upload resume, notes, PDF, DOCX, or Markdown.       |
+| `GET`    | `/api/v1/documents/{documentId}`          | Read document metadata and Markdown content.        |
+| `PATCH`  | `/api/v1/documents/{documentId}`          | Update title, tags, folder, or Markdown content.    |
+| `DELETE` | `/api/v1/documents/{documentId}`          | Delete a document.                                  |
+| `POST`   | `/api/v1/documents/{documentId}/convert`  | Convert original file to Markdown.                  |
+| `POST`   | `/api/v1/documents/{documentId}/optimize` | Ask AI to improve notes or identify missing topics. |
+| `GET`    | `/api/v1/documents/{documentId}/download` | Download the original or Markdown document.         |
+| `GET`    | `/api/v1/folders`                         | List document folders.                              |
+| `POST`   | `/api/v1/folders`                         | Create a folder.                                    |
+| `PATCH`  | `/api/v1/folders/{folderId}`              | Rename or move a folder.                            |
+| `DELETE` | `/api/v1/folders/{folderId}`              | Delete a folder.                                    |
 
 Recommended list query parameters:
 
-| Param | Purpose |
-| --- | --- |
-| `folderId` | Filter documents by folder. |
-| `q` | Search by title, tags, and Markdown content if indexed. |
-| `type` | Filter by `md`, `pdf`, or `docx`. |
-| `tag` | Filter by tag such as `resume` or `onboarding`. |
-| `page`, `pageSize` | Paginate larger document libraries. |
+| Param              | Purpose                                                 |
+| ------------------ | ------------------------------------------------------- |
+| `folderId`         | Filter documents by folder.                             |
+| `q`                | Search by title, tags, and Markdown content if indexed. |
+| `type`             | Filter by `md`, `pdf`, or `docx`.                       |
+| `tag`              | Filter by tag such as `resume` or `onboarding`.         |
+| `page`, `pageSize` | Paginate larger document libraries.                     |
 
 Recommended `PATCH /api/v1/documents/{documentId}` request:
 
@@ -272,14 +272,14 @@ Recommended `PATCH /api/v1/documents/{documentId}` request:
 
 The UI should handle these cases explicitly:
 
-| State | UI behavior |
-| --- | --- |
-| Local server offline | Show the local connection screen and ask the user to run `iprep start`. |
-| Upload rejected | Show supported file types and keep the upload modal open. |
-| File too large | Explain the limit and allow the user to choose another file. |
-| Conversion failed | Show retry action and preserve the original file. |
-| Save failed | Keep the edited Markdown in the editor and show retry. |
-| Document missing | Return to the file list and refresh local state. |
+| State                       | UI behavior                                                              |
+| --------------------------- | ------------------------------------------------------------------------ |
+| Local server offline        | Show the local connection screen and ask the user to run `iprep start`.  |
+| Upload rejected             | Show supported file types and keep the upload modal open.                |
+| File too large              | Explain the limit and allow the user to choose another file.             |
+| Conversion failed           | Show retry action and preserve the original file.                        |
+| Save failed                 | Keep the edited Markdown in the editor and show retry.                   |
+| Document missing            | Return to the file list and refresh local state.                         |
 | Folder delete has documents | Move documents to root or require confirmation before deleting contents. |
 
 ## Future Git Repository Workflow

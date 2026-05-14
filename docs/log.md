@@ -20,11 +20,11 @@ Architecture notes and system design documents. This folder currently has no tra
 
 Top-level documentation files for navigating the `docs/` folder.
 
-| File        | Description                                                                                                          |
-| ----------- | -------------------------------------------------------------------------------------------------------------------- |
-| `CLAUDE.md` | Docs folder guide with folder structure, documentation conventions, and cross-references to other `CLAUDE.md` files. |
+| File                   | Description                                                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `CLAUDE.md`            | Docs folder guide with folder structure, documentation conventions, and cross-references to other `CLAUDE.md` files.         |
 | `gitnexus-learning.md` | Developer guide for using GitNexus in this monorepo, including indexing, querying, impact analysis, and debugging workflows. |
-| `log.md`    | This file; the maintained index of files in the `docs/` folder.                                                      |
+| `log.md`               | This file; the maintained index of files in the `docs/` folder.                                                              |
 
 ---
 
@@ -39,7 +39,7 @@ Early product thinking, rough workflows, and discussion notes before ideas becom
 | `02-iprep-system-design-and-wrokflow.md`       | Brainstorming document for the iPrep system design, monorepo layers, local `.iprep` workspace, package responsibilities, and workflow pipeline. |
 | `03-onboarding-api-latest-changes.md`          | Summary of recent onboarding/profile/provider API implementation updates, schema changes, and behavior impact.                                  |
 | `04-frontend-first-visit-onboarding-plan.md`   | Frontend plan for first-visit onboarding detection, three-step setup UI, DB-backed persistence, and related API usage.                          |
-| `05-notes-files-workflow.md`                   | Product, storage, UI, API, and future workflow plan for Notes & Files, including Markdown conversion and AI context usage.                       |
+| `05-notes-files-workflow.md`                   | Product, storage, UI, API, and future workflow plan for Notes & Files, including Markdown conversion and AI context usage.                      |
 | `api-requirements.md`                          | Future-facing API requirements for the local iPrep server, synthesized from brainstorming docs and demo app API requirements.                   |
 | `iprep-brainstorm-api.postman_collection.json` | Postman collection for the future local iPrep API routes defined in `api-requirements.md`.                                                      |
 
@@ -49,12 +49,12 @@ Early product thinking, rough workflows, and discussion notes before ideas becom
 
 Planning and design documents for the iPrep CLI (`apps/cli`).
 
-| File                       | Description                                                                                                                                            |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `01-cli-plan.md`           | Master CLI plan - stack, folder structure, all commands, utilities, local home structure, and implementation phases. Primary reference for CLI design. |
-| `02-onboard-plan.md`       | Detailed plan for the `iprep onboard` command - 7-step flow, inputs, outputs, and handler design (`runOnBoard`).                                       |
-| `03-start-command.plan.md` | Detailed plan for the `iprep start` command - prerequisite checks, server spawn, health wait, and handler design (`runStart`).                         |
-| `04-doctor-command.plan.md`| Detailed plan for the `iprep doctor` command - system checks, environmental readiness, JSON output support, and handler architecture (`runDoctor`).    |
+| File                        | Description                                                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `01-cli-plan.md`            | Master CLI plan - stack, folder structure, all commands, utilities, local home structure, and implementation phases. Primary reference for CLI design. |
+| `02-onboard-plan.md`        | Detailed plan for the `iprep onboard` command - 7-step flow, inputs, outputs, and handler design (`runOnBoard`).                                       |
+| `03-start-command.plan.md`  | Detailed plan for the `iprep start` command - prerequisite checks, server spawn, health wait, and handler design (`runStart`).                         |
+| `04-doctor-command.plan.md` | Detailed plan for the `iprep doctor` command - system checks, environmental readiness, JSON output support, and handler architecture (`runDoctor`).    |
 
 ---
 
@@ -160,10 +160,10 @@ Task breakdowns and implementation tracking notes. This folder currently has no 
 
 Session handoff notes that summarize recent work, decisions, progress, and next steps.
 
-| File                                             | Description                                                                                                      |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `01-2026-05-13-frontend-onboarding-progress.md`  | Session handoff for frontend onboarding setup, server API support, decisions made, verification, and next steps. |
-| `02-2026-05-13-frontend-ui-refactor.md`          | Session handoff for frontend UI synchronization with the prototype, settings view work, architecture refactor, and next steps. |
+| File                                            | Description                                                                                                                    |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `01-2026-05-13-frontend-onboarding-progress.md` | Session handoff for frontend onboarding setup, server API support, decisions made, verification, and next steps.               |
+| `02-2026-05-13-frontend-ui-refactor.md`         | Session handoff for frontend UI synchronization with the prototype, settings view work, architecture refactor, and next steps. |
 
 ---
 

@@ -3,7 +3,6 @@ import { ApiError, ApiResponse, StatusCodes, asyncHandler } from '../utils/index
 import { decryptProviderSecret } from '../utils/providerSecrets.js';
 import { SettingsQuery } from '@iprep/db';
 
-
 const LOCAL_USER = 'local_user';
 function userId(req: Request): string {
   return (req.headers['x-user-id'] as string) || LOCAL_USER;
@@ -62,10 +61,14 @@ async function checkCli(command: string): Promise<{ installed: boolean; version:
   const { exec } = await import('node:child_process');
   const execSh = (cmd: string): Promise<string> =>
     new Promise((resolve, reject) => {
-      exec(cmd, { shell: isWindows ? 'cmd.exe' : '/bin/sh', timeout: 5000 }, (err, stdout, stderr) => {
-        if (err) reject(err);
-        else resolve(stdout.trim());
-      });
+      exec(
+        cmd,
+        { shell: isWindows ? 'cmd.exe' : '/bin/sh', timeout: 5000 },
+        (err, stdout, stderr) => {
+          if (err) reject(err);
+          else resolve(stdout.trim());
+        },
+      );
     });
 
   // First confirm the binary exists
@@ -75,10 +78,10 @@ async function checkCli(command: string): Promise<{ installed: boolean; version:
 
   // Try to get version (many CLIs: --version, some: -v, version)
   const version = await execSh(`${command} --version`)
-    .then(v => v.split('\n')[0]?.trim() ?? null)
+    .then((v) => v.split('\n')[0]?.trim() ?? null)
     .catch(() =>
       execSh(`${command} -v`)
-        .then(v => v.split('\n')[0]?.trim() ?? null)
+        .then((v) => v.split('\n')[0]?.trim() ?? null)
         .catch(() => null),
     );
 
@@ -141,7 +144,9 @@ export const testProvider = asyncHandler(async (req: Request, res: Response) => 
           headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
         });
         passed = r.ok;
-        message = r.ok ? 'API key valid — Anthropic responded OK' : `Anthropic returned ${r.status}`;
+        message = r.ok
+          ? 'API key valid — Anthropic responded OK'
+          : `Anthropic returned ${r.status}`;
         break;
       }
       case 'GEMINI': {
@@ -186,7 +191,13 @@ export const testProvider = asyncHandler(async (req: Request, res: Response) => 
   // Update the test result in DB
   await SettingsQuery.markProviderTestResult(credentialId, uid, passed, message);
 
-  res.status(StatusCodes.OK).json(
-    new ApiResponse(StatusCodes.OK, { passed, message, provider: credential.provider }, 'Provider test complete'),
-  );
+  res
+    .status(StatusCodes.OK)
+    .json(
+      new ApiResponse(
+        StatusCodes.OK,
+        { passed, message, provider: credential.provider },
+        'Provider test complete',
+      ),
+    );
 });

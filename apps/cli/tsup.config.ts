@@ -11,7 +11,9 @@ function copyFrontend() {
     cpSync(FRONTEND_DIST, CLI_FRONTEND_OUT, { recursive: true, force: true });
     console.log('[tsup] ✓ Copied frontend dist → dist/frontend');
   } else {
-    console.warn('[tsup] ⚠ Frontend dist not found — run "pnpm --filter @iprep/frontend build" first');
+    console.warn(
+      '[tsup] ⚠ Frontend dist not found — run "pnpm --filter @iprep/frontend build" first',
+    );
   }
 }
 

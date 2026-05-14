@@ -163,7 +163,7 @@ export async function runStart(opts: { port?: string; open?: boolean }): Promise
   }
 
   showRunningBanner(port);
-  
+
   if (opts.open !== false) {
     const open = (await import('open')).default;
     await open(`http://localhost:${port}`).catch(() => {
