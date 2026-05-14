@@ -114,10 +114,10 @@ async function waitForReady(maxWaitMs = 15_000): Promise<void> {
 // ─── Step 6 ─────────────────────────────────────────────────────────────────
 
 function showRunningBanner(port: number): void {
-  const col = (s: string) => chalk.dim(s.padEnd(10));
+  const col = (s: string) => chalk.dim(s.padEnd(12));
   console.log();
-  console.log(chalk.bold.green('  ✓  iPrep server is running\n'));
-  console.log(`  ${col('Server')}  ${chalk.cyan(`http://localhost:${port}`)}`);
+  console.log(chalk.bold.green('  ✓  iPrep is running\n'));
+  console.log(`  ${col('Frontend')}  ${chalk.cyan(`http://localhost:${port}`)}`);
   console.log(`  ${col('API')}  ${chalk.cyan(`http://localhost:${port}/api/v1`)}`);
   console.log();
   console.log(`  ${chalk.dim('Press Ctrl+C to stop')}`);

@@ -12,7 +12,9 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
-    "build": "tsup",
+    "build:frontend": "pnpm --filter @iprep/frontend build",
+    "build:cli": "tsup",
+    "build": "pnpm build:frontend && pnpm build:cli",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "typecheck": "tsc --noEmit"
   },
