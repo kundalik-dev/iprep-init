@@ -86,7 +86,7 @@ All three packages build clean. Next: fleshing out server routes and DB queries.
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **iprep-init** (2252 symbols, 3705 relationships, 157 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **iprep-init** (2249 symbols, 3702 relationships, 157 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

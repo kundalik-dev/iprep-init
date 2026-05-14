@@ -6,20 +6,30 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 
 const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const pnpmBin = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 
 export async function runDbMigrations(): Promise<void> {
+  const isWin = process.platform === 'win32';
+  const npxBin = isWin ? 'npx.cmd' : 'npx';
+  const pnpmBin = isWin ? 'pnpm.cmd' : 'pnpm';
+
   try {
-    await execFileAsync(pnpmBin, ['exec', 'prisma', 'migrate', 'deploy'], {
+    // Try npx first as it is almost always available with Node.js
+    await execFileAsync(npxBin, ['prisma', 'migrate', 'deploy'], {
       cwd: packageRoot,
       env: process.env,
-      shell: process.platform === 'win32',
+      shell: isWin,
     });
-  } catch (err: unknown) {
-    // Re-throw with a more descriptive message if possible
-    if (err instanceof Error) {
-      throw err;
+  } catch (npxErr: any) {
+    // Fallback to pnpm if npx fails
+    try {
+      await execFileAsync(pnpmBin, ['exec', 'prisma', 'migrate', 'deploy'], {
+        cwd: packageRoot,
+        env: process.env,
+        shell: isWin,
+      });
+    } catch (pnpmErr: any) {
+      const message = npxErr.message || String(npxErr);
+      throw new Error(`Migration failed (tried npx and pnpm). Error: ${message}`);
     }
-    throw new Error(String(err));
   }
 }

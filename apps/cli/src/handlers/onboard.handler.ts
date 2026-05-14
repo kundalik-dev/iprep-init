@@ -150,7 +150,8 @@ async function runDbMigration(): Promise<void> {
       console.log(chalk.dim('    then re-run: iprep onboard\n'));
     } else {
       console.log(chalk.dim(`\n  -> ${message.trim()}`));
-      console.log(chalk.dim('  -> Re-run: iprep onboard\n'));
+      console.log(chalk.dim('  -> Try running: ') + chalk.bold.white('iprep db migrate'));
+      console.log(chalk.dim('  -> Or re-run: ') + chalk.bold.white('iprep onboard\n'));
     }
 
     throw new Error('migration failed');

@@ -35,7 +35,8 @@ async function verifyPrerequisites(): Promise<void> {
       console.log(`  ${check.ok ? log.success(check.label) : log.error(check.label)}`);
     }
     console.log();
-    console.log(chalk.dim('  → Fix it by running: ') + chalk.bold.white('iprep onboard --yes'));
+    console.log(chalk.dim('  → If it\'s your first time, run: ') + chalk.bold.white('iprep onboard'));
+    console.log(chalk.dim('  → If database is missing tables, run: ') + chalk.bold.white('iprep db migrate'));
     console.log();
     process.exit(1);
   }
