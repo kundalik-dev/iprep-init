@@ -125,6 +125,14 @@ export function SettingsScreen({
   );
 }
 
+// ── AI Provider options for the Preferences dropdown ──────────────────────────
+const AI_PROVIDER_OPTIONS = [
+  { value: 'CLAUDE',  label: 'Anthropic Claude' },
+  { value: 'GEMINI',  label: 'Google Gemini' },
+  { value: 'CODEX',   label: 'OpenAI GPT' },
+  { value: 'OLLAMA',  label: 'Ollama (Local)' },
+];
+
 // ── Preferences Tab ───────────────────────────────────────────────────────────
 function PreferencesTab({
   theme,
@@ -136,11 +144,15 @@ function PreferencesTab({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saved' | 'error'>('idle');
-  const [prefs, setPrefs] = useState({
+  const [prefs, setPrefs] = useState<Record<string, any>>({
     defaultTutor: 'alex',
     defaultPackage: 'behavioral',
     voiceMode: true,
     autoAnalyze: true,
+    // AI Configuration
+    aiMode: 'API_KEY',
+    aiProvider: 'CLAUDE',
+    aiModel: '',
   });
 
   useEffect(() => {
@@ -168,6 +180,8 @@ function PreferencesTab({
 
   if (loading) return <Spinner />;
 
+  const isCliMode = prefs.aiMode === 'CLI';
+
   return (
     <>
       <div className="settings-section-title">Preferences</div>
@@ -187,7 +201,133 @@ function PreferencesTab({
             <option value="technical">Technical Interview</option>
           </select>
         </div>
+
         <div className="settings-divider" />
+
+        {/* ── AI Configuration ─────────────────────────────────────────────── */}
+        <div style={{ marginBottom: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <Brain size={15} style={{ opacity: 0.7 }} />
+            <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-p)' }}>AI Configuration</span>
+          </div>
+          <div style={{ fontSize: '12px', color: 'var(--text-m)', marginBottom: '16px' }}>
+            Choose how iPrep sends prompts to AI for chat and analysis.
+          </div>
+
+          {/* Mode: API Key vs CLI */}
+          <div style={{ marginBottom: '14px' }}>
+            <div className="input-label" style={{ marginBottom: '8px' }}>Connection Mode</div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <label
+                htmlFor="pref-mode-apikey"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '10px 16px', borderRadius: '10px',
+                  border: `2px solid ${!isCliMode ? 'var(--accent, #6366f1)' : 'var(--border, rgba(255,255,255,0.1))'}`,
+                  background: !isCliMode ? 'rgba(99,102,241,0.1)' : 'var(--surface-2, rgba(255,255,255,0.04))',
+                  cursor: 'pointer', flex: 1, transition: 'border-color 0.2s, background 0.2s',
+                }}
+              >
+                <input
+                  id="pref-mode-apikey"
+                  type="radio" name="aiMode" value="API_KEY"
+                  checked={!isCliMode}
+                  onChange={() => setPrefs({ ...prefs, aiMode: 'API_KEY' })}
+                  style={{ accentColor: 'var(--accent, #6366f1)', width: '15px', height: '15px' }}
+                />
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', fontWeight: 600 }}>
+                    <KeyRound size={13} /> API Key
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>Use a stored provider API key</div>
+                </div>
+              </label>
+
+              <label
+                htmlFor="pref-mode-cli"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '10px 16px', borderRadius: '10px',
+                  border: `2px solid ${isCliMode ? 'var(--accent, #6366f1)' : 'var(--border, rgba(255,255,255,0.1))'}`,
+                  background: isCliMode ? 'rgba(99,102,241,0.1)' : 'var(--surface-2, rgba(255,255,255,0.04))',
+                  cursor: 'pointer', flex: 1, transition: 'border-color 0.2s, background 0.2s',
+                }}
+              >
+                <input
+                  id="pref-mode-cli"
+                  type="radio" name="aiMode" value="CLI"
+                  checked={isCliMode}
+                  onChange={() => setPrefs({ ...prefs, aiMode: 'CLI' })}
+                  style={{ accentColor: 'var(--accent, #6366f1)', width: '15px', height: '15px' }}
+                />
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '13px', fontWeight: 600 }}>
+                    <Terminal size={13} /> CLI Tool
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '2px' }}>Use an installed CLI (no key needed)</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          {/* Provider */}
+          <div className="input-group" style={{ marginBottom: '12px' }}>
+            <div className="input-label">AI Provider</div>
+            <select
+              id="pref-ai-provider"
+              className="input"
+              value={prefs.aiProvider ?? 'CLAUDE'}
+              onChange={e => setPrefs({ ...prefs, aiProvider: e.target.value })}
+            >
+              {AI_PROVIDER_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Model name */}
+          <div className="input-group" style={{ marginBottom: '0' }}>
+            <div className="input-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span>API Model ID</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-m)', fontWeight: 400 }}>optional — leave blank for default</span>
+            </div>
+            <input
+              id="pref-ai-model"
+              className="input" type="text"
+              placeholder={
+                prefs.aiProvider === 'CLAUDE' ? 'e.g. claude-3-5-sonnet-latest' :
+                prefs.aiProvider === 'GEMINI' ? 'e.g. gemini-1.5-flash' :
+                prefs.aiProvider === 'CODEX'  ? 'e.g. gpt-4o-mini' :
+                prefs.aiProvider === 'OLLAMA' ? 'e.g. llama3' : 'Enter model ID'
+              }
+              value={prefs.aiModel ?? ''}
+              onChange={e => setPrefs({ ...prefs, aiModel: e.target.value })}
+            />
+            <div style={{ fontSize: '11px', color: 'var(--text-m)', marginTop: '4px', opacity: 0.8 }}>
+              Use the technical ID (slug) from your provider's docs.
+            </div>
+          </div>
+
+          {/* Contextual hint */}
+          <div style={{
+            marginTop: '10px', padding: '10px 14px', borderRadius: '8px',
+            background: 'rgba(99,102,241,0.07)', border: '1px solid rgba(99,102,241,0.2)',
+            fontSize: '12px', color: 'var(--text-m)',
+            display: 'flex', alignItems: 'flex-start', gap: '8px',
+          }}>
+            {isCliMode
+              ? <Terminal size={13} style={{ marginTop: '1px', flexShrink: 0, opacity: 0.7 }} />
+              : <KeyRound size={13} style={{ marginTop: '1px', flexShrink: 0, opacity: 0.7 }} />}
+            <span>
+              {isCliMode
+                ? <>CLI mode runs the AI tool installed on your machine. Check <strong>Providers → CLI Tools</strong> to verify installation status.</>
+                : <>API Key mode uses the key saved in the <strong>API Keys</strong> tab for the selected provider.</>}
+            </span>
+          </div>
+        </div>
+
+        <div className="settings-divider" />
+
         <Toggle
           label="Voice Mode"
           desc="Enable microphone input during sessions"
@@ -232,6 +372,7 @@ function PreferencesTab({
     </>
   );
 }
+
 
 // ── Providers Tab ─────────────────────────────────────────────────────────────
 type TestState = { status: 'idle' | 'testing' | 'passed' | 'failed'; message?: string };

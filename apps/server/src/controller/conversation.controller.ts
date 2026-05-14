@@ -1,6 +1,12 @@
 import type { RequestHandler } from 'express';
 import { ConversationQuery } from '@iprep/db';
 import { ApiError, ApiResponse, StatusCodes, asyncHandler } from '../utils/index.js';
+import { callAi } from '../utils/ai-adapter.js';
+
+const LOCAL_USER = 'local_user';
+function getUserId(req: Parameters<RequestHandler>[0]): string {
+  return (req.headers['x-user-id'] as string) || LOCAL_USER;
+}
 
 function getParam(value: string | string[] | undefined, name: string) {
   if (typeof value === 'string' && value.trim()) {
@@ -64,6 +70,7 @@ export const deleteConversation: RequestHandler = asyncHandler(async (req, res) 
 export const addMessage: RequestHandler = asyncHandler(async (req, res) => {
   const conversationId = getParam(req.params.conversationId, 'conversationId');
   const { text } = req.body;
+  const uid = getUserId(req);
 
   if (!text) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'text is required');
@@ -75,11 +82,11 @@ export const addMessage: RequestHandler = asyncHandler(async (req, res) => {
     content: text,
   });
 
-  // Mock AI response logic for now (later, hook into AI provider)
-  const aiResponseContent = `This is a mock AI response to: "${text}"`;
+  // Call the AI using the provider configured in the user's preferences
+  const aiResult = await callAi(uid, text);
   const aiMessage = await ConversationQuery.addMessage(conversationId, {
     role: 'AI',
-    content: aiResponseContent,
+    content: aiResult.content,
   });
 
   res

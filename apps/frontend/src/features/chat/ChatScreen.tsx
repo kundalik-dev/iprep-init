@@ -9,6 +9,15 @@ import {
   type Conversation,
   type ChatMessage,
 } from './api';
+import { getPreferences } from '../settings/api';
+
+/** Map provider key → display label */
+const PROVIDER_LABELS: Record<string, string> = {
+  CLAUDE:  'Claude (Anthropic)',
+  GEMINI:  'Gemini (Google)',
+  CODEX:   'GPT (OpenAI)',
+  OLLAMA:  'Ollama (Local)',
+};
 
 export function ChatScreen() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -18,6 +27,19 @@ export function ChatScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // AI config read from preferences
+  const [aiProvider, setAiProvider] = useState<string | null>(null);
+  const [aiMode, setAiMode] = useState<string | null>(null);
+
+  useEffect(() => {
+    getPreferences()
+      .then((prefs: Record<string, any>) => {
+        setAiProvider((prefs?.aiProvider as string) ?? null);
+        setAiMode((prefs?.aiMode as string) ?? null);
+      })
+      .catch(() => {});
+  }, []);
 
   const loadConversations = useCallback(async () => {
     try {
@@ -115,6 +137,11 @@ export function ChatScreen() {
       return '';
     }
   };
+
+  // Build a readable AI label for the footer
+  const aiLabel = aiProvider
+    ? `${PROVIDER_LABELS[aiProvider] ?? aiProvider}${aiMode === 'CLI' ? ' (CLI)' : ' (API Key)'}`
+    : null;
 
   return (
     <div className="chat-layout view-enter">
@@ -216,7 +243,12 @@ export function ChatScreen() {
               <SendHorizonal size={18} />
             </button>
           </div>
-          <div className="chat-input-footnote">Stored in local database · Powered by iPrep AI</div>
+          <div className="chat-input-footnote">
+            Stored in local database ·{' '}
+            {aiLabel
+              ? <>Powered by <strong>{aiLabel}</strong></>
+              : <span style={{ color: 'var(--danger, #f87171)' }}>No AI configured — go to Settings → Preferences</span>}
+          </div>
         </form>
       </section>
     </div>
@@ -244,3 +276,5 @@ function EmptyChatState() {
     </div>
   );
 }
+
+

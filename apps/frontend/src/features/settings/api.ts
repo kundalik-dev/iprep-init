@@ -9,6 +9,7 @@ export type ProviderData = {
   isWorking: boolean;
   isSelected: boolean;
   lastTestPassed?: boolean | null;
+  lastTestMessage?: string | null;
   lastTestedAt?: string | null;
   createdAt: string;
   updatedAt: string;
