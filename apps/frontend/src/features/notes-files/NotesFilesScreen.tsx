@@ -1,20 +1,22 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import GithubSlugger from 'github-slugger';
 import {
-  Check,
   ChevronRight,
   Download,
-  Edit3,
   FileText,
   Folder,
   FolderOpen,
   Plus,
   RefreshCw,
-  Save,
   Search,
   Trash2,
   Upload,
   X,
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
 import {
   convertDocument,
@@ -33,6 +35,11 @@ import {
 type EditorMode = 'preview' | 'edit';
 type ModalState = 'new-file' | 'new-folder' | 'upload' | null;
 type SaveState = 'idle' | 'dirty' | 'saving' | 'saved' | 'error';
+type TocItem = {
+  id: string;
+  depth: number;
+  text: string;
+};
 
 export function NotesFilesScreen() {
   const [documents, setDocuments] = useState<IprepDocument[]>([]);
@@ -50,17 +57,19 @@ export function NotesFilesScreen() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    void refreshWorkspace();
+    const timer = window.setTimeout(() => void refreshWorkspace(), 0);
+    return () => window.clearTimeout(timer);
+    // Initial load only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!selectedDocumentId) {
-      setSelectedDocument(null);
-      setDraftMarkdown('');
       return;
     }
 
-    void loadDocument(selectedDocumentId);
+    const timer = window.setTimeout(() => void loadDocument(selectedDocumentId), 0);
+    return () => window.clearTimeout(timer);
   }, [selectedDocumentId]);
 
   const filteredDocuments = useMemo(() => {
@@ -257,24 +266,24 @@ export function NotesFilesScreen() {
   return (
     <div className="files-screen view-enter">
       <div className="files-topbar">
-        <div className="page-header-left">
-          <div className="page-title">Notes & Files</div>
-          <div className="page-subtitle">Upload, edit, and attach preparation context</div>
+        <div className="files-titlebar">
+          <Folder className="files-title-icon" size={24} fill="currentColor" stroke="currentColor" />
+          <div className="page-title">Files</div>
         </div>
         <div className="files-topbar-actions">
           <div className="files-search">
-            <Search size={15} />
+            <Search size={14} />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search notes"
             />
           </div>
-          <button className="btn btn-secondary btn-sm" onClick={() => setModal('new-folder')}>
-            <Folder size={14} /> New Folder
-          </button>
           <button className="btn btn-secondary btn-sm" onClick={() => setModal('new-file')}>
             <Plus size={14} /> New File
+          </button>
+          <button className="btn btn-secondary btn-sm" onClick={() => setModal('new-folder')}>
+            <Plus size={14} /> New Folder
           </button>
           <button className="btn btn-primary btn-sm" onClick={() => setModal('upload')}>
             <Upload size={14} /> Upload
@@ -294,7 +303,7 @@ export function NotesFilesScreen() {
       <div className="files-layout">
         <aside className="file-tree">
           <div className="file-tree-header">
-            <span className="file-tree-title">Workspace</span>
+            <span className="file-tree-title">Files</span>
             <div className="file-tree-actions">
               <button
                 className="tree-action-btn"
@@ -321,9 +330,9 @@ export function NotesFilesScreen() {
                     >
                       <ChevronRight className="tree-chevron" size={13} />
                       {expandedFolders.has(folder.id) ? (
-                        <FolderOpen className="tree-folder-icon" size={14} />
+                        <FolderOpen className="tree-folder-icon" size={16} fill="#ffc107" stroke="#ffc107" />
                       ) : (
-                        <Folder className="tree-folder-icon" size={14} />
+                        <Folder className="tree-folder-icon" size={16} fill="#ffc107" stroke="#ffc107" />
                       )}
                       <span className="tree-folder-name">{folder.name}</span>
                       <span className="tree-folder-count">
@@ -366,62 +375,63 @@ export function NotesFilesScreen() {
             <>
               <div className="editor-toolbar">
                 <div className="editor-file-heading">
-                  <FileText size={16} />
-                  <div>
-                    <div className="editor-filename">{selectedDocument.title}</div>
-                    <div className="editor-file-meta">
-                      {selectedDocument.type.toUpperCase()} · {selectedDocument.conversionStatus}
-                    </div>
-                  </div>
+                  <FileText size={16} className="editor-file-icon" />
+                  <div className="editor-filename">{selectedDocument.title}</div>
+                  {selectedDocument.type !== 'md' && (
+                    <span className={cn('badge', statusBadgeClass(selectedDocument.conversionStatus))}>
+                      {selectedDocument.conversionStatus.replace('_', ' ')}
+                    </span>
+                  )}
                 </div>
-                <span className={cn('badge', statusBadgeClass(selectedDocument.conversionStatus))}>
-                  {selectedDocument.conversionStatus.replace('_', ' ')}
-                </span>
-                {selectedDocument.type === 'md' && (
-                  <div className="editor-mode-tabs">
+                
+                <div className="editor-actions">
+                  {selectedDocument.type === 'md' && (
+                    <div className="editor-mode-tabs">
+                      <button
+                        className={cn('editor-mode-btn', editorMode === 'edit' && 'active')}
+                        onClick={() => setEditorMode('edit')}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className={cn('editor-mode-btn', editorMode === 'preview' && 'active')}
+                        onClick={() => setEditorMode('preview')}
+                      >
+                        Preview
+                      </button>
+                    </div>
+                  )}
+                  {selectedDocument.type === 'md' && saveState !== 'idle' && saveState !== 'saved' && (
                     <button
-                      className={cn('editor-mode-btn', editorMode === 'preview' && 'active')}
-                      onClick={() => setEditorMode('preview')}
+                      className="btn btn-secondary btn-sm editor-save-btn"
+                      disabled={saveState === 'saving'}
+                      onClick={() => void handleSave()}
                     >
-                      Preview
+                      {saveState === 'saving' ? <RefreshCw className="spin" size={14} /> : 'Save ✓'}
                     </button>
+                  )}
+                  {selectedDocument.type !== 'md' && (
                     <button
-                      className={cn('editor-mode-btn', editorMode === 'edit' && 'active')}
-                      onClick={() => setEditorMode('edit')}
+                      className="btn btn-secondary btn-sm"
+                      disabled={isBusy}
+                      onClick={() => void handleConvertDocument(selectedDocument.id)}
                     >
-                      <Edit3 size={13} /> Edit
+                      <RefreshCw size={13} />
+                      Convert
                     </button>
-                  </div>
-                )}
-                {selectedDocument.type === 'md' && (
-                  <button
-                    className="btn btn-primary btn-sm"
-                    disabled={saveState === 'saving' || saveState === 'idle' || saveState === 'saved'}
-                    onClick={() => void handleSave()}
-                  >
-                    {saveState === 'saving' ? <RefreshCw className="spin" size={13} /> : <Save size={13} />}
-                    Save
+                  )}
+                  <button className="btn btn-secondary btn-sm editor-icon-btn" title="Download original">
+                    <Download size={14} />
                   </button>
-                )}
-                {selectedDocument.type !== 'md' && (
                   <button
-                    className="btn btn-secondary btn-sm"
+                    className="btn btn-secondary btn-sm editor-icon-btn danger"
                     disabled={isBusy}
-                    onClick={() => void handleConvertDocument(selectedDocument.id)}
+                    onClick={() => void handleDeleteDocument(selectedDocument.id)}
+                    title="Delete document"
                   >
-                    <RefreshCw size={13} /> Convert
+                    <Trash2 size={14} />
                   </button>
-                )}
-                <button className="btn btn-secondary btn-sm" title="Download original">
-                  <Download size={13} />
-                </button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  disabled={isBusy}
-                  onClick={() => void handleDeleteDocument(selectedDocument.id)}
-                >
-                  <Trash2 size={13} />
-                </button>
+                </div>
               </div>
 
               {selectedDocument.type === 'md' ? (
@@ -437,11 +447,16 @@ export function NotesFilesScreen() {
                       }}
                     />
                   ) : (
-                    <div
-                      className="editor-preview markdown-preview"
-                      dangerouslySetInnerHTML={{ __html: renderMarkdown(draftMarkdown) }}
+                    <MarkdownViewer
+                      source={draftMarkdown}
+                      title={selectedDocument.title}
+                      updatedAt={selectedDocument.updatedAt}
                     />
                   )}
+                  <div className="editor-statusbar">
+                    <span>Last saved: {new Date(selectedDocument.updatedAt).toLocaleDateString()}</span>
+                    <span>{(draftMarkdown.length / 1024).toFixed(1)} KB</span>
+                  </div>
                   <SaveIndicator state={saveState} />
                 </div>
               ) : (
@@ -492,13 +507,8 @@ function DocumentTreeRow({
 }) {
   return (
     <button className={cn('tree-file', isSelected && 'selected')} onClick={onSelect}>
-      <FileText className="tree-file-icon" size={13} />
+      <FileText className="tree-file-icon" size={14} />
       <span className="tree-file-name">{document.title}</span>
-      {document.conversionStatus === 'completed' || document.conversionStatus === 'not_required' ? (
-        <Check className="tree-status-ok" size={12} />
-      ) : (
-        <RefreshCw className="tree-status-pending" size={12} />
-      )}
     </button>
   );
 }
@@ -647,61 +657,149 @@ function statusBadgeClass(status: IprepDocument['conversionStatus']) {
   return 'badge-warning';
 }
 
-function renderMarkdown(markdown: string) {
-  const lines = markdown.split('\n');
-  const html: string[] = [];
-  let inList = false;
+function MarkdownViewer({
+  source,
+  title,
+  updatedAt,
+}: {
+  source: string;
+  title: string;
+  updatedAt: string;
+}) {
+  const parsed = useMemo(() => parseMarkdownDocument(source), [source]);
+  const toc = useMemo(() => extractToc(parsed.content), [parsed.content]);
+  const fallbackTitle = title.replace(/\.(md|markdown)$/i, '');
+  const displayTitle = parsed.frontmatter.title || firstHeading(parsed.content) || fallbackTitle;
+  const description = parsed.frontmatter.description;
 
-  for (const line of lines) {
-    const escapedLine = escapeHtml(line);
-
-    if (line.startsWith('# ')) {
-      if (inList) {
-        html.push('</ul>');
-        inList = false;
-      }
-      html.push(`<h1>${escapeHtml(line.slice(2))}</h1>`);
-      continue;
-    }
-
-    if (line.startsWith('## ')) {
-      if (inList) {
-        html.push('</ul>');
-        inList = false;
-      }
-      html.push(`<h2>${escapeHtml(line.slice(3))}</h2>`);
-      continue;
-    }
-
-    if (line.startsWith('- ')) {
-      if (!inList) {
-        html.push('<ul>');
-        inList = true;
-      }
-      html.push(`<li>${escapeHtml(line.slice(2))}</li>`);
-      continue;
-    }
-
-    if (inList) {
-      html.push('</ul>');
-      inList = false;
-    }
-
-    html.push(line.trim() ? `<p>${escapedLine}</p>` : '<br />');
-  }
-
-  if (inList) {
-    html.push('</ul>');
-  }
-
-  return html.join('');
+  return (
+    <div className="editor-preview">
+      <div className="markdown-view-shell">
+        <article className="markdown-document">
+          <div className="markdown-document-meta">
+            <span>Last read {new Date(updatedAt).toLocaleDateString()}</span>
+          </div>
+          <header className="markdown-document-header">
+            <h1>{displayTitle}</h1>
+            {description && <p>{description}</p>}
+            {Object.keys(parsed.frontmatter).length > 0 && (
+              <dl className="markdown-frontmatter">
+                {Object.entries(parsed.frontmatter)
+                  .filter(([key]) => key !== 'title' && key !== 'description')
+                  .map(([key, value]) => (
+                    <div key={key}>
+                      <dt>{key}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ))}
+              </dl>
+            )}
+          </header>
+          <div className="markdown-preview">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[
+                rehypeSlug,
+                [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: ['heading-anchor'] } }],
+              ]}
+            >
+              {stripFirstHeading(parsed.content, displayTitle)}
+            </ReactMarkdown>
+          </div>
+        </article>
+        {toc.length > 0 && (
+          <aside className="markdown-toc" aria-label="On this page">
+            <div className="markdown-toc-title">On this page</div>
+            <nav>
+              {toc.map((item) => (
+                <a
+                  className={cn('markdown-toc-link', item.depth > 2 && 'nested')}
+                  href={`#${item.id}`}
+                  key={`${item.id}-${item.text}`}
+                >
+                  {item.text}
+                </a>
+              ))}
+            </nav>
+          </aside>
+        )}
+      </div>
+    </div>
+  );
 }
 
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+function parseMarkdownDocument(source: string) {
+  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+
+  if (!match) {
+    return { content: source, frontmatter: {} as Record<string, string> };
+  }
+
+  const frontmatter: Record<string, string> = {};
+
+  for (const line of match[1].split(/\r?\n/)) {
+    const separatorIndex = line.indexOf(':');
+    if (separatorIndex === -1) {
+      continue;
+    }
+
+    const key = line.slice(0, separatorIndex).trim();
+    const value = line.slice(separatorIndex + 1).trim().replace(/^['"]|['"]$/g, '');
+    if (key) {
+      frontmatter[key] = value;
+    }
+  }
+
+  return {
+    content: source.slice(match[0].length),
+    frontmatter,
+  };
+}
+
+function extractToc(source: string): TocItem[] {
+  const slugger = new GithubSlugger();
+  const items: TocItem[] = [];
+
+  for (const line of source.split(/\r?\n/)) {
+    const match = /^(#{2,4})\s+(.+)$/.exec(line);
+    if (!match) {
+      continue;
+    }
+
+    const text = match[2]
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .trim();
+
+    items.push({
+      id: slugger.slug(text),
+      depth: match[1].length,
+      text,
+    });
+  }
+
+  return items;
+}
+
+function firstHeading(source: string) {
+  const match = /^#\s+(.+)$/m.exec(source);
+  return match?.[1].trim() ?? '';
+}
+
+function stripFirstHeading(source: string, displayTitle: string) {
+  const lines = source.split(/\r?\n/);
+  const firstContentLine = lines.findIndex((line) => line.trim().length > 0);
+
+  if (firstContentLine === -1) {
+    return source;
+  }
+
+  const headingMatch = /^#\s+(.+)$/.exec(lines[firstContentLine]);
+
+  if (!headingMatch || headingMatch[1].trim() !== displayTitle) {
+    return source;
+  }
+
+  return [...lines.slice(0, firstContentLine), ...lines.slice(firstContentLine + 1)].join('\n');
 }

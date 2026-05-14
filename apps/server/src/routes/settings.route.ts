@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { SettingsController } from '../controller/settings.controller.js';
 
-const router = Router();
+const router: Router = Router();
 
 // Preferences routes
 router.get('/preferences', SettingsController.getPreferences);

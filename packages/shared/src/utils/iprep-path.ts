@@ -36,4 +36,31 @@ export const IprepPaths = {
 
   /** SQLite file: ~/.iprep/database/iprep.db */
   dbFile: path.join(IPREP_HOME, 'database', 'iprep.db'),
+
+  /** Logs folder: ~/.iprep/logs/ */
+  logs: path.join(IPREP_HOME, 'logs'),
+
+  /** CLI logs: ~/.iprep/logs/cli-log/ */
+  cliLogs: path.join(IPREP_HOME, 'logs', 'cli-log'),
+
+  /** Server logs: ~/.iprep/logs/server-log/ */
+  serverLogs: path.join(IPREP_HOME, 'logs', 'server-log'),
+
+  /** Sessions folder: ~/.iprep/sessions/ */
+  sessions: path.join(IPREP_HOME, 'sessions'),
+
+  /** Skills folder: ~/.iprep/skills/ */
+  skills: path.join(IPREP_HOME, 'skills'),
+
+  /** Docs folder: ~/.iprep/docs/ */
+  docs: path.join(IPREP_HOME, 'docs'),
+
+  /** Interview data folder: ~/.iprep/interview-data/ */
+  interviewData: path.join(IPREP_HOME, 'interview-data'),
+
+  /** Exports folder: ~/.iprep/exports/ */
+  exports: path.join(IPREP_HOME, 'exports'),
+
+  /** Backups folder: ~/.iprep/backups/ */
+  backups: path.join(IPREP_HOME, 'backups'),
 };

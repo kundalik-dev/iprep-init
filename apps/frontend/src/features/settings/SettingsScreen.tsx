@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Bot, Terminal, Edit2, Trash2, Plus, Sparkles, Mic, Brain, Zap, KeyRound, Settings as SettingsIcon, Eye } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Bot, Terminal, Edit2, Trash2, Plus, Sparkles, Mic, Brain, Zap, KeyRound, Settings as SettingsIcon, Eye, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getPreferences, updatePreferences, getProviders, deleteProvider, type ProviderData } from './api';
 
 const mockProviders = [
   {
@@ -117,6 +118,38 @@ function PreferencesTab({
   theme: 'light' | 'dark';
   setTheme: (t: 'light' | 'dark') => void;
 }) {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [prefs, setPrefs] = useState({
+    defaultTutor: 'alex',
+    defaultPackage: 'behavioral',
+    voiceMode: true,
+    autoAnalyze: true,
+  });
+
+  useEffect(() => {
+    getPreferences().then((data) => {
+      if (data && Object.keys(data).length > 0) {
+        setPrefs(prev => ({ ...prev, ...data }));
+      }
+      setLoading(false);
+    }).catch(console.error);
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updatePreferences(prefs);
+    } catch (e) {
+      console.error(e);
+    }
+    setSaving(false);
+  };
+
+  if (loading) {
+    return <div style={{ padding: '40px', textAlign: 'center' }}><Loader2 className="spin" size={24} style={{ margin: '0 auto' }} /></div>;
+  }
+
   return (
     <>
       <div className="settings-section-title">Preferences</div>
@@ -124,14 +157,22 @@ function PreferencesTab({
       <div className="settings-form">
         <div className="input-group">
           <div className="input-label">Default Tutor</div>
-          <select className="input" id="pref-tutor">
+          <select 
+            className="input" 
+            value={prefs.defaultTutor}
+            onChange={e => setPrefs({...prefs, defaultTutor: e.target.value})}
+          >
             <option value="alex">Alex Chen</option>
             <option value="sarah">Sarah Jenkins</option>
           </select>
         </div>
         <div className="input-group">
           <div className="input-label">Default Package</div>
-          <select className="input" id="pref-pkg">
+          <select 
+            className="input"
+            value={prefs.defaultPackage}
+            onChange={e => setPrefs({...prefs, defaultPackage: e.target.value})}
+          >
             <option value="behavioral">Behavioral Interview</option>
             <option value="technical">Technical Interview</option>
           </select>
@@ -143,7 +184,11 @@ function PreferencesTab({
             <div className="toggle-desc">Enable microphone input during sessions</div>
           </div>
           <label className="toggle-switch">
-            <input type="checkbox" defaultChecked />
+            <input 
+              type="checkbox" 
+              checked={prefs.voiceMode}
+              onChange={e => setPrefs({...prefs, voiceMode: e.target.checked})}
+            />
             <span className="toggle-slider"></span>
           </label>
         </div>
@@ -153,7 +198,11 @@ function PreferencesTab({
             <div className="toggle-desc">Automatically generate analysis when session ends</div>
           </div>
           <label className="toggle-switch">
-            <input type="checkbox" defaultChecked />
+            <input 
+              type="checkbox" 
+              checked={prefs.autoAnalyze}
+              onChange={e => setPrefs({...prefs, autoAnalyze: e.target.checked})}
+            />
             <span className="toggle-slider"></span>
           </label>
         </div>
@@ -172,7 +221,13 @@ function PreferencesTab({
           </label>
         </div>
         <div className="settings-divider"></div>
-        <button className="btn btn-primary" style={{ width: 'fit-content' }}>
+        <button 
+          className="btn btn-primary" 
+          style={{ width: 'fit-content', display: 'flex', alignItems: 'center', gap: '8px' }}
+          onClick={handleSave}
+          disabled={saving}
+        >
+          {saving && <Loader2 size={16} className="spin" />}
           Save Preferences
         </button>
       </div>
@@ -181,6 +236,46 @@ function PreferencesTab({
 }
 
 function ProvidersTab() {
+  type DisplayProvider = (typeof mockProviders)[number] & { dbId?: string };
+  const [dbProviders, setDbProviders] = useState<ProviderData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProviders = () => {
+    setLoading(true);
+    getProviders().then((data) => {
+      setDbProviders(data || []);
+      setLoading(false);
+    }).catch((e) => {
+      console.error(e);
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => fetchProviders(), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const handleDelete = async (dbId: string) => {
+    if (confirm('Are you sure you want to remove this provider?')) {
+      await deleteProvider(dbId);
+      fetchProviders();
+    }
+  };
+
+  const displayProviders: DisplayProvider[] = mockProviders.map(p => {
+    const found = dbProviders.find(db => db.provider === p.id.toUpperCase());
+    if (found) {
+      return {
+        ...p,
+        status: found.isWorking ? 'active' : 'configured',
+        statusClass: found.isWorking ? 'status-active' : 'status-configured',
+        dbId: found.id
+      };
+    }
+    return p;
+  });
+
   return (
     <>
       <div className="settings-section-header">
@@ -195,40 +290,50 @@ function ProvidersTab() {
         </button>
       </div>
       
-      <div className="settings-provider-list">
-        {mockProviders.map((provider) => (
-          <div key={provider.id} className="settings-provider-card">
-            <div className="spc-icon">
-              {provider.icon}
-            </div>
-            <div className="spc-content">
-              <div className="spc-header">
-                <div className="spc-title-row">
-                  <span className="spc-name">{provider.name}</span>
-                  <span className={cn('spc-status', provider.statusClass)}>
-                    <span className="spc-status-dot"></span> {provider.status}
-                  </span>
-                </div>
-                <div className="spc-actions">
-                  <button className="spc-action-btn" title="Edit">
-                    <Edit2 size={16} />
-                  </button>
-                  <button className="spc-action-btn danger" title="Delete">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+      {loading ? (
+        <div style={{ padding: '40px', textAlign: 'center' }}><Loader2 className="spin" size={24} style={{ margin: '0 auto' }} /></div>
+      ) : (
+        <div className="settings-provider-list">
+          {displayProviders.map((provider) => (
+            <div key={provider.id} className="settings-provider-card">
+              <div className="spc-icon">
+                {provider.icon}
               </div>
-              <div className="spc-type">{provider.type}</div>
-              <div className="spc-desc">{provider.desc}</div>
-              {provider.command && (
-                <div className="spc-command-box">
-                  <strong>Run:</strong> {provider.command}
+              <div className="spc-content">
+                <div className="spc-header">
+                  <div className="spc-title-row">
+                    <span className="spc-name">{provider.name}</span>
+                    <span className={cn('spc-status', provider.statusClass)}>
+                      <span className="spc-status-dot"></span> {provider.status}
+                    </span>
+                  </div>
+                  <div className="spc-actions">
+                    <button className="spc-action-btn" title="Edit">
+                      <Edit2 size={16} />
+                    </button>
+                    {provider.dbId && (
+                      <button 
+                        className="spc-action-btn danger" 
+                        title="Delete"
+                        onClick={() => handleDelete(provider.dbId!)}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
                 </div>
-              )}
+                <div className="spc-type">{provider.type}</div>
+                <div className="spc-desc">{provider.desc}</div>
+                {provider.command && (
+                  <div className="spc-command-box">
+                    <strong>Run:</strong> {provider.command}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }

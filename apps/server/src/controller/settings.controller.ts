@@ -73,7 +73,7 @@ export class SettingsController {
   static async deleteProvider(req: Request, res: Response) {
     try {
       const userId = req.headers['x-user-id'] as string;
-      const providerId = req.params.id;
+      const providerId = String(req.params.id);
       
       if (!userId) {
         return res.status(401).json({ success: false, error: 'Unauthorized' });

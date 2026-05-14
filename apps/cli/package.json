@@ -29,7 +29,8 @@
     "express": "^5.2.1",
     "figlet": "^1.11.0",
     "gradient-string": "^3.0.0",
-    "inquirer": "^13.4.2"
+    "inquirer": "^13.4.2",
+    "open": "^11.0.0"
   },
   "devDependencies": {
     "@iprep/db": "workspace:*",

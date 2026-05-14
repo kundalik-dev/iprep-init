@@ -1,5 +1,4 @@
-import type { Prisma } from '../generated/prisma';
-import { prisma } from '../index';
+import { prisma } from '../prisma.js';
 
 export class SettingsQuery {
   // --- Preferences ---

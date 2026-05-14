@@ -69,15 +69,15 @@ function createDirectoryStructure(): void {
   const dirs = [
     { abs: IprepPaths.root, label: '~/.iprep/' },
     { abs: IprepPaths.database, label: '~/.iprep/database/' },
-    { abs: path.join(IprepPaths.root, 'logs'), label: '~/.iprep/logs/' },
-    { abs: path.join(IprepPaths.root, 'logs', 'cli-log'), label: '~/.iprep/logs/cli-log/' },
-    { abs: path.join(IprepPaths.root, 'logs', 'server-log'), label: '~/.iprep/logs/server-log/' },
-    { abs: path.join(IprepPaths.root, 'sessions'), label: '~/.iprep/sessions/' },
-    { abs: path.join(IprepPaths.root, 'skills'), label: '~/.iprep/skills/' },
-    { abs: path.join(IprepPaths.root, 'docs'), label: '~/.iprep/docs/' },
-    { abs: path.join(IprepPaths.root, 'interview-data'), label: '~/.iprep/interview-data/' },
-    { abs: path.join(IprepPaths.root, 'exports'), label: '~/.iprep/exports/' },
-    { abs: path.join(IprepPaths.root, 'backups'), label: '~/.iprep/backups/' },
+    { abs: IprepPaths.logs, label: '~/.iprep/logs/' },
+    { abs: IprepPaths.cliLogs, label: '~/.iprep/logs/cli-log/' },
+    { abs: IprepPaths.serverLogs, label: '~/.iprep/logs/server-log/' },
+    { abs: IprepPaths.sessions, label: '~/.iprep/sessions/' },
+    { abs: IprepPaths.skills, label: '~/.iprep/skills/' },
+    { abs: IprepPaths.docs, label: '~/.iprep/docs/' },
+    { abs: IprepPaths.interviewData, label: '~/.iprep/interview-data/' },
+    { abs: IprepPaths.exports, label: '~/.iprep/exports/' },
+    { abs: IprepPaths.backups, label: '~/.iprep/backups/' },
   ];
 
   for (const dir of dirs) {

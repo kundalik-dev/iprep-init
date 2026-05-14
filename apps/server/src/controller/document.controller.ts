@@ -176,7 +176,8 @@ export const uploadDocument: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const getDocument: RequestHandler = asyncHandler(async (req, res) => {
-  const document = await DocumentQuery.getDocument(req.params.documentId);
+  const documentId = String(req.params.documentId);
+  const document = await DocumentQuery.getDocument(documentId);
 
   if (!document) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'document not found');
@@ -188,7 +189,8 @@ export const getDocument: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const updateDocument: RequestHandler = asyncHandler(async (req, res) => {
-  const currentDocument = await DocumentQuery.getDocument(req.params.documentId);
+  const documentId = String(req.params.documentId);
+  const currentDocument = await DocumentQuery.getDocument(documentId);
 
   if (!currentDocument) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'document not found');
@@ -225,7 +227,8 @@ export const updateDocument: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const deleteDocument: RequestHandler = asyncHandler(async (req, res) => {
-  const document = await DocumentQuery.deleteDocument(req.params.documentId);
+  const documentId = String(req.params.documentId);
+  const document = await DocumentQuery.deleteDocument(documentId);
 
   await fs.rm(documentDir(document.id), { recursive: true, force: true });
 
@@ -233,7 +236,8 @@ export const deleteDocument: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const convertDocument: RequestHandler = asyncHandler(async (req, res) => {
-  const currentDocument = await DocumentQuery.getDocument(req.params.documentId);
+  const documentId = String(req.params.documentId);
+  const currentDocument = await DocumentQuery.getDocument(documentId);
 
   if (!currentDocument) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'document not found');
@@ -287,13 +291,14 @@ export const createFolder: RequestHandler = asyncHandler(async (req, res) => {
 
 export const updateFolder: RequestHandler = asyncHandler(async (req, res) => {
   const name = String(req.body?.name ?? '').trim();
+  const folderId = String(req.params.folderId);
 
   if (!name) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'folder name is required');
   }
 
   const folders = await readFolders();
-  const folder = folders.find((item) => item.id === req.params.folderId);
+  const folder = folders.find((item) => item.id === folderId);
 
   if (!folder) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'folder not found');
@@ -307,8 +312,9 @@ export const updateFolder: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const deleteFolder: RequestHandler = asyncHandler(async (req, res) => {
+  const folderId = String(req.params.folderId);
   const folders = await readFolders();
-  const nextFolders = folders.filter((folder) => folder.id !== req.params.folderId);
+  const nextFolders = folders.filter((folder) => folder.id !== folderId);
 
   if (nextFolders.length === folders.length) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'folder not found');
@@ -316,5 +322,5 @@ export const deleteFolder: RequestHandler = asyncHandler(async (req, res) => {
 
   await writeFolders(nextFolders);
 
-  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, { id: req.params.folderId }, 'Folder deleted'));
+  res.status(StatusCodes.OK).json(new ApiResponse(StatusCodes.OK, { id: folderId }, 'Folder deleted'));
 });
