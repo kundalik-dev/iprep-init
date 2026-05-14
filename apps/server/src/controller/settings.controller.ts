@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { Request, Response, RequestHandler } from 'express';
 import type { AIProvider, ProviderMode } from '@iprep/db';
 import { SettingsQuery } from '@iprep/db';
 import { encryptProviderSecret, hashProviderSecret } from '../utils/providerSecrets.js';
@@ -33,7 +33,7 @@ function validateProviderInput(provider: string, mode: string): void {
 
 // ── Preferences ───────────────────────────────────────────────────────────────
 
-export const getPreferences = asyncHandler(async (req: Request, res: Response) => {
+export const getPreferences: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
   const preferences = await SettingsQuery.getPreferences(uid);
   res
@@ -41,7 +41,7 @@ export const getPreferences = asyncHandler(async (req: Request, res: Response) =
     .json(new ApiResponse(StatusCodes.OK, preferences ?? {}, 'Preferences fetched'));
 });
 
-export const updatePreferences = asyncHandler(async (req: Request, res: Response) => {
+export const updatePreferences: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
   const updated = await SettingsQuery.updatePreferences(uid, req.body);
   res
@@ -51,7 +51,7 @@ export const updatePreferences = asyncHandler(async (req: Request, res: Response
 
 // ── Providers list ─────────────────────────────────────────────────────────────
 
-export const getProviders = asyncHandler(async (req: Request, res: Response) => {
+export const getProviders: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
   const providers = await SettingsQuery.getProviders(uid);
 
@@ -76,7 +76,7 @@ export const getProviders = asyncHandler(async (req: Request, res: Response) => 
 
 // ── Save / upsert API key ─────────────────────────────────────────────────────
 
-export const saveApiKey = asyncHandler(async (req: Request, res: Response) => {
+export const saveApiKey: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
   const {
     provider,
@@ -130,13 +130,13 @@ export const saveApiKey = asyncHandler(async (req: Request, res: Response) => {
 
 // ── Delete provider credential ────────────────────────────────────────────────
 
-export const deleteProviderKey = asyncHandler(async (req: Request, res: Response) => {
+export const deleteProviderKey: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
-  const credentialId = req.params.id;
+  const credentialId = req.params.id as string;
 
   if (!credentialId) throw new ApiError(StatusCodes.BAD_REQUEST, 'id param is required');
 
-  await SettingsQuery.deleteProvider(credentialId, uid);
+  await SettingsQuery.deleteProvider(credentialId as string, uid as string);
   res
     .status(StatusCodes.OK)
     .json(new ApiResponse(StatusCodes.OK, { id: credentialId }, 'Provider key deleted'));
@@ -144,7 +144,7 @@ export const deleteProviderKey = asyncHandler(async (req: Request, res: Response
 
 // ── Decrypt key (internal / admin use only) ────────────────────────────────────
 
-export const revealApiKey = asyncHandler(async (req: Request, res: Response) => {
+export const revealApiKey: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
   const credentialId = req.params.id;
 

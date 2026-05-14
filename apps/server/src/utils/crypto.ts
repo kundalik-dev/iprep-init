@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { env } from '@iprep/shared';
+import { env } from '../config/env.js';
 
 const ALGORITHM = 'aes-256-gcm';
 const IV_LENGTH = 16;

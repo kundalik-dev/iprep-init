@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { Request, Response, RequestHandler } from 'express';
 import { ApiError, ApiResponse, StatusCodes, asyncHandler } from '../utils/index.js';
 import { decryptProviderSecret } from '../utils/providerSecrets.js';
 import { SettingsQuery } from '@iprep/db';
@@ -89,7 +89,7 @@ async function checkCli(command: string): Promise<{ installed: boolean; version:
 }
 
 // ── GET /api/v1/settings/providers/cli-status ─────────────────────────────────
-export const getCliStatus = asyncHandler(async (_req: Request, res: Response) => {
+export const getCliStatus: RequestHandler = asyncHandler(async (_req: Request, res: Response) => {
   const checks = await Promise.all(
     Object.entries(CLI_CATALOG).map(async ([key, def]) => {
       const { installed, version } = await checkCli(def.command);
@@ -109,9 +109,9 @@ export const getCliStatus = asyncHandler(async (_req: Request, res: Response) =>
 });
 
 // ── POST /api/v1/settings/providers/:id/test ──────────────────────────────────
-export const testProvider = asyncHandler(async (req: Request, res: Response) => {
+export const testProvider: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
   const uid = userId(req);
-  const credentialId = req.params.id;
+  const credentialId = req.params.id as string;
 
   const providers = await SettingsQuery.getProviders(uid);
   const credential = providers.find((p) => p.id === credentialId);
@@ -189,7 +189,7 @@ export const testProvider = asyncHandler(async (req: Request, res: Response) => 
   }
 
   // Update the test result in DB
-  await SettingsQuery.markProviderTestResult(credentialId, uid, passed, message);
+  await SettingsQuery.markProviderTestResult(credentialId as string, uid as string, passed, message);
 
   res
     .status(StatusCodes.OK)
