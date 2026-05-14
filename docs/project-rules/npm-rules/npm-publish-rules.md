@@ -108,11 +108,15 @@ Database    Ready
 
 ## Package Contents Check
 
-Before publishing, inspect what npm will include:
+Before publishing, inspect what npm will include and simulate the publish:
 
 ```bash
 cd apps/cli
+# 1. Check file list
 npm pack --dry-run
+
+# 2. Full publish simulation
+npm publish --dry-run
 ```
 
 The package should include:
@@ -167,7 +171,18 @@ Keep the root `package.json` version aligned only if the release represents the 
 
 ## Publish Command
 
-Publish from the CLI package directory:
+### Dry Run (Recommended)
+
+Always perform a dry run first to catch manifest errors or missing files:
+
+```bash
+cd apps/cli
+npm publish --dry-run
+```
+
+### Final Publish
+
+Once verified, publish from the CLI package directory:
 
 ```bash
 cd apps/cli

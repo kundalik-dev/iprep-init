@@ -189,7 +189,12 @@ export const testProvider: RequestHandler = asyncHandler(async (req: Request, re
   }
 
   // Update the test result in DB
-  await SettingsQuery.markProviderTestResult(credentialId as string, uid as string, passed, message);
+  await SettingsQuery.markProviderTestResult(
+    credentialId as string,
+    uid as string,
+    passed,
+    message,
+  );
 
   res
     .status(StatusCodes.OK)

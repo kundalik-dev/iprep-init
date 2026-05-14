@@ -41,13 +41,15 @@ export const getPreferences: RequestHandler = asyncHandler(async (req: Request, 
     .json(new ApiResponse(StatusCodes.OK, preferences ?? {}, 'Preferences fetched'));
 });
 
-export const updatePreferences: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-  const uid = userId(req);
-  const updated = await SettingsQuery.updatePreferences(uid, req.body);
-  res
-    .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, updated.preferences, 'Preferences saved'));
-});
+export const updatePreferences: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const uid = userId(req);
+    const updated = await SettingsQuery.updatePreferences(uid, req.body);
+    res
+      .status(StatusCodes.OK)
+      .json(new ApiResponse(StatusCodes.OK, updated.preferences, 'Preferences saved'));
+  },
+);
 
 // ── Providers list ─────────────────────────────────────────────────────────────
 
@@ -130,17 +132,19 @@ export const saveApiKey: RequestHandler = asyncHandler(async (req: Request, res:
 
 // ── Delete provider credential ────────────────────────────────────────────────
 
-export const deleteProviderKey: RequestHandler = asyncHandler(async (req: Request, res: Response) => {
-  const uid = userId(req);
-  const credentialId = req.params.id as string;
+export const deleteProviderKey: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const uid = userId(req);
+    const credentialId = req.params.id as string;
 
-  if (!credentialId) throw new ApiError(StatusCodes.BAD_REQUEST, 'id param is required');
+    if (!credentialId) throw new ApiError(StatusCodes.BAD_REQUEST, 'id param is required');
 
-  await SettingsQuery.deleteProvider(credentialId as string, uid as string);
-  res
-    .status(StatusCodes.OK)
-    .json(new ApiResponse(StatusCodes.OK, { id: credentialId }, 'Provider key deleted'));
-});
+    await SettingsQuery.deleteProvider(credentialId as string, uid as string);
+    res
+      .status(StatusCodes.OK)
+      .json(new ApiResponse(StatusCodes.OK, { id: credentialId }, 'Provider key deleted'));
+  },
+);
 
 // ── Decrypt key (internal / admin use only) ────────────────────────────────────
 
