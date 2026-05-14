@@ -3,3 +3,4 @@ node_modules/
 .turbo/
 *.generated.ts
 packages/db/prisma/migrations/
+.claude/

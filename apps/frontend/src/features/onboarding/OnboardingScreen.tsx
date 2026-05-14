@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Bot, CheckCircle2, FileUp, KeyRound, Loader2, Terminal, UserRound } from 'lucide-react';
+import { Bot, CheckCircle2, FileUp, KeyRound, Loader2, Sparkles, Terminal, UserRound } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -198,15 +198,47 @@ export function OnboardingScreen({ initialStep, onComplete }: OnboardingScreenPr
 
   return (
     <div className="onboarding-shell">
-      <div className="onboarding-brand">
-        <div className="brand-mark">i</div>
-        <div>
-          <div className="brand-name">iPrep</div>
-          <div className="brand-tag">First setup</div>
+      <div className="onboarding-hero">
+        <div className="hero-content">
+          <div className="hero-logo-wrapper">
+            <Sparkles className="hero-logo-icon" size={32} />
+          </div>
+          <h1 className="hero-title">Welcome to iPrep</h1>
+          <p className="hero-subtitle">
+            Your personal AI-powered interview coach. Set up your local environment and start practicing in minutes.
+          </p>
+          
+          <div className="hero-features">
+            <div className="feature-item">
+              <CheckCircle2 size={20} className="feature-icon" />
+              <span>Local privacy and control</span>
+            </div>
+            <div className="feature-item">
+              <CheckCircle2 size={20} className="feature-icon" />
+              <span>Bring your own API key or CLI</span>
+            </div>
+            <div className="feature-item">
+              <CheckCircle2 size={20} className="feature-icon" />
+              <span>Hyper-personalized feedback</span>
+            </div>
+          </div>
         </div>
+        <div className="hero-decoration"></div>
       </div>
 
-      <Card className="onboarding-card">
+      <div className="onboarding-form-area">
+        <div className="onboarding-brand mobile-only">
+          <div className="brand-mark">
+            <Sparkles size={18} />
+          </div>
+          <div>
+            <h1 className="brand-title">iPrep</h1>
+            <p className="brand-subtitle">FIRST SETUP</p>
+          </div>
+        </div>
+
+        <div className="onboarding-form-container">
+          <Card className="onboarding-card">
         <CardHeader>
           <Badge variant="muted">Step {activeStepIndex + 1} of 3</Badge>
           <CardTitle className="onboarding-title">Set up your local coach</CardTitle>
@@ -248,7 +280,9 @@ export function OnboardingScreen({ initialStep, onComplete }: OnboardingScreenPr
             />
           ) : null}
         </CardContent>
-      </Card>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
