@@ -6,9 +6,9 @@ import { IprepPaths } from '@iprep/shared';
 export async function handleDbMigrate(): Promise<void> {
   printCommandBadge('iprep db migrate');
   console.log(log.bold('\nStarting database migration...\n'));
-  
+
   printStep('Database', IprepPaths.dbFile);
-  
+
   try {
     // Ensure DATABASE_URL is set
     if (!process.env.DATABASE_URL) {
