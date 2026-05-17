@@ -4,6 +4,7 @@ import type { ComponentType } from 'react';
 export type ViewId =
   | 'dashboard'
   | 'new-interview'
+  | 'session'
   | 'history'
   | 'chat'
   | 'files'

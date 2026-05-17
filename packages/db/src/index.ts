@@ -13,3 +13,10 @@ export type { CreateUserInput, UpdateUserInput } from './queries/user.query.js';
 export { runDbMigrations } from './migrate.js';
 export { SettingsQuery } from './queries/settings.query.js';
 export { ConversationQuery } from './queries/conversation.query.js';
+export { InterviewQuery } from './queries/interview.query.js';
+export type {
+  CreateInterviewInput,
+  ListInterviewsInput,
+  TranscriptTurnInput,
+  UpdateInterviewInput,
+} from './queries/interview.query.js';

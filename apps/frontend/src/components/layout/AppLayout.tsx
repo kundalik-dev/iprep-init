@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { practiceNav, toolNav, type ViewId } from '@/config/navigation';
 import { ChatScreen } from '@/features/chat/ChatScreen';
 import { DashboardScreen } from '@/features/dashboard/DashboardScreen';
+import { InterviewScreen } from '@/features/interview/InterviewScreen';
 import { NotesFilesScreen } from '@/features/notes-files/NotesFilesScreen';
 import { SettingsScreen } from '@/features/settings/SettingsScreen';
 import { Placeholder } from '@/components/layout/SystemScreens';
@@ -124,6 +125,8 @@ export function AppLayout({ activeView, setActiveView, theme, setTheme }: AppLay
         <div id="view-root">
           {activeView === 'dashboard' ? (
             <DashboardScreen />
+          ) : activeView === 'new-interview' || activeView === 'session' ? (
+            <InterviewScreen activeView={activeView} setActiveView={setActiveView} />
           ) : activeView === 'chat' ? (
             <ChatScreen />
           ) : activeView === 'files' ? (

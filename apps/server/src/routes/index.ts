@@ -8,6 +8,8 @@ import { profileRoutes } from './profile.route.js';
 import { userRoutes } from './user.route.js';
 import settingsRoutes from './settings.route.js';
 import { conversationRouter } from './conversation.routes.js';
+import { analysisRoutes } from './analysis.route.js';
+import { interviewRoutes } from './interview.route.js';
 
 const router: Router = Router();
 
@@ -20,5 +22,7 @@ router.use('/user', profileRoutes);
 router.use('/users', userRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/conversations', conversationRouter);
+router.use('/interviews', interviewRoutes);
+router.use('/analysis', analysisRoutes);
 
 export { router as apiRoutes };

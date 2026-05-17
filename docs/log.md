@@ -5,7 +5,7 @@ description: Index of every file in the docs/ folder with one-line descriptions 
 
 # docs/ - File Log
 
-> Last updated: 2026-05-14
+> Last updated: 2026-05-17
 > Index of every file in the `docs/` folder. Keep this up to date when files are added, renamed, or removed.
 
 ---
@@ -13,6 +13,24 @@ description: Index of every file in the docs/ folder with one-line descriptions 
 ## architecture/
 
 Architecture notes and system design documents. This folder currently has no tracked files.
+
+---
+
+## adapters/
+
+Adapter architecture and implementation references for local and external AI runtime adapters.
+
+| File                       | Description                                                                                                      |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `overview.md`              | High-level overview of adapter responsibilities, built-in adapter types, registry usage, and package structure.  |
+| `creating-an-adapter.md`   | Step-by-step guide for creating built-in or external adapter packages with server, UI, CLI, and session support. |
+| `external-adapters.md`     | Guide for packaging, installing, and distributing adapters as external plugins without modifying core source.     |
+| `adapter-ui-parser.md`     | Contract for self-contained browser-safe UI parsers that render adapter stdout/transcript events.                |
+| `codex-local.md`           | Codex local adapter notes covering configuration, CLI requirements, session persistence, and skills injection.   |
+| `claude-local.md`          | Claude Code local adapter notes covering configuration, session persistence, and environment testing.            |
+| `gemini-local.md`          | Gemini local adapter notes covering configuration, `--resume` sessions, skills injection, and testing.           |
+| `process.md`               | Generic process adapter reference for running arbitrary local commands or custom agent scripts.                  |
+| `http.md`                  | HTTP adapter reference for webhook-style integrations with external agent services.                              |
 
 ---
 
