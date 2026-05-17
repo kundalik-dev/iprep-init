@@ -142,10 +142,10 @@ export function SettingsScreen({
 
 // ── AI Provider options for the Preferences dropdown ──────────────────────────
 const AI_PROVIDER_OPTIONS = [
-  { value: 'CLAUDE', label: 'Anthropic Claude' },
-  { value: 'GEMINI', label: 'Google Gemini' },
-  { value: 'CODEX', label: 'OpenAI GPT' },
-  { value: 'OLLAMA', label: 'Ollama (Local)' },
+  { value: 'CLAUDE', label: 'Anthropic Claude', modes: ['API_KEY', 'CLI'] },
+  { value: 'GEMINI', label: 'Google Gemini', modes: ['API_KEY', 'CLI'] },
+  { value: 'CODEX', label: 'OpenAI GPT', modes: ['API_KEY', 'CLI'] },
+  { value: 'OLLAMA', label: 'Ollama (Local)', modes: ['API_KEY'] },
 ];
 
 // ── Preferences Tab ───────────────────────────────────────────────────────────
@@ -170,6 +170,22 @@ function PreferencesTab({
     aiModel: '',
   });
 
+  const normalizeAiPrefs = (nextPrefs: Record<string, unknown>) => {
+    const aiMode = nextPrefs.aiMode === 'CLI' ? 'CLI' : 'API_KEY';
+    const allowedProviders = AI_PROVIDER_OPTIONS.filter((option) => option.modes.includes(aiMode));
+    const aiProvider = (nextPrefs.aiProvider as string) ?? allowedProviders[0]?.value ?? 'CLAUDE';
+    const normalizedAiProvider = allowedProviders.some((option) => option.value === aiProvider)
+      ? aiProvider
+      : allowedProviders[0]?.value ?? 'CLAUDE';
+
+    return {
+      ...nextPrefs,
+      aiMode,
+      aiProvider: normalizedAiProvider,
+      aiModel: normalizedAiProvider === aiProvider ? nextPrefs.aiModel : '',
+    };
+  };
+
   useEffect(() => {
     getPreferences()
       .then((data) => {
@@ -183,7 +199,9 @@ function PreferencesTab({
     setSaving(true);
     setSaveStatus('idle');
     try {
-      await updatePreferences(prefs);
+      const normalizedPrefs = normalizeAiPrefs(prefs);
+      await updatePreferences(normalizedPrefs);
+      setPrefs(normalizedPrefs);
       setSaveStatus('saved');
     } catch {
       setSaveStatus('error');
@@ -196,6 +214,28 @@ function PreferencesTab({
   if (loading) return <Spinner />;
 
   const isCliMode = prefs.aiMode === 'CLI';
+  const providerOptions = AI_PROVIDER_OPTIONS.filter((option) =>
+    option.modes.includes(isCliMode ? 'CLI' : 'API_KEY'),
+  );
+  const selectedProvider = (prefs.aiProvider as string) ?? providerOptions[0]?.value ?? 'CLAUDE';
+  const normalizedProvider = providerOptions.some((option) => option.value === selectedProvider)
+    ? selectedProvider
+    : providerOptions[0]?.value ?? 'CLAUDE';
+
+  const updateAiMode = (aiMode: 'API_KEY' | 'CLI') => {
+    const nextProviderOptions = AI_PROVIDER_OPTIONS.filter((option) => option.modes.includes(aiMode));
+    const currentProvider = (prefs.aiProvider as string) ?? nextProviderOptions[0]?.value ?? 'CLAUDE';
+    const nextProvider = nextProviderOptions.some((option) => option.value === currentProvider)
+      ? currentProvider
+      : nextProviderOptions[0]?.value ?? 'CLAUDE';
+
+    setPrefs({
+      ...prefs,
+      aiMode,
+      aiProvider: nextProvider,
+      aiModel: nextProvider === currentProvider ? prefs.aiModel : '',
+    });
+  };
 
   return (
     <>
@@ -268,7 +308,7 @@ function PreferencesTab({
                   name="aiMode"
                   value="API_KEY"
                   checked={!isCliMode}
-                  onChange={() => setPrefs({ ...prefs, aiMode: 'API_KEY' })}
+                  onChange={() => updateAiMode('API_KEY')}
                   style={{ accentColor: 'var(--accent, #6366f1)', width: '15px', height: '15px' }}
                 />
                 <div>
@@ -312,7 +352,7 @@ function PreferencesTab({
                   name="aiMode"
                   value="CLI"
                   checked={isCliMode}
-                  onChange={() => setPrefs({ ...prefs, aiMode: 'CLI' })}
+                  onChange={() => updateAiMode('CLI')}
                   style={{ accentColor: 'var(--accent, #6366f1)', width: '15px', height: '15px' }}
                 />
                 <div>
@@ -341,10 +381,10 @@ function PreferencesTab({
             <select
               id="pref-ai-provider"
               className="input"
-              value={(prefs.aiProvider as string) ?? 'CLAUDE'}
-              onChange={(e) => setPrefs({ ...prefs, aiProvider: e.target.value })}
+              value={normalizedProvider}
+              onChange={(e) => setPrefs({ ...prefs, aiProvider: e.target.value, aiModel: '' })}
             >
-              {AI_PROVIDER_OPTIONS.map((opt) => (
+              {providerOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>

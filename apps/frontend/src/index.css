@@ -4712,10 +4712,16 @@ mark.highlight {
   gap: 8px;
 }
 
-.field span {
+.field > span {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-p);
+}
+
+.field-label.required::before {
+  content: '*';
+  color: var(--error);
+  margin-right: 3px;
 }
 
 .field input,
@@ -4737,6 +4743,18 @@ mark.highlight {
 .field select:focus {
   border-color: var(--accent-v);
   box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.field input[aria-invalid='true'] {
+  border-color: var(--error);
+  background: var(--error-bg);
+}
+
+.field-error {
+  color: var(--error);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 .field input[type='file'] {

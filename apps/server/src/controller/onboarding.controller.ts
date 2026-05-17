@@ -16,6 +16,7 @@ import {
   encryptProviderSecret,
   hashProviderSecret,
 } from '../utils/index.js';
+import { testApiProviderConnection } from './provider-check.controller.js';
 
 type ValidationIssue = {
   message: string;
@@ -103,27 +104,21 @@ function testCliProvider(provider: string): ProviderConnectionTestResult {
   };
 }
 
-function testApiProvider(apiKey?: string): ProviderConnectionTestResult {
-  if (!apiKey || apiKey.trim().length < 10) {
-    return { success: false, message: 'api key looks invalid' };
-  }
-
-  return {
-    success: true,
-    message: 'api key format accepted (live provider ping can be added in adapters)',
-  };
-}
-
-function runProviderConnectionTest(input: {
+async function runProviderConnectionTest(input: {
   provider: string;
   mode: string;
   apiKey?: string;
-}): ProviderConnectionTestResult {
+}): Promise<ProviderConnectionTestResult> {
   if (input.mode === 'cli') {
     return testCliProvider(input.provider);
   }
 
-  return testApiProvider(input.apiKey);
+  const result = await testApiProviderConnection({
+    provider: input.provider,
+    apiKey: input.apiKey,
+  });
+
+  return { success: result.passed, message: result.message };
 }
 
 function mapProviders(state: Awaited<ReturnType<typeof OnboardingQuery.getOnboardingState>>) {
@@ -238,7 +233,7 @@ export const testOnboardingProviderConnection: RequestHandler = asyncHandler(asy
     throw buildValidationError(result.error.issues);
   }
 
-  const connection = runProviderConnectionTest(result.data);
+  const connection = await runProviderConnectionTest(result.data);
 
   res.status(StatusCodes.OK).json(
     new ApiResponse(
@@ -262,7 +257,7 @@ export const saveOnboardingProvider: RequestHandler = asyncHandler(async (req, r
     throw buildValidationError(result.error.issues);
   }
 
-  const connection = runProviderConnectionTest(result.data);
+  const connection = await runProviderConnectionTest(result.data);
   if (!connection.success) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'provider test failed', [connection.message], {
       provider: result.data.provider,

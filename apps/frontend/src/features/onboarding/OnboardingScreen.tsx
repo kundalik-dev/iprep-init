@@ -259,13 +259,17 @@ export function OnboardingScreen({ initialStep, onComplete }: OnboardingScreenPr
             </CardHeader>
             <CardContent>
               <Stepper activeStep={step} />
-              {error ? <div className="form-error">{error}</div> : null}
+              {error && step !== 'profile' ? <div className="form-error">{error}</div> : null}
 
               {step === 'profile' ? (
                 <ProfileStep
                   profile={profile}
+                  error={error}
                   isSaving={isSaving}
-                  onChange={setProfile}
+                  onChange={(nextProfile) => {
+                    setProfile(nextProfile);
+                    if (error) setError(null);
+                  }}
                   onContinue={handleProfileContinue}
                 />
               ) : null}
@@ -321,11 +325,13 @@ function Stepper({ activeStep }: { activeStep: OnboardingStep }) {
 
 function ProfileStep({
   profile,
+  error,
   isSaving,
   onChange,
   onContinue,
 }: {
   profile: ProfileFormState;
+  error: string | null;
   isSaving: boolean;
   onChange: (profile: ProfileFormState) => void;
   onContinue: () => void;
@@ -341,12 +347,15 @@ function ProfileStep({
       </div>
 
       <label className="field">
-        <span>Name</span>
+        <span className="field-label required">Name</span>
         <input
+          aria-invalid={Boolean(error)}
+          aria-required="true"
           value={profile.name}
           onChange={(event) => onChange({ ...profile, name: event.target.value })}
           placeholder="Your name"
         />
+        {error ? <span className="field-error">{error}</span> : null}
       </label>
 
       <label className="field">

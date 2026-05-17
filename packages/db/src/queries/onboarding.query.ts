@@ -33,6 +33,12 @@ function stepForGoal(goal?: string | null): OnboardingStep {
   return goal && goal.trim().length > 0 ? 'PROVIDER' : 'GOAL';
 }
 
+function asPreferenceRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
 async function ensureLocalUser() {
   return prisma.user.upsert({
     where: { id: LOCAL_USER_ID },
@@ -210,6 +216,15 @@ export const OnboardingQuery = {
         data: {
           onboardingStep: workingSelectedCount > 0 ? 'COMPLETE' : 'PROVIDER',
           isOnboardingComplete: false,
+          preferences:
+            input.makeDefault && input.isWorking
+              ? {
+                  ...asPreferenceRecord(user.preferences),
+                  aiMode: input.mode,
+                  aiProvider: input.provider,
+                  aiModel: input.modelName ?? '',
+                }
+              : undefined,
         },
       }),
       prisma.userOnboarding.update({

@@ -8,6 +8,16 @@ function userId(req: Request): string {
   return (req.headers['x-user-id'] as string) || LOCAL_USER;
 }
 
+type ProviderApiTestInput = {
+  provider: string;
+  apiKey?: string;
+};
+
+type ProviderApiTestResult = {
+  passed: boolean;
+  message: string;
+};
+
 // ── CLI definitions ──────────────────────────────────────────────────────────
 const CLI_CATALOG: Record<
   string,
@@ -88,6 +98,81 @@ async function checkCli(command: string): Promise<{ installed: boolean; version:
   return { installed: true, version };
 }
 
+export async function testApiProviderConnection({
+  provider,
+  apiKey,
+}: ProviderApiTestInput): Promise<ProviderApiTestResult> {
+  const normalizedProvider = provider.toUpperCase();
+
+  if (normalizedProvider !== 'OLLAMA' && (!apiKey || apiKey.trim().length < 10)) {
+    return { passed: false, message: 'api key looks invalid' };
+  }
+
+  try {
+    switch (normalizedProvider) {
+      case 'CLAUDE': {
+        const r = await fetch('https://api.anthropic.com/v1/models', {
+          headers: { 'x-api-key': apiKey ?? '', 'anthropic-version': '2023-06-01' },
+        });
+        return {
+          passed: r.ok,
+          message: r.ok ? 'API key valid - Anthropic responded OK' : `Anthropic returned ${r.status}`,
+        };
+      }
+      case 'GEMINI': {
+        const r = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`,
+        );
+        return {
+          passed: r.ok,
+          message: r.ok ? 'API key valid - Gemini responded OK' : `Gemini returned ${r.status}`,
+        };
+      }
+      case 'CODEX': {
+        const r = await fetch('https://api.openai.com/v1/models', {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+        return {
+          passed: r.ok,
+          message: r.ok ? 'API key valid - OpenAI responded OK' : `OpenAI returned ${r.status}`,
+        };
+      }
+      case 'OPENROUTER': {
+        const r = await fetch('https://openrouter.ai/api/v1/models', {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+        return {
+          passed: r.ok,
+          message: r.ok
+            ? 'API key valid - OpenRouter responded OK'
+            : `OpenRouter returned ${r.status}`,
+        };
+      }
+      case 'OTHER': {
+        const r = await fetch('https://api.deepgram.com/v1/projects', {
+          headers: { Authorization: `Token ${apiKey}` },
+        });
+        return {
+          passed: r.ok,
+          message: r.ok ? 'API key valid - Deepgram responded OK' : `Deepgram returned ${r.status}`,
+        };
+      }
+      case 'OLLAMA': {
+        const r = await fetch('http://localhost:11434/api/tags').catch(() => null);
+        const passed = r !== null && r.ok;
+        return {
+          passed,
+          message: passed ? 'Ollama is running locally' : 'Ollama is not running on port 11434',
+        };
+      }
+      default:
+        return { passed: false, message: `No test available for provider "${provider}"` };
+    }
+  } catch (err: unknown) {
+    return { passed: false, message: `Connection error: ${(err as Error).message}` };
+  }
+}
+
 // ── GET /api/v1/settings/providers/cli-status ─────────────────────────────────
 export const getCliStatus: RequestHandler = asyncHandler(async (_req: Request, res: Response) => {
   const checks = await Promise.all(
@@ -133,60 +218,10 @@ export const testProvider: RequestHandler = asyncHandler(async (req: Request, re
     throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, 'Failed to decrypt API key');
   }
 
-  // ── Run provider-specific health checks ──────────────────────────────────────
-  let passed = false;
-  let message = '';
-
-  try {
-    switch (credential.provider) {
-      case 'CLAUDE': {
-        const r = await fetch('https://api.anthropic.com/v1/models', {
-          headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-        });
-        passed = r.ok;
-        message = r.ok
-          ? 'API key valid — Anthropic responded OK'
-          : `Anthropic returned ${r.status}`;
-        break;
-      }
-      case 'GEMINI': {
-        const r = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`,
-        );
-        passed = r.ok;
-        message = r.ok ? 'API key valid — Gemini responded OK' : `Gemini returned ${r.status}`;
-        break;
-      }
-      case 'CODEX': {
-        const r = await fetch('https://api.openai.com/v1/models', {
-          headers: { Authorization: `Bearer ${apiKey}` },
-        });
-        passed = r.ok;
-        message = r.ok ? 'API key valid — OpenAI responded OK' : `OpenAI returned ${r.status}`;
-        break;
-      }
-      case 'OTHER': {
-        // Deepgram projects endpoint
-        const r = await fetch('https://api.deepgram.com/v1/projects', {
-          headers: { Authorization: `Token ${apiKey}` },
-        });
-        passed = r.ok;
-        message = r.ok ? 'API key valid — Deepgram responded OK' : `Deepgram returned ${r.status}`;
-        break;
-      }
-      case 'OLLAMA': {
-        // Ollama runs locally
-        const r = await fetch('http://localhost:11434/api/tags').catch(() => null);
-        passed = r !== null && r.ok;
-        message = passed ? 'Ollama is running locally' : 'Ollama is not running on port 11434';
-        break;
-      }
-      default:
-        message = `No test available for provider "${credential.provider}"`;
-    }
-  } catch (err: unknown) {
-    message = `Connection error: ${(err as Error).message}`;
-  }
+  const { passed, message } = await testApiProviderConnection({
+    provider: credential.provider,
+    apiKey,
+  });
 
   // Update the test result in DB
   await SettingsQuery.markProviderTestResult(

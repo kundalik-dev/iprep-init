@@ -28,11 +28,24 @@ export interface AiAdapterResult {
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
+/** Convert values passed to a CLI process into safe string arguments. */
+function toCliArg(value: unknown): string {
+  const arg = String(value ?? '');
+  if (/[\0\r\n]/.test(arg)) {
+    throw new Error('CLI argument contains unsupported control characters');
+  }
+  return arg;
+}
+
 /** Run a CLI command and return its stdout as a string. */
-function runCli(command: string, args: string[], input: string): Promise<string> {
+function runCli(command: string, args: unknown[], input: unknown): Promise<string> {
   return new Promise((resolve, reject) => {
     const isWin = process.platform === 'win32';
-    const proc = spawn(command, args, {
+    const safeCommand = toCliArg(command);
+    const safeArgs = args.map(toCliArg);
+    const safeInput = String(input ?? '');
+
+    const proc = spawn(safeCommand, safeArgs, {
       shell: isWin ? 'cmd.exe' : '/bin/sh',
       stdio: ['pipe', 'pipe', 'pipe'],
     });
@@ -55,7 +68,7 @@ function runCli(command: string, args: string[], input: string): Promise<string>
     proc.on('error', reject);
 
     // Write the prompt to stdin and close
-    proc.stdin.write(input);
+    proc.stdin.write(safeInput);
     proc.stdin.end();
   });
 }
@@ -90,10 +103,11 @@ async function callViaCli(
 
     case 'CODEX': {
       const cmd = isWin ? 'codex.cmd' : 'codex';
-      // Codex CLI: `codex --quiet "<prompt>"`
-      const args = ['--quiet', prompt];
+      // Codex CLI reads `-` from stdin, so chat text is never parsed as CLI args.
+      const args = ['exec', '--color', 'never', '--skip-git-repo-check'];
       if (model) args.push('--model', model);
-      const content = await runCli(cmd, args, '');
+      args.push('-');
+      const content = await runCli(cmd, args, prompt);
       return { content, provider, model };
     }
 

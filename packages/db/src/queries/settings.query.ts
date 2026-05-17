@@ -1,5 +1,11 @@
 import { prisma } from '../prisma.js';
 
+function asPreferenceRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
 export class SettingsQuery {
   // --- Preferences ---
   static async getPreferences(userId: string) {
@@ -7,7 +13,23 @@ export class SettingsQuery {
       where: { id: userId },
       select: { preferences: true },
     });
-    return user?.preferences || {};
+
+    const preferences = asPreferenceRecord(user?.preferences);
+    if (preferences.aiMode && preferences.aiProvider) return preferences;
+
+    const selectedProvider = await prisma.providerCredential.findFirst({
+      where: { userId, isSelected: true, isWorking: true },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    if (!selectedProvider) return preferences;
+
+    return {
+      ...preferences,
+      aiMode: selectedProvider.mode,
+      aiProvider: selectedProvider.provider,
+      aiModel: selectedProvider.modelName ?? '',
+    };
   }
 
   static async updatePreferences(userId: string, preferences: any) {
