@@ -1,0 +1,18 @@
+{
+  "name": "@iprep/adapter-utils",
+  "version": "1.2.6",
+  "description": "@iprep/adapter-utils - shared contracts and helpers for iPrep AI adapters",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "kundalik.dev",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.6.2",
+    "typescript": "^6.0.3"
+  }
+}

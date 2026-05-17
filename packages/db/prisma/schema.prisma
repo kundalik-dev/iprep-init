@@ -40,6 +40,7 @@ model User {
   notes      Note[]
   stats      UserStats?
   chats      Chat[]
+  aiSessions AiChatSession[]
   providers  ProviderCredential[]
   onboarding UserOnboarding?
 
@@ -149,9 +150,40 @@ model Chat {
   user   User   @relation(fields: [userId], references: [id])
 
   messages Message[]
+  aiSessions AiChatSession[]
 
   // Contextual links seen in "3 notes loaded"
   usedNotes Note[] @relation("ChatContext")
+}
+
+model AiChatSession {
+  id          String       @id @default(cuid())
+  userId      String
+  chatId      String
+  provider    AIProvider
+  mode        ProviderMode
+  adapterType String // e.g. "codex_local", "openai_api", "gemini_api"
+  modelName   String? // e.g. "gpt-5.3-codex", "gpt-4o-mini", "gemini-1.5-flash"
+
+  // CLI adapters can store native session ids here.
+  // API adapters can leave this null and rely on message history or sessionState.
+  sessionId String?
+
+  // Provider-specific state, such as previous_response_id, summary cursors,
+  // token windows, or other resumable metadata.
+  sessionState Json?
+
+  lastUsedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@unique([chatId, provider, mode, adapterType, modelName])
+  @@index([userId, chatId])
+  @@index([provider, mode, adapterType])
+  @@map("ai_chat_sessions")
 }
 
 model Message {

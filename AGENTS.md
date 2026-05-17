@@ -7,11 +7,12 @@ A public opensource TypeScript monorepo for iPrep — an interview preparation p
 ## Stack
 
 - TypeScript 6, NodeNext ESM
-- Express 5 (server), Commander.js (CLI), Vite (frontend)
+- Express 5 (server), Commander.js (CLI), Vite + React (frontend)
 - Zod 4 for env/schema validation
 - Prisma 7 + SQLite (dev), via `@iprep/db`
 - pnpm workspaces + Turborepo
 - `tsx` for dev execution, `tsc` for builds
+- Local AI adapter scaffolding for provider-specific CLI/API execution
 
 ## Structure
 
@@ -33,6 +34,27 @@ turbo.json          — Turborepo pipeline config
 .env                — Root env file; loaded by @iprep/shared at runtime
 ```
 
+## Current Structure
+
+The older tree above may lag behind active work. Treat this section as the current source of truth.
+
+```
+apps/
+  server/       - Express 5 REST API
+  cli/          - Commander.js CLI
+  frontend/     - Vite React app
+
+packages/
+  shared/        - constants, schemas, path utilities, formatters
+  db/            - Prisma schema, generated client, query layer
+  adapter-utils/ - shared AI adapter contracts and process helpers
+  adapters/
+    codex-local/ - first iPrep-native adapter scaffold using type key `codex_local`
+
+ai-adapter/
+  codex-local/ - reference Paperclip-style Codex adapter source used for design guidance
+```
+
 ## Package Dependency Graph
 
 ```
@@ -44,6 +66,18 @@ cli          ← shared, llm-adapters (planned)
 frontend     ← shared only (planned)
 ```
 
+Current package dependency graph:
+
+```
+shared        <- no internal deps
+db            <- shared only
+adapter-utils <- no internal deps
+adapters/*    <- adapter-utils
+server        <- shared, db
+cli           <- shared
+frontend      <- app-local API clients and shared contracts as needed
+```
+
 ## Dev Commands
 
 ```bash
@@ -51,13 +85,29 @@ pnpm install                      # install and link all workspace deps
 pnpm build                        # build all packages in dep order (Turbo)
 pnpm dev                          # start all apps in watch mode
 pnpm --filter=@iprep/server dev   # run only the server
+pnpm --filter=@iprep/frontend dev # run only the frontend
+pnpm --filter=@iprep/adapter-utils build
+pnpm --filter=@iprep/adapter-codex-local build
 pnpm db:generate                  # regenerate Prisma client after schema changes
 pnpm db:migrate                   # run pending migrations
 ```
 
+## Recent Achievements
+
+- Frontend chat UX now shows optimistic user messages immediately while AI responses are loading.
+- Chat loading state now uses rhythmic typing dots instead of a card spinner.
+- Codex CLI prompt execution was hardened to pass free-form chat text through stdin rather than shell arguments.
+- `packages/adapter-utils` was added as the shared adapter contract/helper package.
+- `packages/adapters/codex-local` was added as the first iPrep-native adapter scaffold using the `codex_local` type key.
+- Prisma schema now includes `AiChatSession` design for per-user, per-chat, per-provider/model session state.
+
 ## Conventions
 
 - All packages extend `../../tsconfig.base.json` — never duplicate compiler options
+- Add a short, user-friendly comment above every new function explaining what it does in one plain sentence.
+- Nested adapter packages under `packages/adapters/*` extend `../../../tsconfig.base.json`.
+- Adapter packages should expose metadata from `src/index.ts` and server entrypoints from `src/server/index.ts`.
+- Provider/session continuity belongs in adapter session state, not scattered through controller logic.
 - Always use `.js` extension in relative imports (NodeNext ESM requirement)
 - Use `path.dirname(fileURLToPath(import.meta.url))` for `__dirname` in ESM
 - Import from package barrels only — `import { x } from '@iprep/shared'`, never deep paths
@@ -74,14 +124,15 @@ pnpm db:migrate                   # run pending migrations
 - Don't add `.default()` to `EnvSchema` fields — breaks the missing-field error logic
 - Don't import `@prisma/client` in apps — only through `@iprep/db`
 - Don't add dependencies to root `package.json` except dev tooling (turbo, eslint, prettier, husky)
-- Don't add any LLM provider SDK outside `packages/llm-adapters`
+- Don't add provider-specific execution logic directly to controllers; place it in adapter packages or adapter-facing utilities
+- Don't store provider-specific session state as one-off columns when a structured adapter session record is more flexible
 - Don't use `any` — use `unknown` and narrow
 
 ## Current Focus
 
-Setting up the monorepo foundation: shared env loading, server routes, and build pipeline.
-Active packages: `@iprep/shared` (env, paths, formatters) and `@iprep/server` (Express routes, config).
-All three packages build clean. Next: fleshing out server routes and DB queries.
+Stabilizing AI chat execution and session continuity.
+Active areas: `@iprep/server` chat orchestration, `@iprep/db` chat/session persistence, `@iprep/adapter-utils`, and `@iprep/adapter-codex-local`.
+Next: generate/apply the Prisma migration for `AiChatSession`, add query helpers, and wire `codex_local` into chat execution.
 
 <!-- gitnexus:start -->
 
