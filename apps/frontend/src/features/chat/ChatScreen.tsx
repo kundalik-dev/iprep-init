@@ -116,14 +116,42 @@ export function ChatScreen() {
     }
 
     const textToSend = inputText;
+    const sentAt = new Date().toISOString();
+    const optimisticUserMessage: ChatMessage = {
+      id: `pending-${sentAt}`,
+      role: 'USER',
+      content: textToSend,
+      sentAt,
+      createdAt: sentAt,
+      updatedAt: sentAt,
+      chatId,
+    };
+
     setInputText('');
+    setMessages((prev) => [...prev, optimisticUserMessage]);
     setIsSending(true);
 
     try {
       const result = await addMessage(chatId, textToSend);
-      setMessages((prev) => [...prev, result.userMessage, result.aiMessage]);
+      setMessages((prev) => {
+        let replacedPendingMessage = false;
+        const withSavedUserMessage = prev.map((msg) => {
+          if (msg.id !== optimisticUserMessage.id) return msg;
+          replacedPendingMessage = true;
+          return result.userMessage;
+        });
+
+        return [
+          ...(replacedPendingMessage
+            ? withSavedUserMessage
+            : [...withSavedUserMessage, result.userMessage]),
+          result.aiMessage,
+        ];
+      });
     } catch (err: unknown) {
       console.error('Failed to send message', err);
+      setMessages((prev) => prev.filter((msg) => msg.id !== optimisticUserMessage.id));
+      setInputText(textToSend);
     } finally {
       setIsSending(false);
     }
@@ -229,8 +257,10 @@ export function ChatScreen() {
             <div className="message ai">
               <div className="msg-avatar ai">iP</div>
               <div className="msg-body">
-                <div className="msg-bubble">
-                  <Loader2 className="animate-spin" size={16} />
+                <div className="typing-indicator" aria-label="iPrep AI is typing">
+                  <span className="typing-dot" />
+                  <span className="typing-dot" />
+                  <span className="typing-dot" />
                 </div>
               </div>
             </div>

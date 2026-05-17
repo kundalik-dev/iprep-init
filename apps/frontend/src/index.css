@@ -2784,9 +2784,11 @@ mark.highlight {
 
 .typing-indicator {
   display: flex;
-  gap: 10px;
+  gap: 7px;
   align-items: center;
-  padding: 0 4px;
+  width: fit-content;
+  min-height: 34px;
+  padding: 0 2px;
 }
 .typing-bubble {
   display: flex;
@@ -2799,26 +2801,28 @@ mark.highlight {
   border-top-left-radius: 4px;
 }
 .typing-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--text-m);
+  width: 7px;
+  height: 7px;
+  background: var(--accent-v);
   border-radius: 50%;
-  animation: typingBounce 1.2s ease-in-out infinite;
+  opacity: 0.38;
+  animation: typingPulse 1.05s ease-in-out infinite;
 }
 .typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
+  animation-delay: 0.15s;
 }
 .typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
+  animation-delay: 0.3s;
 }
-@keyframes typingBounce {
+@keyframes typingPulse {
   0%,
-  60%,
   100% {
-    transform: translateY(0);
+    opacity: 0.38;
+    transform: translateY(0) scale(0.88);
   }
-  30% {
-    transform: translateY(-5px);
+  45% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1);
   }
 }
 
